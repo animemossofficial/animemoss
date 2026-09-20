@@ -1,0 +1,15 @@
+
+    .card{
+    display: block;
+    width: 204px;
+    text-decoration: none;
+    color: white;
+    background: #1b1b1b;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: 0.3s;
+}
+
+.card:hover{
+    transform: scale(1.03);
+}

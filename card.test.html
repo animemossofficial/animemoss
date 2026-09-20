@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .card{
+    width:260px;
+    background:#111;
+    border-radius:18px;
+    overflow:hidden;
+}
+.image{
+    position:relative;
+    width:240px;
+    height:330px;
+    margin:10px auto;
+    overflow:hidden;
+    border-radius:15px;
+    border:2px solid #ffd400;
+}
+.image img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+
+    transition:.35s ease;
+}
+.image::after{
+    content:"";
+    position:absolute;
+    inset:0;
+
+    background:rgba(0,0,0,.45);
+
+    opacity:0;
+    transition:.35s;
+}
+.card:hover img{
+    transform:scale(1.08);
+}
+
+.card:hover .image::after{
+    opacity:1;
+}
+.play-btn{
+    position:absolute;
+
+    top:50%;
+    left:50%;
+
+    transform:translate(-50%,-50%) scale(.5);
+
+    width:70px;
+    height:70px;
+
+    border-radius:50%;
+    border:3px solid white;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    background:rgba(255,255,255,.15);
+    backdrop-filter:blur(4px);
+
+    color:#ffd400;
+    font-size:28px;
+
+    opacity:0;
+
+    transition:.35s ease;
+}
+.card:hover .play-btn{
+    opacity:1;
+    transform:translate(-50%,-50%) scale(1);
+}
+.episode{
+    position:absolute;
+
+    bottom:10px;
+    left:10px;
+
+    background:#ffd400;
+    color:black;
+
+    padding:5px 12px;
+
+    border-radius:20px;
+
+    font-weight:bold;
+    font-size:14px;
+}
+.title-bar{
+    position:absolute;
+
+    bottom:-60px;
+    left:0;
+
+    width:100%;
+
+    background:rgba(0,0,0,.45);
+
+    backdrop-filter:blur(6px);
+
+    color:white;
+
+    padding:15px;
+
+    font-size:20px;
+    font-weight:bold;
+
+    transition:.35s ease;
+}
+.title-bar{
+    position:absolute;
+
+    bottom:-60px;
+    left:0;
+
+    width:100%;
+
+    background:rgba(0,0,0,.45);
+
+    backdrop-filter:blur(6px);
+
+    color:white;
+
+    padding:15px;
+
+    font-size:20px;
+    font-weight:bold;
+
+    transition:.35s ease;
+}
+.card:hover .title-bar{
+    bottom:0;
+}
+.title-bar{
+    border-top:1px solid rgba(255,255,255,.15);
+}
+.card:hover .title-bar{
+    background:rgba(0,0,0,.65);
+}
+    </style>
+</head>
+<body>
+    <div class="card">
+    <div class="image">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZlIaCENWFNL-A4PfnfmW0da_0MuBqOurpwuZOAs27Ew&s=10" alt="">
+
+        <div class="play-btn">
+            ▶
+        </div>
+
+        <div class="episode">S1-EP11</div>
+
+        <div class="title-bar">
+        Solo Leveling
+    </div>
+    </div>
+
+   
+</div>
+</body>
+</html>

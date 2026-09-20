@@ -1,0 +1,1622 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime! MOSS</title>
+    <style>
+        * {
+            /* outline: 1px solid red; */
+        }
+
+        body {
+            background-color: #161616;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        .navbar nav ul {
+            display: flex;
+            justify-content: flex-end;
+            list-style: none;
+        }
+
+        .navbar {
+
+            animation: navbarAnimation .8s ease-in-out;
+        }
+
+        @keyframes navbarAnimation {
+            from {
+                transform: translateX(900px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .navbar nav li {
+            padding: 8px;
+        }
+
+        .container {
+            width: min(1500px, 95%);
+            margin: auto;
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, 190px);
+
+            justify-content: center;
+
+            gap: 25px;
+        }
+
+        @keyframes containerAnimation {
+            from {
+                transform: translateY(160px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translatey(0);
+                opacity: 1;
+            }
+        }
+
+        .container h2 {
+            align-content: center;
+        }
+
+        /* Width */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        /* Background */
+        ::-webkit-scrollbar-track {
+            background: #161616;
+        }
+
+        /* Scroll Handle */
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(#ff2d55, #8b5cf6);
+            border-radius: 20px;
+            border: 2px solid #161616;
+        }
+
+        /* Hover */
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(#ff4d6d, #a855f7);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #8b5cf6;
+            border-radius: 20px;
+            box-shadow: 0 0 10px #8b5cf6;
+        }
+
+        #menu {
+            display: none;
+        }
+
+        .mobile.menu {
+            display: none;
+        }
+
+        #menu:checked~.mobile.menu {
+            display: block;
+            left: 0;
+
+        }
+
+        .hamburger {
+            font-size: 30px;
+            cursor: pointer;
+            display: none;
+        }
+
+        @media (max-width: 440px) {
+            .navbar nav ul {
+                display: none;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+        }
+
+        .card {
+            width: 190px;
+            border: 2px solid #2d2d2d;
+            border-radius: 16px;
+            overflow: hidden;
+            background: transparent;
+            transition: .35s ease;
+        }
+
+        .card:hover {
+            border-color: #ff2d55;
+            box-shadow: 0 0 20px rgba(255, 45, 85, .45);
+        }
+
+        .image {
+            width: 100%;
+            height: 275px;
+            margin: 0;
+            position: relative;
+        }
+
+        .image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .image::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+
+            background: rgba(0, 0, 0, .45);
+
+            opacity: 0;
+            transition: .35s;
+        }
+
+        .card:hover img {
+            transform: scale(1.08);
+        }
+
+        .card:hover .image::after {
+            opacity: 1;
+        }
+
+        .play-btn {
+            position: absolute;
+
+            top: 50%;
+            left: 50%;
+
+            transform: translate(-50%, -50%) scale(.5);
+
+            width: 72px;
+            height: 72px;
+
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, .15);
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            background: rgba(255, 45, 85, .92);
+            backdrop-filter: blur(10px);
+
+            color: white;
+            font-size: 26px;
+
+            opacity: 0;
+
+            transition: .35s ease;
+
+            box-shadow: 0 0 20px rgba(255, 45, 85, .45);
+        }
+
+        .card:hover .play-btn {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1.08);
+
+            background: #ff2d55;
+
+            box-shadow:
+                0 0 18px rgba(255, 45, 85, .6),
+                0 0 35px rgba(255, 45, 85, .35);
+        }
+
+        .title-bar {
+            position: absolute;
+
+            bottom: -60px;
+            left: 0;
+
+            width: 100%;
+
+            background: rgba(0, 0, 0, .45);
+
+            backdrop-filter: blur(6px);
+
+            color: white;
+
+            padding: 12px 15px;
+            box-sizing: border-box;
+
+            font-size: 20px;
+            font-weight: bold;
+
+            transition: .35s ease;
+        }
+
+        .card:hover .title-bar {
+            bottom: 0;
+        }
+
+        .title-bar {
+            border-top: 1px solid rgba(255, 255, 255, .15);
+        }
+
+        .card:hover .title-bar {
+            background: rgba(0, 0, 0, .65);
+        }
+
+        .episode {
+            position: absolute;
+
+            top: 12px;
+            left: 12px;
+
+            bottom: auto;
+
+            /* background: #ffd400; */
+            color: #000;
+
+            padding: 6px 14px;
+
+            border-radius: 20px;
+
+            font-size: 13px;
+            font-weight: 700;
+
+            z-index: 20;
+
+            box-shadow: 0 0 10px rgba(255, 212, 0, .35);
+            background: rgba(255, 212, 0, .95);
+            backdrop-filter: blur(5px);
+        }
+
+        .overlay {
+            position: absolute;
+            inset: 0;
+        }
+
+        /* HEADER */
+
+
+        /* LOGO */
+
+        .logo {
+
+            display: flex;
+            align-items: center;
+
+            text-decoration: none;
+
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 42px;
+            font-weight: 900;
+
+            letter-spacing: -1px;
+        }
+
+        .logo .anime {
+
+            color: white;
+        }
+
+        .logo .moss {
+
+            color: #ff2d55;
+
+            margin-left: 3px;
+        }
+
+        .logo .play {
+
+            width: 34px;
+            height: 34px;
+
+            background: #ff2d55;
+
+            border-radius: 50%;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            color: white;
+
+            font-size: 17px;
+
+            margin-left: 10px;
+
+            transition: .35s;
+        }
+
+        .logo:hover .play {
+
+            transform: rotate(360deg);
+        }
+
+        /* NAVBAR */
+
+        .navbar ul {
+
+            display: flex;
+
+            gap: 35px;
+
+            list-style: none;
+
+            padding: 0;
+            margin: 0;
+        }
+
+        .navbar ul li a {
+
+            text-decoration: none;
+
+            color: #cfcfcf;
+
+            font-size: 16px;
+
+            font-weight: 600;
+
+            transition: .3s;
+        }
+
+        .navbar ul li a:hover {
+
+            color: #ff2d55;
+        }
+
+        /* LOGIN */
+
+        .login a {
+
+            color: white;
+
+            text-decoration: none;
+
+            border: 1px solid #444;
+
+            padding: 10px 18px;
+
+            border-radius: 8px;
+
+            transition: .3s;
+        }
+
+        .login a:hover {
+
+            background: #ff2d55;
+
+            border-color: #ff2d55;
+        }
+
+        /* MOBILE */
+
+        @media(max-width:1000px) {
+
+            .navbar {
+
+                display: none;
+            }
+
+            .header {
+
+                padding: 0 20px;
+            }
+
+            .logo {
+
+                font-size: 34px;
+            }
+
+        }
+
+        .navbar ul li a {
+            position: relative;
+            color: #bdbdbd;
+            text-decoration: none;
+            transition: .3s;
+        }
+
+        .navbar ul li a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -8px;
+
+            width: 100%;
+            height: 2px;
+
+            background: #555;
+
+            transform: scaleX(0);
+            transform-origin: right;
+
+            transition: .35s ease;
+        }
+
+        .navbar ul li a:hover {
+            color: #fff;
+        }
+
+        .navbar ul li a:hover::after {
+            background: #ff2d55;
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .hero {
+            position: relative;
+            width: 100%;
+            height: 500px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+
+            background:
+                linear-gradient(rgba(0, 0, 0, .45), rgba(0, 0, 0, .75)),
+                url("https://i.pinimg.com/1200x/b4/af/24/b4af2488354646fdeef841a6ea05146d.jpg") center/cover no-repeat;
+
+            filter: grayscale(100%);
+            transition: .6s;
+        }
+
+        .hero:hover::before {
+            filter: grayscale(0%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            width: min(900px, 90%);
+            text-align: center;
+        }
+
+        .hero h1 {
+            color: white;
+            font-size: 58px;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            color: #d4d4d4;
+            font-size: 20px;
+            margin-bottom: 35px;
+        }
+
+        .search-box {
+            display: flex;
+            overflow: hidden;
+            border-radius: 15px;
+            background: white;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, .35);
+        }
+
+        .search-box input {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 18px;
+            font-size: 18px;
+        }
+
+        .search-box button {
+            width: 170px;
+            border: none;
+            background: #ff2d55;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            transition: .3s;
+        }
+
+        .search-box button:hover {
+            background: #ff4b6f;
+        }
+
+        .search-box {
+            display: flex;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, .35);
+        }
+
+        .search-box input {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 20px;
+            font-size: 18px;
+        }
+
+        .search-box button {
+            width: 180px;
+            border: none;
+            background: #ff2d55;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            transition: .3s;
+        }
+
+        .search-box button:hover {
+            background: #ff4b6f;
+        }
+
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 999;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            width: 100%;
+            height: 75px;
+            padding: 0 45px;
+            box-sizing: border-box;
+
+            background: #161616;
+            /* <-- ye add karo */
+            /* ya #111 */
+        }
+
+        .domain-alert {
+            width: fit-content;
+            max-width: 90%;
+            margin: 20px auto 0;
+            padding: 12px 22px;
+
+            background: rgba(255, 45, 85, .12);
+            border: 1px solid rgba(255, 45, 85, .35);
+            border-radius: 12px;
+
+            color: #f5f5f5;
+            font-size: 15px;
+            text-align: center;
+            backdrop-filter: blur(8px);
+        }
+
+        .domain-alert a {
+            color: #ff2d55;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .domain-alert a:hover {
+            text-decoration: underline;
+        }
+
+        .section-header {
+            width: min(1500px, 95%);
+            margin: 40px auto 25px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            padding-left: 80px;
+            box-sizing: border-box;
+
+            gap: 20px;
+        }
+
+        .title {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .latest {
+            color: #fff;
+            font-size: 40px;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .episodes {
+            color: #ff2d55;
+            font-size: 24px;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+
+        .filters {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filters a {
+            text-decoration: none;
+            color: #cfcfcf;
+
+            padding: 10px 22px;
+
+            border: 1px solid #333;
+
+            border-radius: 40px;
+
+            transition: .3s;
+        }
+
+        .filters a:hover {
+            background: #ff2d55;
+            color: white;
+            border-color: #ff2d55;
+        }
+
+        .filters .active {
+            background: #ff2d55;
+            color: white;
+            border-color: #ff2d55;
+        }
+
+        /* ===========================
+        SHARE SECTION
+=========================== */
+
+        .share-section {
+            width: min(1200px, 95%);
+            margin: 45px auto 35px;
+            text-align: center;
+        }
+
+        .share-buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 18px;
+        }
+
+        .share-buttons a {
+
+            width: 58px;
+            height: 58px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            border-radius: 50%;
+
+            color: white;
+            text-decoration: none;
+
+            font-size: 24px;
+
+            transition: .35s ease;
+
+            box-shadow: 0 8px 25px rgba(0, 0, 0, .25);
+        }
+
+        .share-buttons a:hover {
+
+            transform: translateY(-7px) scale(1.08);
+
+            box-shadow: 0 18px 35px rgba(0, 0, 0, .45);
+        }
+
+        /* Facebook */
+
+        .facebook {
+            background: #1877F2;
+        }
+
+        /* X */
+
+        .twitter {
+            background: #111;
+        }
+
+        /* Reddit */
+
+        .reddit {
+            background: #FF5700;
+        }
+
+        /* WhatsApp */
+
+        .whatsapp {
+            background: #25D366;
+        }
+
+        /* Telegram */
+
+        .telegram {
+            background: #229ED9;
+        }
+
+        /* Other */
+
+        .other {
+            background: #666;
+        }
+
+        @media(max-width:600px) {
+
+            .share-title {
+
+                font-size: 16px;
+
+            }
+
+            .share-buttons {
+
+                gap: 12px;
+
+            }
+
+            .share-buttons a {
+
+                width: 50px;
+                height: 50px;
+
+                font-size: 20px;
+
+            }
+
+        }
+
+        .share-title {
+            font-family: "Poppins", sans-serif;
+            font-size: 18px;
+            font-weight: 400;
+            color: #d9d9d9;
+            line-height: 1.8;
+            text-align: center;
+        }
+
+        .love {
+            font-family: "Bebas Neue", sans-serif;
+            font-size: 20px;
+            /* bas thoda sa bada */
+            letter-spacing: 1px;
+            color: #ffffff;
+            margin-right: 6px;
+        }
+
+        .section-divider {
+
+            width: min(950px, 82%);
+
+            height: 2px;
+
+            margin: 45px auto;
+
+            background: linear-gradient(90deg,
+                    transparent 0%,
+                    #ff2d55 25%,
+                    #ff6b8a 50%,
+                    #ff2d55 75%,
+                    transparent 100%);
+
+            border-radius: 100px;
+
+            box-shadow:
+                0 0 8px rgba(255, 45, 85, .5),
+                0 0 18px rgba(255, 45, 85, .2);
+
+        }
+
+        /* ===========================
+        FEATURED BANNER
+=========================== */
+
+        .featured-banner {
+
+            width: min(1400px, 95%);
+            height: 560px;
+
+            margin: 45px auto;
+
+            position: relative;
+
+            overflow: hidden;
+
+            border-radius: 24px;
+
+            background: #111;
+
+            border: 1px solid #2c2c2c;
+
+            transition: .35s;
+
+        }
+
+        .featured-banner:hover {
+
+            border-color: #ff2d55;
+
+            box-shadow:
+                0 0 30px rgba(255, 45, 85, .25);
+
+        }
+
+        /* ===========================
+          IMAGE
+=========================== */
+
+        #banner-image {
+
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+
+            display: block;
+
+            transition: .6s;
+
+        }
+
+        .featured-banner:hover #banner-image {
+
+            transform: scale(1.05);
+
+        }
+
+        /* ===========================
+         DARK OVERLAY
+=========================== */
+
+        .banner-overlay {
+
+            position: absolute;
+
+            inset: 0;
+
+            background:
+                linear-gradient(to top,
+                    rgba(0, 0, 0, .96) 5%,
+                    rgba(0, 0, 0, .82) 28%,
+                    rgba(0, 0, 0, .45) 58%,
+                    rgba(0, 0, 0, .15) 100%);
+
+        }
+
+        /* ===========================
+          CONTENT
+=========================== */
+
+        .banner-content {
+
+            position: absolute;
+
+            left: 55px;
+
+            bottom: 60px;
+
+            z-index: 5;
+
+            max-width: 650px;
+
+        }
+
+        .banner-tag {
+
+            display: inline-block;
+
+            background: #ff2d55;
+
+            color: white;
+
+            padding: 8px 18px;
+
+            border-radius: 40px;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            letter-spacing: 1px;
+
+            margin-bottom: 18px;
+
+            box-shadow:
+                0 0 18px rgba(255, 45, 85, .45);
+
+        }
+
+        #banner-title {
+
+            margin: 0;
+
+            color: white;
+
+            font-size: 58px;
+
+            font-weight: 800;
+
+            line-height: 1.05;
+
+        }
+
+        #banner-description {
+
+            margin-top: 20px;
+
+            color: #d7d7d7;
+
+            font-size: 18px;
+
+            line-height: 1.8;
+
+        }
+
+        /* ===========================
+          BUTTONS
+=========================== */
+
+        .banner-buttons {
+
+            display: flex;
+
+            gap: 18px;
+
+            margin-top: 35px;
+
+        }
+
+        .watch-btn {
+
+            background: #ff2d55;
+
+            color: white;
+
+            text-decoration: none;
+
+            padding: 15px 30px;
+
+            border-radius: 12px;
+
+            font-weight: 700;
+
+            transition: .3s;
+
+        }
+
+        .watch-btn:hover {
+
+            background: #ff4f74;
+
+            transform: translateY(-4px);
+
+        }
+
+        .details-btn {
+
+            border: 1px solid #666;
+
+            color: white;
+
+            text-decoration: none;
+
+            padding: 15px 30px;
+
+            border-radius: 12px;
+
+            transition: .3s;
+
+        }
+
+        .details-btn:hover {
+
+            border-color: #ff2d55;
+
+            color: #ff2d55;
+
+            transform: translateY(-4px);
+
+        }
+
+        /* ===========================
+            DOTS
+=========================== */
+
+        .banner-dots {
+
+            position: absolute;
+
+            bottom: 30px;
+
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            display: flex;
+
+            gap: 12px;
+
+            z-index: 6;
+
+        }
+
+        .dot {
+
+            width: 12px;
+
+            height: 12px;
+
+            border-radius: 50%;
+
+            background: rgba(255, 255, 255, .35);
+
+            transition: .35s;
+
+            cursor: pointer;
+
+        }
+
+        .dot.active {
+
+            width: 36px;
+
+            border-radius: 20px;
+
+            background: #ff2d55;
+
+        }
+
+        /* ===========================
+         RESPONSIVE
+=========================== */
+
+        @media(max-width:900px) {
+
+            .featured-banner {
+
+                height: 500px;
+
+            }
+
+            .banner-content {
+
+                left: 30px;
+
+                right: 30px;
+
+            }
+
+            #banner-title {
+
+                font-size: 42px;
+
+            }
+
+            #banner-description {
+
+                font-size: 16px;
+
+            }
+
+        }
+
+        @media(max-width:600px) {
+
+            .featured-banner {
+
+                height: 430px;
+
+            }
+
+            .banner-content {
+
+                left: 20px;
+
+                bottom: 30px;
+
+            }
+
+            #banner-title {
+
+                font-size: 32px;
+
+            }
+
+            .banner-buttons {
+
+                flex-direction: column;
+
+            }
+
+            .watch-btn,
+            .details-btn {
+
+                text-align: center;
+
+            }
+
+        }
+    </style>
+
+    <link rel="stylesheet" href="animepage.css">
+    <link rel="stylesheet" href="hamburger.html">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Bebas+Neue&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+
+<body>
+    <header class="header">
+
+        <a href="#" class="logo">
+            <span class="anime">Anime</span>
+            <span class="moss">MOSS</span>
+
+            <span class="play">
+                ▶
+            </span>
+        </a>
+
+        <nav class="navbar">
+
+            <ul>
+
+                <li><a href="#">Genres</a></li>
+                <li><a href="#">Types</a></li>
+                <li><a href="#">Updates</a></li>
+                <li><a href="#">Popular</a></li>
+                <li><a href="#">Upcoming</a></li>
+                <li><a href="#">Random</a></li>
+
+            </ul>
+
+        </nav>
+
+        <div class="login">
+
+            <a href="#">
+                Login
+            </a>
+
+        </div>
+
+    </header>
+    <!-- HERO -->
+    <section class="hero">
+
+
+        <div class="hero-content">
+
+            <h1>Watch Anime Without Limits</h1>
+
+            <p>Discover • Track • Watch</p>
+
+            <div class="search-box">
+                <input type="search" placeholder="Search anime...">
+                <button>Search</button>
+            </div>
+
+            <div class="domain-alert">
+                📢 Please bookmark <a href="#">animemoss.bid</a> to stay updated with our latest domain and
+                announcements. Thank you!
+            </div>
+
+        </div>
+
+    </section>
+    <section class="share-section">
+
+        <p class="share-title">
+            <span class="love">
+                ❤️ Love AnimeMOSS?
+            </span>
+
+            Help more anime fans discover their next favorite series by sharing AnimeMOSS with your
+            friends. Every share helps us grow!
+
+        </p>
+
+        <div class="share-buttons">
+
+            <a href="#" class="facebook" title="Facebook">
+                <i class="fa-brands fa-facebook-f"></i>
+            </a>
+
+            <a href="#" class="twitter" title="X">
+                <i class="fa-brands fa-x-twitter"></i>
+            </a>
+
+            <a href="#" class="reddit" title="Reddit">
+                <i class="fa-brands fa-reddit-alien"></i>
+            </a>
+
+            <a href="#" class="whatsapp" title="WhatsApp">
+                <i class="fa-brands fa-whatsapp"></i>
+            </a>
+
+            <a href="#" class="telegram" title="Telegram">
+                <i class="fa-brands fa-telegram"></i>
+            </a>
+
+            <a href="#" class="other" title="Share">
+                <i class="fa-solid fa-share-nodes"></i>
+            </a>
+
+        </div>
+
+    </section>
+
+    <main class="main">
+        <div class="section-divider"></div>
+
+        <section class="featured-banner">
+
+            <img id="banner-image" src="" alt="Featured Anime">
+
+            <div class="banner-overlay"></div>
+
+            <div class="banner-content">
+
+                <span id="banner-tag" class="banner-tag">
+                </span>
+
+                <h1 id="banner-title"></h1>
+
+                <p id="banner-description"></p>
+
+                <div class="banner-buttons">
+
+                    <a href="#" id="watch-btn" class="watch-btn">
+
+                        ▶ Watch Now
+
+                    </a>
+
+                    <a href="#" id="details-btn" class="details-btn">
+
+                        View Details
+
+                    </a>
+
+                </div>
+
+            </div>
+
+            <div class="banner-dots">
+
+                <span class="dot active"></span>
+
+                <span class="dot"></span>
+
+                <span class="dot"></span>
+
+                <span class="dot"></span>
+
+            </div>
+
+        </section>
+
+        </section>
+        <div class="section-header">
+
+            <div class="title">
+                <span class="latest">Latest</span>
+                <h2 class="episodes">Episodes</h2>
+            </div>
+
+            <div class="filters">
+                <a href="#" class="active">All</a>
+                <a href="#">Sub</a>
+                <a href="#">Dub</a>
+                <a href="#">Trending</a>
+            </div>
+
+        </div>
+        <div class="container">
+            <a href="">
+                <div class="card">
+                    <div class="image">
+
+                        <img src="https://i.pinimg.com/736x/11/9a/ad/119aad3c7d98b9bf795ee7b2eb753791.jpg"
+                            alt="one piece">
+
+                        <div class="overlay">
+                            <button class="play-btn">▶</button>
+
+                            <div class="title-bar">
+                                Onepiece
+                            </div>
+
+                            <div class="episode">
+                                S1-EP11
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </a>
+            <a href="">
+                <div class="card">
+                    <div class="image">
+
+                        <img src="https://i.pinimg.com/1200x/c6/db/1c/c6db1ce4ee68d9eeb1e5787077f50cec.jpg"
+                            alt="Solo Leveling">
+
+                        <div class="overlay">
+                            <button class="play-btn">▶</button>
+
+                            <div class="title-bar">
+                                Solo Leveling
+                            </div>
+
+                            <div class="episode">
+                                S1-EP11
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </a>
+            <a href="">
+                <div class="card">
+                    <div class="image">
+
+                        <img src="https://i.pinimg.com/736x/0b/a1/2b/0ba12b80a3492d921cc335b1e68638d2.jpg"
+                            alt="Gachiakuta">
+
+                        <div class="overlay">
+                            <button class="play-btn">▶</button>
+
+                            <div class="title-bar">
+                                Gachiakuta
+                            </div>
+
+                            <div class="episode">
+                                S1-EP11
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </a>
+            <a href="">
+                <div class="card">
+                    <div class="image">
+
+                        <img src="https://i.pinimg.com/736x/a1/46/7f/a1467fb9dfe067858af2003ef8925569.jpg"
+                            alt="Chainsawman">
+
+                        <div class="overlay">
+                            <button class="play-btn">▶</button>
+
+                            <div class="title-bar">
+                                Chainsaw man
+                            </div>
+
+                            <div class="episode">
+                                S1-EP11
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </a>
+            <a href="">
+                <div class="card">
+                    <div class="image">
+
+                        <img src="https://i.pinimg.com/736x/26/71/36/2671365a034fb535268e6dfc93032931.jpg"
+                            alt="jujutsu kaisan">
+
+                        <div class="overlay">
+                            <button class="play-btn">▶</button>
+
+                            <div class="title-bar">
+                                Jujutsu kaisan
+                            </div>
+
+                            <div class="episode">
+                                S1-EP11
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </a>
+            <a href="">
+                <div class="card">
+                    <div class="image">
+
+                        <img src="https://i.pinimg.com/736x/81/c7/9c/81c79cb8cfcb320fb7890403fc9bc81d.jpg"
+                            alt="Demon slayer">
+
+                        <div class="overlay">
+                            <button class="play-btn">▶</button>
+
+                            <div class="title-bar">
+                                Demon slayer
+                            </div>
+
+                            <div class="episode">
+                                S1-EP11
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </a>
+            <a href="">
+                <div class="card">
+                    <div class="image">
+
+                        <img src="https://i.pinimg.com/736x/d4/cb/12/d4cb121e34d7e9f953703267c8574f2c.jpg"
+                            alt="HEll's paradise">
+
+                        <div class="overlay">
+                            <button class="play-btn">▶</button>
+
+                            <div class="title-bar">
+                                Hell's paradise
+                            </div>
+
+                            <div class="episode">
+                                S1-EP11
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </a>
+            <a href="">
+                <div class="card">
+                    <div class="image">
+
+                        <img src="https://i.pinimg.com/736x/cd/ec/b1/cdecb11edd24867bf1e2f4be220aab2c.jpg"
+                            alt="dandadan">
+                        <div class="overlay">
+                            <button class="play-btn">▶</button>
+
+                            <div class="title-bar">
+                                DandaDan
+                            </div>
+
+                            <div class="episode">
+                                S1-EP11
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </a>
+            <a href="">
+                <div class="card">
+                    <div class="image">
+
+                        <img src="https://i.pinimg.com/736x/6f/e7/ce/6fe7ce69d70e42c66cd61952dce6058e.jpg"
+                            alt="Wind breaker">
+                        <div class="overlay">
+                            <button class="play-btn">▶</button>
+
+                            <div class="title-bar">
+                                Wind breaker
+                            </div>
+
+                            <div class="episode">
+                                S1-EP11
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </a>
+            <a href="">
+                <div class="card">
+                    <div class="image">
+
+                        <img src="https://i.pinimg.com/736x/9f/3b/2a/9f3b2ad4da7ab7926c65487addc5b906.jpg"
+                            alt="kaiju no 8">
+                        <div class="overlay">
+                            <button class="play-btn">▶</button>
+
+                            <div class="title-bar">
+                                Kaiju No 8
+                            </div>
+
+                            <div class="episode">
+                                S1-EP11
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </a>
+            <a href="">
+                <div class="card">
+                    <div class="image">
+
+                        <img src="https://i.pinimg.com/736x/a8/4e/79/a84e79ad5d11991ee4a827ebd3284d70.jpg"
+                            alt="naruto shippuden">
+                        <div class="overlay">
+                            <button class="play-btn">▶</button>
+
+                            <div class="title-bar">
+                                Naruto shippuden
+                            </div>
+
+                            <div class="episode">
+                                S1-EP11
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </a>
+            <a href="">
+                <div class="card">
+                    <div class="image">
+
+                        <img src="https://i.pinimg.com/736x/0e/5f/ab/0e5fab75ae7caee4b36235a14bdaf2a2.jpg"
+                            alt="Blue lock">
+                        <div class="overlay">
+                            <button class="play-btn">▶</button>
+
+                            <div class="title-bar">
+                                Blue lock
+                            </div>
+
+                            <div class="episode">
+                                S1-EP11
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </a>
+            <a href="">
+                <div class="card">
+                    <div class="image">
+
+                        <img src="https://i.pinimg.com/736x/d6/db/56/d6db56701eb303d9dd3cddab3afb4701.jpg"
+                            alt="Attack on titan">
+                        <div class="overlay">
+                            <button class="play-btn">▶</button>
+
+                            <div class="title-bar">
+                                Attack on titan
+                            </div>
+
+                            <div class="episode">
+                                S1-EP11
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </a>
+        </div>
+    </main>
+    <script src="script.js"></script>
+
+</body>
+
+</html>
