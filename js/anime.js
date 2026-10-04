@@ -144,37 +144,39 @@ function renderAnime(anime, index = 99) {
         `
     );
 }
-function showLoading(message = "Loading anime...") {
-    let loadingBox = document.getElementById("anime-loading");
+function showLoading(message = "Loading...") {
+    let loader = document.getElementById("anime-loading");
 
-    if (!loadingBox) {
-        loadingBox = document.createElement("div");
-        loadingBox.id = "anime-loading";
-
-        loadingBox.style.cssText = `
-            width:100%;
-            text-align:center;
-            color:white;
-            padding:24px 10px;
-            font-size:16px;
+    if (!loader) {
+        loader = document.createElement("div");
+        loader.id = "anime-loading";
+        loader.style.cssText = `
+            width: 100%;
+            padding: 20px 16px;
+            text-align: center;
+            color: rgba(255,255,255,.65);
+            box-sizing: border-box;
         `;
 
-        container.parentNode.insertBefore(
-            loadingBox,
-            container.nextSibling
-        );
+        const container =
+            document.querySelector(".anime-container, #anime-container, main")
+            || document.body;
+
+        container.prepend(loader);
     }
 
-    loadingBox.textContent = message;
-    loadingBox.style.display = "block";
+    loader.textContent = message;
+    loader.style.display = "block";
 }
 
 function hideLoading() {
-    const loadingBox = document.getElementById("anime-loading");
+    const loader = document.getElementById("anime-loading");
 
-    if (loadingBox) {
-        loadingBox.style.display = "none";
+    if (!loader) {
+        return;
     }
+
+    loader.style.display = "none";
 }
 
 function updatePagination() {
@@ -353,7 +355,7 @@ async function loadAnime(page = 1, reset = false) {
         // on a catalog sort field that may not be supported.
         if (activeFilter === "trending" && !currentSearch) {
             const response = await fetch(
-                `${API_BASE}/api/most-viewed?period=week&limit=${PAGE_SIZE}`,
+                `${API_BASE}/api/trending?limit=${PAGE_SIZE}`,
                 { cache: "no-store" }
             );
 
@@ -464,7 +466,8 @@ async function loadAnime(page = 1, reset = false) {
 }
 
 async function checkAvailability(animeId, type) {
-    const key = `${animeId}:${type}`;
+    const day = getRotationDay();
+    const key = `${day}:${animeId}:${type}`;
 
     if (availabilityCache.has(key)) {
         return availabilityCache.get(key);
@@ -475,49 +478,64 @@ async function checkAvailability(animeId, type) {
     }
 
     const request = (async () => {
-        try {
-            const response = await fetch(
-                `${API_BASE}/watch/${encodeURIComponent(animeId)}/1?type=${encodeURIComponent(type)}`
-            );
+        for (let attempt = 1; attempt <= 2; attempt++) {
+            try {
+                const response = await fetch(
+                    `${API_BASE}/watch/${encodeURIComponent(animeId)}/1?type=${encodeURIComponent(type)}`
+                );
 
-            if (!response.ok) {
-                availabilityCache.set(key, false);
-                return false;
-            }
+                if (!response.ok) {
+                    if (attempt < 2) {
+                        await new Promise(resolve => setTimeout(resolve, 250));
+                        continue;
+                    }
 
-            const data = await response.json();
+                    console.warn(
+                        `Availability provider returned HTTP ${response.status} for ${animeId} (${type})`
+                    );
 
-            // Production /watch returns { embeds: [...] }.
-            // Keep the older streams shape as a fallback.
-            const embeds = Array.isArray(data?.embeds)
-                ? data.embeds
-                : Array.isArray(data?.streams)
-                    ? data.streams
-                        .map(stream =>
-                            stream && (
-                                stream.embed ||
-                                stream.url ||
-                                stream.extractedUrl ||
-                                stream.stream_url ||
-                                stream.streamUrl
+                    return null;
+                }
+
+                const data = await response.json();
+
+                const embeds = Array.isArray(data?.embeds)
+                    ? data.embeds
+                    : Array.isArray(data?.streams)
+                        ? data.streams
+                            .map(stream =>
+                                stream && (
+                                    stream.embed ||
+                                    stream.url ||
+                                    stream.extractedUrl ||
+                                    stream.stream_url ||
+                                    stream.streamUrl
+                                )
                             )
-                        )
-                        .filter(Boolean)
-                    : [];
+                            .filter(Boolean)
+                        : [];
 
-            const available = embeds.length > 0;
+                const available = embeds.length > 0;
 
-            availabilityCache.set(key, available);
-            return available;
+                availabilityCache.set(key, available);
 
-        } catch (error) {
-            console.warn(
-                `Availability check failed for ${animeId} (${type})`
-            );
+                return available;
 
-            availabilityCache.set(key, false);
-            return false;
+            } catch (error) {
+                if (attempt < 2) {
+                    await new Promise(resolve => setTimeout(resolve, 250));
+                    continue;
+                }
+
+                console.warn(
+                    `Availability check failed for ${animeId} (${type}); keeping result unknown`
+                );
+
+                return null;
+            }
         }
+
+        return null;
     })();
 
     availabilityRequests.set(key, request);
@@ -600,7 +618,7 @@ const availabilityHasMore = {
     dub: true
 };
 
-const MAX_SOURCE_PAGES_PER_REQUEST = 2;
+const MAX_SOURCE_PAGES_PER_REQUEST = 8;
 
 async function buildAvailabilityPage(type, targetPage) {
     const cached = availabilityPages[type][targetPage - 1];
@@ -626,7 +644,7 @@ async function buildAvailabilityPage(type, targetPage) {
         const pageData = await fetchCatalog(
             sourcePage,
             "",
-            "-userCount"
+            "popular"
         );
 
         const animeList = Array.isArray(pageData.media)
