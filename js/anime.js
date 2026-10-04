@@ -764,7 +764,11 @@ if (nextButton) {
     });
 }
 
-function performSearch() {
+function performSearch(event) {
+    if (event) {
+        event.preventDefault();
+    }
+
     const query = searchInput
         ? searchInput.value.trim()
         : "";
@@ -773,24 +777,20 @@ function performSearch() {
         return;
     }
 
-    window.location.href =
-        `search.html?search=${encodeURIComponent(query)}`;
+    const searchUrl = new URL(
+        "search.html",
+        window.location.href
+    );
+
+    searchUrl.searchParams.set("search", query);
+
+    window.location.assign(searchUrl.href);
 }
 
-if (searchButton) {
-    searchButton.addEventListener("click", event => {
-        event.preventDefault();
-        performSearch();
-    });
-}
+const searchBox = document.querySelector(".search-box");
 
-if (searchInput) {
-    searchInput.addEventListener("keydown", event => {
-        if (event.key === "Enter") {
-            event.preventDefault();
-            performSearch();
-        }
-    });
+if (searchBox) {
+    searchBox.addEventListener("submit", performSearch);
 }
 
 filters.forEach(filter => {

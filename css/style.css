@@ -4265,3 +4265,25 @@ body {
 
 
 }
+
+
+/* AnimeMOSS mobile search interaction fix */
+@media (max-width: 768px) {
+    .search-box {
+        position: relative;
+        z-index: 100;
+        pointer-events: auto;
+        touch-action: manipulation;
+    }
+
+    .search-box input,
+    .search-box button {
+        pointer-events: auto;
+        touch-action: manipulation;
+    }
+
+    .search-box button {
+        position: relative;
+        z-index: 101;
+    }
+}
