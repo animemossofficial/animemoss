@@ -174,10 +174,16 @@
 
             <p>Discover • Track • Watch</p>
 
-            <div class="search-box">
-                <input type="search" placeholder="Search anime...">
-                <button>Search</button>
-            </div>
+            <form class="search-box" action="search.html" method="GET">
+                <input
+                    type="search"
+                    name="search"
+                    placeholder="Search anime..."
+                    autocomplete="off"
+                    enterkeyhint="search"
+                >
+                <button type="submit">Search</button>
+            </form>
 
             <div class="domain-alert">
                 📢 Please bookmark <a href="domain-update.html">animemoss.bid</a> to stay updated with our latest domain and
