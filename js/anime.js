@@ -349,10 +349,47 @@ async function loadAnime(page = 1, reset = false) {
     updatePagination();
 
     try {
-        const sort =
-            activeFilter === "trending"
-                ? "-userCount"
-                : "-averageRating";
+        // Trending uses AnimeMOSS real view data instead of relying
+        // on a catalog sort field that may not be supported.
+        if (activeFilter === "trending" && !currentSearch) {
+            const response = await fetch(
+                `${API_BASE}/api/most-viewed?period=week&limit=${PAGE_SIZE}`,
+                { cache: "no-store" }
+            );
+
+            if (!response.ok) {
+                throw new Error(
+                    `Trending request failed: ${response.status}`
+                );
+            }
+
+            const result = await response.json();
+
+            const trendingList = Array.isArray(result.results)
+                ? result.results
+                : [];
+
+            currentPage = 1;
+            hasNextPage = false;
+            container.innerHTML = "";
+
+            if (!trendingList.length) {
+                container.innerHTML = `
+                    <h2 style="color:white;text-align:center;width:100%;">
+                        No trending anime found.
+                    </h2>
+                `;
+            } else {
+                trendingList.forEach((anime, index) => {
+                    renderAnime(anime, index);
+                });
+            }
+
+            hideLoading();
+            return;
+        }
+
+        const sort = "-averageRating";
 
         const sourcePage =
             currentSearch
@@ -450,18 +487,25 @@ async function checkAvailability(animeId, type) {
 
             const data = await response.json();
 
-            const available =
-                Array.isArray(data?.streams) &&
-                data.streams.some(stream =>
-                    stream &&
-                    (
-                        stream.embed ||
-                        stream.url ||
-                        stream.extractedUrl ||
-                        stream.stream_url ||
-                        stream.streamUrl
-                    )
-                );
+            // Production /watch returns { embeds: [...] }.
+            // Keep the older streams shape as a fallback.
+            const embeds = Array.isArray(data?.embeds)
+                ? data.embeds
+                : Array.isArray(data?.streams)
+                    ? data.streams
+                        .map(stream =>
+                            stream && (
+                                stream.embed ||
+                                stream.url ||
+                                stream.extractedUrl ||
+                                stream.stream_url ||
+                                stream.streamUrl
+                            )
+                        )
+                        .filter(Boolean)
+                    : [];
+
+            const available = embeds.length > 0;
 
             availabilityCache.set(key, available);
             return available;

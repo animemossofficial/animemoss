@@ -3845,3 +3845,41 @@ header {
 .site-footer-disclaimer strong {
     opacity: 0.9;
 }
+
+
+/* =========================================================
+   ANIMEMOSS TOUCH CARD INFO PANEL
+   ========================================================= */
+@media (max-width: 1000px) {
+    .anime-card-link.touch-panel-active .anime-hover-panel {
+        display: block !important;
+        position: fixed !important;
+
+        left: var(--touch-panel-left, 10px) !important;
+        top: var(--touch-panel-top, 10px) !important;
+
+        right: auto !important;
+        bottom: auto !important;
+
+        width: min(305px, calc(100vw - 20px)) !important;
+        max-width: calc(100vw - 20px) !important;
+
+        min-height: 0 !important;
+
+        opacity: 1 !important;
+        visibility: visible !important;
+
+        pointer-events: auto !important;
+        transform: none !important;
+
+        z-index: 100000 !important;
+    }
+
+    .anime-card-link.touch-panel-active .anime-hover-panel::before {
+        display: none !important;
+    }
+
+    .anime-card-link.touch-panel-active .overlay {
+        z-index: 100001 !important;
+    }
+}

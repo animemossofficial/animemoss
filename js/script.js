@@ -353,3 +353,327 @@ document.addEventListener("keydown", event => {
 
 
 
+
+
+/* =========================================================
+   ANIMEMOSS HOMEPAGE SEARCH
+   ========================================================= */
+(function () {
+    const searchBox = document.querySelector(".hero .search-box");
+    const input = searchBox?.querySelector('input[type="search"]');
+    const button = searchBox?.querySelector("button");
+
+    if (!input || !button) return;
+
+    function goToSearch() {
+        const query = input.value.trim();
+
+        if (!query) {
+            input.focus();
+            return;
+        }
+
+        window.location.href =
+            `search.html?search=${encodeURIComponent(query)}`;
+    }
+
+    button.addEventListener("click", event => {
+        event.preventDefault();
+        goToSearch();
+    });
+
+    input.addEventListener("keydown", event => {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            goToSearch();
+        }
+    });
+})();
+
+
+/* =========================================================
+   ANIMEMOSS SHARE BUTTONS
+   ========================================================= */
+(function () {
+    const buttons = document.querySelectorAll(".share-buttons a");
+
+    if (!buttons.length) return;
+
+    const shareUrl = window.location.href.split("#")[0];
+    const shareTitle = "AnimeMOSS — Watch Anime Without Limits";
+
+    const encodedUrl = encodeURIComponent(shareUrl);
+    const encodedTitle = encodeURIComponent(shareTitle);
+    const encodedText = encodeURIComponent(
+        `${shareTitle} ${shareUrl}`
+    );
+
+    const targets = {
+        facebook:
+            `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
+
+        twitter:
+            `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`,
+
+        reddit:
+            `https://www.reddit.com/submit?url=${encodedUrl}&title=${encodedTitle}`,
+
+        whatsapp:
+            `https://api.whatsapp.com/send?text=${encodedText}`,
+
+        telegram:
+            `https://t.me/share/url?url=${encodedUrl}&text=${encodedTitle}`
+    };
+
+    buttons.forEach(button => {
+        button.addEventListener("click", async event => {
+            event.preventDefault();
+
+            const type =
+                button.classList.contains("facebook") ? "facebook" :
+                button.classList.contains("twitter") ? "twitter" :
+                button.classList.contains("reddit") ? "reddit" :
+                button.classList.contains("whatsapp") ? "whatsapp" :
+                button.classList.contains("telegram") ? "telegram" :
+                "other";
+
+            if (type === "other") {
+                if (navigator.share) {
+                    try {
+                        await navigator.share({
+                            title: shareTitle,
+                            text: "Discover AnimeMOSS",
+                            url: shareUrl
+                        });
+                    } catch (error) {
+                        if (error?.name !== "AbortError") {
+                            console.warn(
+                                "Native share failed:",
+                                error
+                            );
+                        }
+                    }
+
+                    return;
+                }
+
+                try {
+                    await navigator.clipboard.writeText(shareUrl);
+                    alert("AnimeMOSS link copied!");
+                } catch {
+                    window.prompt(
+                        "Copy AnimeMOSS link:",
+                        shareUrl
+                    );
+                }
+
+                return;
+            }
+
+            window.open(
+                targets[type],
+                "_blank",
+                "noopener,noreferrer,width=700,height=600"
+            );
+        });
+    });
+})();
+
+
+/* =========================================================
+   ANIMEMOSS TOUCH LONG-PRESS CARD INFO PANEL
+   ========================================================= */
+(function () {
+    let timer = null;
+    let activeCard = null;
+    let startX = 0;
+    let startY = 0;
+    let longPressed = false;
+    let suppressClickUntil = 0;
+
+    function closePanels(except = null) {
+        document
+            .querySelectorAll(".anime-card-link.touch-panel-active")
+            .forEach(card => {
+                if (card !== except) {
+                    card.classList.remove("touch-panel-active");
+                }
+            });
+    }
+
+    function positionPanel(card) {
+        const panel = card.querySelector(".anime-hover-panel");
+
+        if (!panel) return;
+
+        const rect = card.getBoundingClientRect();
+        const margin = 10;
+        const width = Math.min(
+            305,
+            window.innerWidth - margin * 2
+        );
+
+        let left = Math.max(
+            margin,
+            Math.min(
+                rect.left,
+                window.innerWidth - width - margin
+            )
+        );
+
+        let top = rect.bottom + 8;
+
+        panel.style.setProperty(
+            "--touch-panel-left",
+            `${left}px`
+        );
+
+        panel.style.setProperty(
+            "--touch-panel-top",
+            `${top}px`
+        );
+
+        requestAnimationFrame(() => {
+            const panelRect =
+                panel.getBoundingClientRect();
+
+            if (panelRect.bottom > window.innerHeight - margin) {
+                top = Math.max(
+                    margin,
+                    rect.top - panelRect.height - 8
+                );
+
+                panel.style.setProperty(
+                    "--touch-panel-top",
+                    `${top}px`
+                );
+            }
+        });
+    }
+
+    function cancelTimer() {
+        if (timer) {
+            clearTimeout(timer);
+            timer = null;
+        }
+    }
+
+    document.addEventListener(
+        "touchstart",
+        event => {
+            const cardLink =
+                event.target.closest(".anime-card-link");
+
+            if (
+                !cardLink ||
+                event.target.closest(".anime-hover-panel")
+            ) {
+                return;
+            }
+
+            cancelTimer();
+
+            const touch = event.touches[0];
+
+            startX = touch.clientX;
+            startY = touch.clientY;
+
+            activeCard = cardLink;
+            longPressed = false;
+
+            timer = setTimeout(() => {
+                if (!activeCard) return;
+
+                closePanels(activeCard);
+
+                activeCard.classList.add(
+                    "touch-panel-active"
+                );
+
+                positionPanel(activeCard);
+
+                longPressed = true;
+                suppressClickUntil =
+                    Date.now() + 900;
+
+                if (navigator.vibrate) {
+                    navigator.vibrate(20);
+                }
+            }, 450);
+        },
+        { passive: true }
+    );
+
+    document.addEventListener(
+        "touchmove",
+        event => {
+            if (!timer || !activeCard) return;
+
+            const touch = event.touches[0];
+
+            if (
+                Math.abs(touch.clientX - startX) > 10 ||
+                Math.abs(touch.clientY - startY) > 10
+            ) {
+                cancelTimer();
+                activeCard = null;
+            }
+        },
+        { passive: true }
+    );
+
+    document.addEventListener(
+        "touchend",
+        event => {
+            cancelTimer();
+
+            if (longPressed) {
+                event.preventDefault();
+                longPressed = false;
+            }
+
+            activeCard = null;
+        },
+        { passive: false }
+    );
+
+    document.addEventListener(
+        "touchcancel",
+        () => {
+            cancelTimer();
+            activeCard = null;
+            longPressed = false;
+        },
+        { passive: true }
+    );
+
+    document.addEventListener(
+        "click",
+        event => {
+            if (Date.now() < suppressClickUntil) {
+                event.preventDefault();
+                event.stopPropagation();
+                suppressClickUntil = 0;
+                return;
+            }
+
+            if (
+                !event.target.closest(".anime-card-link") &&
+                !event.target.closest(".anime-hover-panel")
+            ) {
+                closePanels();
+            }
+        },
+        true
+    );
+
+    window.addEventListener("resize", () => {
+        const card = document.querySelector(
+            ".anime-card-link.touch-panel-active"
+        );
+
+        if (card) {
+            positionPanel(card);
+        }
+    });
+})();
