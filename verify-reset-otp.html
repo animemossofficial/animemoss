@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Verify Reset Code - AnimeMOSS</title>
+
+    <link rel="stylesheet" href="css/auth.css">
+</head>
+
+<body class="auth-page">
+
+    <main class="auth-wrapper">
+
+        <a class="auth-brand" href="index.html">
+            Anime<span>MOSS</span>
+            <span class="auth-brand-icon">▶</span>
+        </a>
+
+        <section class="auth-card">
+
+            <h1 class="auth-title">Enter verification code</h1>
+
+            <p class="auth-subtitle">
+                Enter the 6-digit code sent to your email.
+                The code expires in 10 minutes.
+            </p>
+
+            <div
+                id="auth-message"
+                class="auth-message"
+                role="alert"
+                aria-live="polite"
+            ></div>
+
+            <form
+                id="verify-reset-form"
+                class="auth-form"
+                novalidate
+            >
+
+                <div class="auth-field">
+                    <label for="reset-otp">
+                        Verification Code
+                    </label>
+
+                    <input
+                        id="reset-otp"
+                        name="otp"
+                        type="text"
+                        inputmode="numeric"
+                        autocomplete="one-time-code"
+                        pattern="[0-9]{6}"
+                        minlength="6"
+                        maxlength="6"
+                        placeholder="000000"
+                        required
+                    >
+                </div>
+
+                <button
+                    id="verify-otp-submit"
+                    class="auth-submit"
+                    type="submit"
+                >
+                    Verify Code
+                </button>
+
+            </form>
+
+            <div class="auth-footer">
+                <button
+                    id="resend-otp-btn"
+                    type="button"
+                    style="
+                        border:0;
+                        background:transparent;
+                        color:#ff2d55;
+                        cursor:pointer;
+                        font:inherit;
+                        font-weight:700;
+                    "
+                    disabled
+                >
+                    Resend Code in 60s
+                </button>
+            </div>
+
+            <a
+                class="auth-home-link"
+                href="login.html"
+            >
+                ← Back to Login
+            </a>
+
+        </section>
+
+    </main>
+
+    <script src="js/verify-reset-otp.js"></script>
+
+</body>
+</html>

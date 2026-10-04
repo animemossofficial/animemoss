@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="AnimeMOSS domain update and official website announcement.">
+    <title>AnimeMOSS — Domain Update</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #f5f5f7;
+            background:
+                radial-gradient(circle at 50% -10%, rgba(255, 52, 104, .16), transparent 38%),
+                #08090f;
+            line-height: 1.6;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .page {
+            width: min(1080px, calc(100% - 28px));
+            margin: 0 auto;
+            padding: 28px 0 50px;
+        }
+
+        /* HERO */
+        .hero {
+            position: relative;
+            min-height: 310px;
+            overflow: hidden;
+            display: flex;
+            align-items: flex-end;
+            border: 1px solid rgba(255,255,255,.1);
+            border-radius: 22px;
+            background:
+                radial-gradient(circle at 75% 35%, rgba(255, 81, 122, .28), transparent 25%),
+                radial-gradient(circle at 25% 65%, rgba(84, 82, 255, .22), transparent 30%),
+                linear-gradient(135deg, #11152b, #170c18 52%, #090b14);
+            box-shadow: 0 25px 80px rgba(0,0,0,.35);
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(120deg,
+                    transparent 0 30%,
+                    rgba(255,255,255,.035) 30.2%,
+                    transparent 30.5% 55%,
+                    rgba(255,255,255,.025) 55.2%,
+                    transparent 55.5%);
+            pointer-events: none;
+        }
+
+        .hero-glow {
+            position: absolute;
+            width: 260px;
+            height: 260px;
+            right: -80px;
+            top: -90px;
+            border-radius: 50%;
+            background: rgba(255, 45, 100, .16);
+            filter: blur(30px);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            padding: 42px;
+        }
+
+        .brand {
+            display: inline-block;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -.5px;
+        }
+
+        .brand span {
+            color: #ff416d;
+        }
+
+        .hero-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 12px;
+            border: 1px solid rgba(255,75,110,.35);
+            border-radius: 999px;
+            background: rgba(255,55,100,.08);
+            color: #ff6a89;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.3px;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            max-width: 760px;
+            margin: 15px 0 10px;
+            font-size: clamp(34px, 6vw, 64px);
+            line-height: 1.02;
+            letter-spacing: -2px;
+        }
+
+        .hero p {
+            max-width: 680px;
+            margin: 0;
+            color: #bfc1cc;
+            font-size: 16px;
+        }
+
+        /* NOTICE */
+        .notice {
+            margin: 32px 0;
+            padding: 30px;
+            border: 1px solid rgba(255,255,255,.09);
+            border-radius: 18px;
+            background: #10111a;
+            text-align: center;
+        }
+
+        .notice-icon {
+            width: 58px;
+            height: 58px;
+            margin: 0 auto 18px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            border: 1px solid rgba(255,65,109,.35);
+            background: rgba(255,65,109,.08);
+            color: #ff416d;
+            font-size: 27px;
+        }
+
+        .notice h2 {
+            margin: 0;
+            font-size: clamp(26px, 4vw, 40px);
+            line-height: 1.15;
+        }
+
+        .notice h2 span {
+            color: #ff416d;
+        }
+
+        .notice-text {
+            max-width: 720px;
+            margin: 16px auto 0;
+            color: #bfc1cc;
+            font-size: 16px;
+        }
+
+        .domain-box {
+            max-width: 700px;
+            margin: 25px auto 0;
+            padding: 18px;
+            border: 1px solid rgba(255,255,255,.09);
+            border-radius: 15px;
+            background: #0b0c13;
+        }
+
+        .domain-label {
+            margin-bottom: 8px;
+            color: #777b89;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+        }
+
+        .domain-name {
+            display: block;
+            color: #ff416d;
+            font-size: clamp(24px, 5vw, 36px);
+            font-weight: 800;
+            letter-spacing: -.5px;
+        }
+
+        .domain-status {
+            margin-top: 4px;
+            color: #858896;
+            font-size: 12px;
+        }
+
+        .domain-button {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            min-width: 240px;
+            margin-top: 20px;
+            padding: 14px 24px;
+            border: 0;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #ff416d, #ff5b8a);
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: default;
+            box-shadow: 0 10px 30px rgba(255,65,109,.2);
+        }
+
+        /* INFORMATION */
+        .section-title {
+            margin: 42px 0 16px;
+            font-size: 23px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .card {
+            padding: 24px;
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 16px;
+            background: #10111a;
+        }
+
+        .card-number {
+            color: #ff416d;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+        }
+
+        .card h3 {
+            margin: 8px 0 7px;
+            font-size: 18px;
+        }
+
+        .card p {
+            margin: 0;
+            color: #9fa2af;
+            font-size: 14px;
+        }
+
+        .safety {
+            margin-top: 16px;
+            padding: 25px;
+            border-left: 3px solid #ff416d;
+            border-radius: 12px;
+            background: #10111a;
+        }
+
+        .safety h3 {
+            margin: 0 0 8px;
+        }
+
+        .safety p {
+            margin: 0;
+            color: #a7a9b5;
+            font-size: 14px;
+        }
+
+        /* FOOTER */
+        .footer {
+            margin-top: 55px;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255,255,255,.08);
+            text-align: center;
+            color: #666a78;
+            font-size: 12px;
+        }
+
+        .footer-brand {
+            margin-bottom: 6px;
+            color: #e8e8ed;
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .footer-brand span {
+            color: #ff416d;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 14px 0;
+        }
+
+        .footer-links a {
+            color: #858896;
+        }
+
+        .footer-links a:hover {
+            color: #fff;
+        }
+
+        @media (max-width: 700px) {
+            .page {
+                width: min(100% - 18px, 1080px);
+                padding-top: 9px;
+            }
+
+            .hero {
+                min-height: 350px;
+                border-radius: 16px;
+            }
+
+            .hero-content {
+                padding: 28px 22px;
+            }
+
+            .hero h1 {
+                letter-spacing: -1px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .notice {
+                padding: 24px 18px;
+            }
+
+            .domain-button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="page">
+
+    <section class="hero">
+        <div class="hero-glow"></div>
+
+        <div class="hero-content">
+            <div class="brand">Anime<span>MOSS</span></div>
+
+            <div class="hero-label">
+                📢 Important Domain Update
+            </div>
+
+            <h1>
+                Stay Updated With AnimeMOSS
+            </h1>
+
+            <p>
+                Please keep this page bookmarked for future domain announcements,
+                service updates, and important AnimeMOSS information.
+            </p>
+        </div>
+    </section>
+
+    <section class="notice">
+
+        <div class="notice-icon">!</div>
+
+        <h2>
+            Important Notice
+            <br>
+            <span>About AnimeMOSS Access</span>
+        </h2>
+
+        <p class="notice-text">
+            📢 Please bookmark <strong>animemoss.bid</strong> to stay updated
+            with our latest domain and announcements. Thank you!
+        </p>
+
+        <div class="domain-box">
+            <div class="domain-label">Current announced domain</div>
+
+            <span class="domain-name">animemoss.bid</span>
+
+            <div class="domain-status">
+                Domain link will be activated when the domain is ready.
+            </div>
+
+            <span class="domain-button">
+                Visit AnimeMOSS
+            </span>
+        </div>
+
+    </section>
+
+    <h2 class="section-title">Why this page exists</h2>
+
+    <section class="cards">
+
+        <article class="card">
+            <div class="card-number">01</div>
+            <h3>Domain Updates</h3>
+            <p>
+                AnimeMOSS may change domains or access points in the future.
+                This page provides a central place for important announcements.
+            </p>
+        </article>
+
+        <article class="card">
+            <div class="card-number">02</div>
+            <h3>Stay Informed</h3>
+            <p>
+                Bookmark this page so you can check for future domain,
+                maintenance, and service announcements.
+            </p>
+        </article>
+
+        <article class="card">
+            <div class="card-number">03</div>
+            <h3>Protect Your Account</h3>
+            <p>
+                Never enter your password or account information on a website
+                unless you have independently confirmed that you are using the
+                correct AnimeMOSS address.
+            </p>
+        </article>
+
+        <article class="card">
+            <div class="card-number">04</div>
+            <h3>Official Information</h3>
+            <p>
+                Domain announcements published through AnimeMOSS should be
+                treated as the primary source for future access information.
+            </p>
+        </article>
+
+    </section>
+
+    <section class="safety">
+        <h3>⚠️ Important Safety Reminder</h3>
+        <p>
+            Be careful with websites pretending to be AnimeMOSS. Do not share
+            passwords, verification codes, session information, or other
+            confidential account details with anyone claiming to represent
+            AnimeMOSS through an unverified website or message.
+        </p>
+    </section>
+
+    <footer class="footer">
+
+        <div class="footer-brand">
+            Anime<span>MOSS</span>
+        </div>
+
+        <div>WATCH · DISCOVER · ENJOY</div>
+
+        <div class="footer-links">
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+            <a href="privacy.html">Privacy</a>
+            <a href="terms.html">Terms</a>
+            <a href="copyright.html">Copyright</a>
+        </div>
+
+        <div>
+            © 2026 AnimeMOSS. All rights reserved.
+        </div>
+
+    </footer>
+
+</div>
+
+</body>
+</html>

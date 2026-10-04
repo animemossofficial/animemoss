@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Anime - Anime! MOSS</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/anime.css">
+
+    <style>
+        body {
+            min-height: 100vh;
+        }
+
+        .search-results-page {
+            padding: 110px 30px 50px;
+        }
+
+        .search-results-header {
+            max-width: 1400px;
+            margin: 0 auto 25px;
+        }
+
+        .search-results-header h1 {
+            color: #fff;
+            margin: 0 0 6px;
+            font-size: 28px;
+        }
+
+        .search-results-header p {
+            color: #aaa;
+            margin: 0;
+        }
+
+        #search-results-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 22px;
+        }
+
+        .search-results-loading,
+        .search-results-empty,
+        .search-results-error {
+            grid-column: 1 / -1;
+            color: #aaa;
+            text-align: center;
+            padding: 50px 10px;
+        }
+
+        .search-results-pagination {
+            max-width: 1400px;
+            margin: 40px auto 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .search-results-pagination button {
+            min-width: 40px;
+            height: 40px;
+            border: 1px solid rgba(155, 65, 255, 0.25);
+            border-radius: 8px;
+            padding: 0 12px;
+            background: rgba(24, 20, 35, 0.95);
+            color: #ddd;
+            cursor: pointer;
+            font-size: 14px;
+            transition:
+                background .18s ease,
+                color .18s ease,
+                border-color .18s ease,
+                transform .18s ease;
+        }
+
+        .search-results-pagination button:hover:not(:disabled) {
+            background: rgba(155, 65, 255, 0.18);
+            color: #fff;
+            border-color: rgba(155, 65, 255, 0.55);
+            transform: translateY(-1px);
+        }
+
+        .search-results-pagination button.active {
+            background: linear-gradient(
+                135deg,
+                #8b35e8,
+                #b84cff
+            );
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 5px 18px rgba(155, 65, 255, 0.25);
+        }
+
+        .search-results-pagination button:disabled {
+            opacity: .35;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .search-page-dots {
+            color: #777;
+            padding: 0 3px;
+            user-select: none;
+        }
+
+        @media (max-width: 600px) {
+            .search-results-page {
+                padding: 95px 15px 35px;
+            }
+
+            #search-results-container {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="header">
+
+        <a href="index.html" class="logo">
+            <span class="anime">Anime</span>
+            <span class="moss">MOSS</span>
+
+            <span class="play">
+                ▶
+            </span>
+        </a>
+
+        <nav class="navbar">
+    <ul>
+
+        <li class="nav-dropdown">
+            <button type="button" class="nav-dropdown-toggle">
+                Genres <span>⌄</span>
+            </button>
+
+            <div class="nav-dropdown-menu nav-genres-menu">
+                <a href="search.html?genre=Action">Action</a>
+                <a href="search.html?genre=Adventure">Adventure</a>
+                <a href="search.html?genre=Comedy">Comedy</a>
+                <a href="search.html?genre=Drama">Drama</a>
+                <a href="search.html?genre=Fantasy">Fantasy</a>
+                <a href="search.html?genre=Horror">Horror</a>
+                <a href="search.html?genre=Mystery">Mystery</a>
+                <a href="search.html?genre=Romance">Romance</a>
+                <a href="search.html?genre=Sci-Fi">Sci-Fi</a>
+                <a href="search.html?genre=Sports">Sports</a>
+                <a href="search.html?genre=Supernatural">Supernatural</a>
+                <a href="search.html?genre=Thriller">Thriller</a>
+                <a href="search.html?genre=Psychological">Psychological</a>
+                <a href="search.html?genre=Slice%20of%20Life">Slice of Life</a>
+                <a href="search.html?genre=Ecchi">Ecchi</a>
+                <a href="search.html?genre=Music">Music</a>
+                <a href="search.html?genre=School">School</a>
+                <a href="search.html?genre=Historical">Historical</a>
+            </div>
+        </li>
+
+        <li class="nav-dropdown">
+            <button type="button" class="nav-dropdown-toggle">
+                Types <span>⌄</span>
+            </button>
+
+            <div class="nav-dropdown-menu nav-types-menu">
+                <a href="search.html?type=MOVIE">Movie</a>
+                
+                <a href="search.html?type=ONA">ONA</a>
+                <a href="search.html?type=OVA">OVA</a>
+                <a href="search.html?type=SPECIAL">Special</a>
+                <a href="search.html?type=TV">TV</a>
+                
+                
+                
+            </div>
+        </li>
+
+        <li><a href="search.html?section=popular">Popular</a></li>
+        <li><a href="search.html?section=schedule">Schedule</a></li>
+        <li><a href="search.html?section=ongoing">Ongoing</a></li>
+
+    </ul>
+</nav>
+
+
+<button class="mobile-menu-button" id="mobileMenuButton" type="button" aria-label="Open menu" aria-expanded="false">
+    <span></span>
+    <span></span>
+    <span></span>
+</button>
+
+<div class="mobile-drawer-overlay" id="mobileDrawerOverlay"></div>
+
+<aside class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
+    <div class="mobile-drawer-header">
+        <span>AnimeMOSS</span>
+        <button id="mobileDrawerClose" type="button" aria-label="Close menu">×</button>
+    </div>
+
+    <div class="mobile-drawer-content">
+
+        <div class="mobile-drawer-group">
+            <div class="mobile-drawer-heading">Genres</div>
+
+            <div class="mobile-drawer-submenu">
+                <a href="search.html?genre=Action">Action</a>
+                <a href="search.html?genre=Adventure">Adventure</a>
+                <a href="search.html?genre=Comedy">Comedy</a>
+                <a href="search.html?genre=Drama">Drama</a>
+                <a href="search.html?genre=Fantasy">Fantasy</a>
+                <a href="search.html?genre=Horror">Horror</a>
+                <a href="search.html?genre=Mystery">Mystery</a>
+                <a href="search.html?genre=Romance">Romance</a>
+                <a href="search.html?genre=Sci-Fi">Sci-Fi</a>
+                <a href="search.html?genre=Sports">Sports</a>
+                <a href="search.html?genre=Supernatural">Supernatural</a>
+                <a href="search.html?genre=Thriller">Thriller</a>
+                <a href="search.html?genre=Psychological">Psychological</a>
+                <a href="search.html?genre=Slice%20of%20Life">Slice of Life</a>
+                <a href="search.html?genre=Ecchi">Ecchi</a>
+                <a href="search.html?genre=Music">Music</a>
+                <a href="search.html?genre=School">School</a>
+                <a href="search.html?genre=Historical">Historical</a>
+            </div>
+        </div>
+
+        <div class="mobile-drawer-group">
+            <div class="mobile-drawer-heading">Types</div>
+
+            <div class="mobile-drawer-submenu">
+                <a href="search.html?type=MOVIE">Movie</a>
+                <a href="search.html?type=ONA">ONA</a>
+                <a href="search.html?type=OVA">OVA</a>
+                <a href="search.html?type=SPECIAL">Special</a>
+                <a href="search.html?type=TV">TV</a>
+            </div>
+        </div>
+
+        <a class="mobile-drawer-link" href="search.html?section=popular">Popular</a>
+        <a class="mobile-drawer-link" href="search.html?section=schedule">Schedule</a>
+        <a class="mobile-drawer-link" href="search.html?section=ongoing">Ongoing</a>
+        <a class="mobile-drawer-link" id="auth-mobile-link" href="login.html">Login</a>
+
+    </div>
+</aside>
+
+
+        <div class="login" id="auth-desktop">
+            <a id="auth-login-link" href="login.html">Login</a>
+        </div>
+
+    </header>
+
+    <main class="search-results-page">
+
+        <div class="search-results-header">
+            <h1 id="search-results-title">Search Results</h1>
+        </div>
+
+        <div id="search-results-container">
+            <div class="search-results-loading">Loading...</div>
+        </div>
+
+        <div class="search-results-pagination">
+            <button id="search-prev" type="button">&lt;</button>
+            <button id="search-next" type="button">&gt;</button>
+        </div>
+
+    </main>
+
+    <script src="js/auth.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/search.js?v=5"></script>
+    <script src="js/auth-ui.js"></script>
+
+</body>
+
+</html>

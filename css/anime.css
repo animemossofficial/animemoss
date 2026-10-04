@@ -1,0 +1,181 @@
+
+/* AnimeMOSS live search suggestions */
+.search-box {
+    position: relative;
+}
+
+.search-suggestions {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    display: none;
+    background: #111;
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 12px 35px rgba(0,0,0,.45);
+}
+
+.search-suggestions.show {
+    display: block;
+}
+
+.search-suggestion-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    color: #fff;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255,255,255,.07);
+    transition: background .15s ease;
+}
+
+.search-suggestion-item:hover {
+    background: rgba(255,255,255,.08);
+}
+
+.search-suggestion-item img {
+    width: 42px;
+    height: 58px;
+    object-fit: cover;
+    border-radius: 5px;
+    flex-shrink: 0;
+}
+
+.search-suggestion-info {
+    min-width: 0;
+    flex: 1;
+}
+
+.search-suggestion-title {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.35;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.search-suggestion-meta {
+    margin-top: 5px;
+    font-size: 11px;
+    color: #aaa;
+}
+
+.search-view-all {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    border: 0;
+    background: #1d1d1d;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.search-view-all:hover {
+    background: #292929;
+}
+
+.search-suggestions-message {
+    padding: 14px;
+    color: #aaa;
+    font-size: 13px;
+    text-align: center;
+}
+
+/* Force AnimeMOSS live search dropdown above homepage content */
+.search-box .search-suggestions {
+    display: none !important;
+    position: absolute !important;
+    top: calc(100% + 8px) !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 999999 !important;
+    width: 100% !important;
+    max-height: 420px !important;
+    overflow-y: auto !important;
+}
+
+.search-box .search-suggestions.show {
+    display: block !important;
+}
+
+.search-box .search-suggestion-item {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Allow live search dropdown to extend outside search box */
+.search-box {
+    overflow: visible !important;
+}
+
+/* Let live search dropdown escape the hero/banner clipping */
+.hero,
+.banner,
+.search-section,
+.search-container,
+.hero-content {
+    overflow: visible !important;
+}
+
+.search-box .search-suggestions {
+    max-height: 70vh !important;
+    overflow-y: auto !important;
+}
+
+/* PREMIUM BACK TO LIBRARY */
+.anime-header {
+    position: relative;
+}
+
+.back-library-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 50;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 10px 16px;
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 999px;
+
+    background: rgba(12,12,18,.68);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+
+    box-shadow: 0 8px 25px rgba(0,0,0,.28);
+
+    transition:
+        background .22s ease,
+        border-color .22s ease,
+        transform .22s ease,
+        box-shadow .22s ease;
+}
+
+.back-library-btn span:first-child {
+    font-size: 25px;
+    line-height: 14px;
+}
+
+.back-library-btn:hover {
+    background: rgba(255,45,85,.92);
+    border-color: rgba(255,255,255,.20);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(0,0,0,.38);
+}
+

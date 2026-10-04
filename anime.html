@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- <link rel="stylesheet" href="css/anime.css"> -->
+
+    <title>AnimeMOSS</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/anime.css">
+</head>
+
+<body>
+    <header class="anime-header">
+
+        <div id="auth-compact" class="auth-compact">
+            <a href="login.html">Login</a>
+        </div>
+
+        <a href="index.html" class="back-library-btn">
+            <span>‹</span>
+            <span>Back to Library</span>
+        </a>
+
+        <div class="banner">
+
+            <img id="banner" src="" alt="Banner">
+
+            <div class="banner-overlay"></div>
+
+        </div>
+
+        <div class="anime-info">
+
+            <img id="poster" src="" alt="Poster">
+
+            <div class="details">
+
+                <span id="status" class="status"></span>
+
+                <h1 id="title"></h1>
+
+                <h3 id="native-title"></h3>
+
+                <div class="stats">
+
+                    <span id="score"></span>
+
+                    <span id="episodes"></span>
+
+                    <span id="season"></span>
+
+                </div>
+
+                <div id="genres" class="genres"></div>
+
+                <div class="buttons">
+
+                    <a href="#" class="watch-btn">
+                        ▶ Watch Now
+                    </a>
+
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </header>
+
+    <section class="about">
+
+        <h2>Synopsis</h2>
+
+        <p id="description"></p>
+
+    </section>
+
+    <section class="related">
+
+        <h2>Related Anime</h2>
+
+        <div class="related-container" id="related-container">
+
+        </div>
+
+    </section>
+
+    <div id="anime-details"></div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/anime-page.js"></script>
+    <script src="js/auth-ui.js"></script>
+
+</body>
+
+</html>

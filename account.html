@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>My Account - AnimeMOSS</title>
+
+    <link rel="stylesheet" href="css/auth.css">
+    <link rel="stylesheet" href="css/account.css">
+</head>
+
+<body class="account-page">
+
+    <main class="account-wrapper">
+
+        <a class="auth-brand" href="index.html">
+            Anime<span>MOSS</span>
+            <span class="auth-brand-icon">▶</span>
+        </a>
+
+        <section class="account-card">
+
+            <div class="account-header">
+                <div class="account-avatar" id="account-avatar">
+                    ?
+                </div>
+
+                <div>
+                    <h1 id="account-name">Loading...</h1>
+                    <p>My Account</p>
+                </div>
+            </div>
+
+            <div
+                id="account-message"
+                class="account-message"
+                role="alert"
+                aria-live="polite"
+            ></div>
+
+            <div class="account-section">
+
+                <h2>Profile</h2>
+
+                <div class="account-info-row">
+                    <span class="account-label">Username</span>
+                    <strong id="account-username">Loading...</strong>
+                </div>
+
+                <div class="account-info-row account-editable-row">
+                    <span class="account-label">Display Name</span>
+
+                    <div class="account-value-group">
+                        <strong id="account-display-name">Loading...</strong>
+
+                        <button
+                            id="edit-display-name-btn"
+                            class="account-inline-action"
+                            type="button"
+                        >
+                            Edit
+                        </button>
+                    </div>
+                </div>
+
+                <div
+                    id="display-name-editor"
+                    class="account-editor"
+                    hidden
+                >
+                    <label for="display-name-input">
+                        New Display Name
+                    </label>
+
+                    <input
+                        id="display-name-input"
+                        type="text"
+                        minlength="2"
+                        maxlength="32"
+                        autocomplete="name"
+                        placeholder="Enter your display name"
+                    >
+
+                    <div class="account-editor-actions">
+                        <button
+                            id="save-display-name-btn"
+                            class="account-action"
+                            type="button"
+                        >
+                            Save
+                        </button>
+
+                        <button
+                            id="cancel-display-name-btn"
+                            class="account-action"
+                            type="button"
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+
+                <div class="account-info-row">
+                    <span class="account-label">Email</span>
+                    <strong id="account-email">Loading...</strong>
+                </div>
+
+                <div class="account-info-row">
+                    <span class="account-label">Email Status</span>
+                    <strong id="account-email-status">Loading...</strong>
+                </div>
+
+                <div class="account-info-row">
+                    <span class="account-label">Member Since</span>
+                    <strong id="account-created">Loading...</strong>
+                </div>
+
+            </div>
+
+            <div class="account-section">
+
+                <h2>Security</h2>
+
+                <button
+                    id="change-password-btn"
+                    class="account-action"
+                    type="button"
+                >
+                    Change Password
+                </button>
+
+            </div>
+
+            <div class="account-section">
+
+                <h2>Sessions</h2>
+
+                <button
+                    id="logout-all-btn"
+                    class="account-action"
+                    type="button"
+                >
+                    Logout All Devices
+                </button>
+
+                <button
+                    id="logout-btn"
+                    class="account-action danger"
+                    type="button"
+                >
+                    Logout
+                </button>
+
+            </div>
+
+            <a
+                class="auth-home-link"
+                href="index.html"
+            >
+                ← Back to AnimeMOSS
+            </a>
+
+        </section>
+
+    </main>
+
+    <script src="js/auth.js"></script>
+    <script src="js/account.js"></script>
+
+</body>
+</html>

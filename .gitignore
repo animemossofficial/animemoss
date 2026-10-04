@@ -1,0 +1,8 @@
+*.bak
+*.before-*
+*.working
+*.broken-backup
+*.tar.gz
+*.daily-backup
+*.current-*
+nul
