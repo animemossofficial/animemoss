@@ -870,7 +870,7 @@ filters.forEach(filter => {
         const el=document.getElementById("home-most-viewed");
         state(el,"Loading ranking…");
         try{
-            const r=await fetch(`${API_BASE}/api/most-viewed?period=${period}&limit=5`,{cache:"no-store"});
+            const r=await fetch(`${API_BASE}/api/most-viewed?period=${period}&limit=5`,{cache:"default"});
             if(!r.ok) throw new Error(`HTTP ${r.status}`);
             const d=await r.json();
             const list=Array.isArray(d.results)?d.results:[];
@@ -901,8 +901,8 @@ filters.forEach(filter => {
         const doneEl=document.getElementById("home-completed");
         try{
             const [nr,cr]=await Promise.all([
-                fetch(`${API_BASE}/api/recent-releases?days=14&limit=6`,{cache:"no-store"}),
-                fetch(`${API_BASE}/api/recently-completed?days=60&limit=6`,{cache:"no-store"})
+                fetch(`${API_BASE}/api/recent-releases?days=14&limit=6`,{cache:"default"}),
+                fetch(`${API_BASE}/api/recently-completed?days=60&limit=6`,{cache:"default"})
             ]);
             const [nd,cd]=await Promise.all([nr.json(),cr.json()]);
             if(!nr.ok) throw new Error("releases");
