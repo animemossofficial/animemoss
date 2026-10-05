@@ -305,6 +305,53 @@
         </div>
         <div class="container" id="anime-container"></div>
 
+        <section id="home-discovery" class="home-discovery" aria-label="Anime discovery">
+            <div class="discovery-grid">
+                <article class="discovery-card discovery-popular">
+                    <header class="discovery-head">
+                        <div>
+                            <span class="discovery-eyebrow">LIVE RANKING</span>
+                            <h2>Most Viewed</h2>
+                        </div>
+                        <div class="discovery-periods" role="tablist" aria-label="Most viewed period">
+                            <button class="discovery-period active" data-period="all" type="button">All Time</button>
+                            <button class="discovery-period" data-period="week" type="button">7D</button>
+                            <button class="discovery-period" data-period="month" type="button">30D</button>
+                        </div>
+                    </header>
+                    <div id="home-most-viewed" class="discovery-body">
+                        <div class="discovery-state">Loading ranking…</div>
+                    </div>
+                </article>
+
+                <article class="discovery-card">
+                    <header class="discovery-head">
+                        <div>
+                            <span class="discovery-eyebrow">FRESH ON SITE</span>
+                            <h2>New Releases</h2>
+                        </div>
+                        <span class="discovery-mark">NEW</span>
+                    </header>
+                    <div id="home-new-releases" class="discovery-list">
+                        <div class="discovery-state">Loading releases…</div>
+                    </div>
+                </article>
+
+                <article class="discovery-card">
+                    <header class="discovery-head">
+                        <div>
+                            <span class="discovery-eyebrow">JUST FINISHED</span>
+                            <h2>Completed</h2>
+                        </div>
+                        <span class="discovery-mark">DONE</span>
+                    </header>
+                    <div id="home-completed" class="discovery-list">
+                        <div class="discovery-state">Loading completed…</div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
     </main>
     <script src="js/auth.js"></script>
     <script src="js/script.js"></script>
