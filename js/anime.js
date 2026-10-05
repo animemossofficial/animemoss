@@ -1178,7 +1178,9 @@ document.addEventListener("pointerout",e=>{
 document.addEventListener("pointerdown",e=>{
     if(e.pointerType==="mouse"||!amTouchDevice())return;
     const c=e.target.closest(".anime-card-link");if(!c)return;
-    clearTimeout(amInfoTimer);amInfoTimer=setTimeout(()=>amOpenInfoPanel(c),450);
+    clearTimeout(amInfoTimer);
+    // Touch devices: open immediately on touch, no long-press delay.
+    amOpenInfoPanel(c);
 });
 document.addEventListener("pointerup",e=>{if(e.pointerType!=="mouse"){clearTimeout(amInfoTimer);amInfoTimer=null;}});
 document.addEventListener("pointercancel",()=>{clearTimeout(amInfoTimer);amInfoTimer=null;});
