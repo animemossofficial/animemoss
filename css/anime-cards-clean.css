@@ -214,3 +214,48 @@
     font-size:18px;
   }
 }
+
+
+/* =========================================================
+   FINAL INTERACTION RULES
+   ========================================================= */
+
+/* Desktop/laptop: info panel only with a real cursor. */
+@media (hover:hover) and (pointer:fine){
+  .anime-card-link .anime-hover-panel{
+    display:block!important;
+  }
+  .anime-card-link:hover .anime-hover-panel{
+    opacity:1!important;
+    visibility:visible!important;
+    transform:translateX(0) scale(1)!important;
+    pointer-events:auto!important;
+  }
+}
+
+/* Touch devices: NEVER show the info panel, even while holding. */
+@media (hover:none) and (pointer:coarse){
+  .anime-card-link .anime-hover-panel{
+    display:none!important;
+    opacity:0!important;
+    visibility:hidden!important;
+    pointer-events:none!important;
+  }
+}
+
+/* Play button is independent from the info panel. */
+.anime-card-link .play-btn{
+  pointer-events:none!important;
+}
+.anime-card-link.is-pressed .image::after{
+  opacity:1;
+}
+.anime-card-link.is-pressed .play-btn{
+  opacity:1;
+  transform:translate(-50%,-50%) scale(1);
+  animation:animemossPlayPulse 1.7s ease-in-out infinite;
+}
+.anime-card-link.is-pressed .image img{
+  transform:scale(1.075);
+  filter:saturate(1.08) brightness(.82);
+}
