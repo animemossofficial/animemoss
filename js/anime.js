@@ -1130,8 +1130,11 @@ function amPlacePanel(card){
     const r=card.getBoundingClientRect(),gap=12,edge=10,vw=innerWidth,vh=innerHeight;
     const right=Math.max(0,vw-r.right-gap-edge),left=Math.max(0,r.left-gap-edge);
     const side=right>=left?"right":"left",space=side==="right"?right:left;
-    const width=Math.max(140,Math.min(310,space));
-    amInfoPanel.style.width=width+"px";amInfoPanel.style.maxWidth=width+"px";
+    // Keep one stable premium shape; only shrink when the viewport physically cannot fit it.
+    const width=Math.min(300, Math.max(120, space));
+    amInfoPanel.style.width=width+"px";
+    amInfoPanel.style.minWidth=width+"px";
+    amInfoPanel.style.maxWidth=width+"px";
     amInfoPanel.style.left="0px";amInfoPanel.style.top="0px";
     const h=Math.min(amInfoPanel.getBoundingClientRect().height,vh-edge*2);
     const top=Math.max(edge,Math.min(r.top+(r.height-h)/2,vh-h-edge));
