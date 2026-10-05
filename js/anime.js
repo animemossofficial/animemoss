@@ -841,7 +841,7 @@ filters.forEach(filter => {
         <div class="am-premium-head">
           <h2 class="am-premium-title"><span>🔥</span> MOST VIEWED</h2>
           <div class="am-premium-tabs">
-            <button class="am-premium-tab active" data-period="day">Day</button>
+            <button class="am-premium-tab active" data-period="all">All Time</button>
             <button class="am-premium-tab" data-period="week">Week</button>
             <button class="am-premium-tab" data-period="month">Month</button>
           </div>
@@ -953,7 +953,7 @@ filters.forEach(filter => {
         });
     });
 
-    loadMost("day");
+    loadMost("all");
     loadLists();
 })();
 
