@@ -1130,27 +1130,136 @@ setInterval(() => {
 }, 60000);
 
 /* AUTO POSITION HOVER PANEL BASED ON AVAILABLE SPACE */
-document.addEventListener("mouseover", event => {
-    const card = event.target.closest(".card");
+/* =========================================================
+   ANIMEMOSS INFO PANEL — DESKTOP CURSOR ONLY
+   Rebuilt: right by default, flips left when right side is tight.
+   ========================================================= */
 
-    if (!card || !card.matches(":hover")) return;
+let activeInfoCard = null;
+let activeInfoPanel = null;
+
+function positionAnimeInfoPanel(card, panel) {
+    if (!card || !panel) return;
+
+    const gap = 12;
+    const margin = 12;
+    const viewportWidth = document.documentElement.clientWidth;
+    const viewportHeight = window.innerHeight;
+
+    panel.style.display = "block";
+    panel.style.visibility = "hidden";
+    panel.style.opacity = "0";
+
+    const cardRect = card.getBoundingClientRect();
+    const panelRect = panel.getBoundingClientRect();
+
+    const panelWidth = Math.min(
+        panelRect.width || 320,
+        viewportWidth - margin * 2
+    );
+
+    const spaceRight = viewportWidth - cardRect.right - gap;
+    const spaceLeft = cardRect.left - gap;
+
+    let side = "right";
+    if (spaceRight < panelWidth && spaceLeft >= panelWidth) {
+        side = "left";
+    } else if (spaceRight < panelWidth && spaceLeft < panelWidth) {
+        side = spaceRight >= spaceLeft ? "right" : "left";
+    }
+
+    card.classList.toggle("info-panel-left", side === "left");
+    card.classList.toggle("info-panel-right", side === "right");
+
+    const measured = panel.getBoundingClientRect();
+    const height = measured.height || 250;
+    const maxTop = Math.max(margin, viewportHeight - height - margin);
+    const desiredTop = Math.max(margin, Math.min(cardRect.top, maxTop));
+
+    panel.style.top = (desiredTop - cardRect.top) + "px";
+
+    if (side === "right") {
+        panel.style.left = gap + "px";
+        panel.style.right = "auto";
+    } else {
+        panel.style.right = gap + "px";
+        panel.style.left = "auto";
+    }
+}
+
+function openAnimeInfoPanel(card) {
+    if (!card || !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
 
     const panel = card.querySelector(".anime-hover-panel");
     if (!panel) return;
 
-    const rect = card.getBoundingClientRect();
-    const panelWidth = 300;
-    const gap = 12;
+    if (activeInfoCard && activeInfoCard !== card) {
+        activeInfoCard.classList.remove("info-panel-open");
+    }
 
-    const spaceRight = window.innerWidth - rect.right;
-    const spaceLeft = rect.left;
+    activeInfoCard = card;
+    activeInfoPanel = panel;
+    positionAnimeInfoPanel(card, panel);
+    card.classList.add("info-panel-open");
 
-    card.classList.toggle(
-        "panel-open-left",
-        spaceRight < panelWidth + gap && spaceLeft >= panelWidth + gap
-    );
+    requestAnimationFrame(() => {
+        if (activeInfoCard === card) {
+            panel.style.visibility = "visible";
+            panel.style.opacity = "1";
+        }
+    });
+}
+
+function closeAnimeInfoPanel(card) {
+    if (!card) return;
+
+    const panel = card.querySelector(".anime-hover-panel");
+    card.classList.remove("info-panel-open", "info-panel-left", "info-panel-right");
+
+    if (panel) {
+        panel.style.visibility = "";
+        panel.style.opacity = "";
+        panel.style.top = "";
+        panel.style.left = "";
+        panel.style.right = "";
+        panel.style.display = "";
+    }
+
+    if (activeInfoCard === card) {
+        activeInfoCard = null;
+        activeInfoPanel = null;
+    }
+}
+
+document.addEventListener("mouseover", event => {
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    const card = event.target.closest(".anime-card-link");
+    if (!card) return;
+    const from = event.relatedTarget;
+    if (from && card.contains(from)) return;
+    openAnimeInfoPanel(card);
 });
 
+document.addEventListener("mouseout", event => {
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    const card = event.target.closest(".anime-card-link");
+    if (!card) return;
+    const to = event.relatedTarget;
+    if (to && card.contains(to)) return;
+    closeAnimeInfoPanel(card);
+});
+
+function repositionActiveAnimeInfoPanel() {
+    if (!activeInfoCard || !activeInfoPanel) return;
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+        closeAnimeInfoPanel(activeInfoCard);
+        return;
+    }
+    positionAnimeInfoPanel(activeInfoCard, activeInfoPanel);
+}
+
+window.addEventListener("resize", repositionActiveAnimeInfoPanel);
+window.addEventListener("scroll", repositionActiveAnimeInfoPanel, { passive: true });
 /* ANIMEMOSS PREMIUM SECTIONS */
 (function(){
 const grid=document.getElementById("anime-container");
