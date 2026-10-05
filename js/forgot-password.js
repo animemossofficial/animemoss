@@ -50,9 +50,12 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             if (!data?.challengeId) {
-                throw new Error(
-                    "Unable to start the password reset."
+                showSuccess(
+                    "If an account exists for that email, a reset code has been sent."
                 );
+                button.disabled = false;
+                button.textContent = "Send Reset Code";
+                return;
             }
 
             window.location.href =
