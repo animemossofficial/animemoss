@@ -106,3 +106,14 @@
   z-index:2147483647!important;
   transform:translateY(0) scale(1);
 }
+
+/* Only the body-level rebuilt panel is visible. Never render the legacy panel inside cards. */
+html body .anime-card-link .anime-hover-panel,
+html body .anime-card-link:hover .anime-hover-panel,
+html body .anime-card-link.info-panel-open .anime-hover-panel,
+html body .anime-card-link.touch-panel-active .anime-hover-panel{
+  display:none!important;
+  visibility:hidden!important;
+  opacity:0!important;
+  pointer-events:none!important;
+}
