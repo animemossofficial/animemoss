@@ -130,7 +130,7 @@ function renderAnime(anime, index = 99) {
                                 onclick="event.preventDefault(); event.stopPropagation(); window.location.href='watch.html?id=${id}&episode=1';"
                             >
                                 <span class="watch-icon">&#9654;</span>
-                                <span>Watch Series</span>
+                                <span>Watch Now</span>
                             </button>
                         </div>
 
