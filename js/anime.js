@@ -149,6 +149,33 @@ function renderAnime(anime, index = 99) {
         `
     );
 }
+
+// Touch-only play-button interaction.
+// The info panel remains desktop-cursor-only via CSS.
+function setupAnimeCardTouchFeedback() {
+    const cards = document.querySelectorAll(".anime-card-link");
+
+    cards.forEach((card) => {
+        let timer = null;
+
+        card.addEventListener("touchstart", () => {
+            card.classList.add("is-pressed");
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                card.classList.remove("is-pressed");
+            }, 900);
+        }, { passive: true });
+
+        const clear = () => {
+            clearTimeout(timer);
+            card.classList.remove("is-pressed");
+        };
+
+        card.addEventListener("touchend", clear, { passive: true });
+        card.addEventListener("touchcancel", clear, { passive: true });
+    });
+}
+
 function showLoading(message = "Loading...") {
     let loader = document.getElementById("anime-loading");
 
