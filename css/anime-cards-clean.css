@@ -442,3 +442,7 @@
     pointer-events:none!important;
   }
 }
+
+/* INFO PANEL REBUILD OVERRIDE — only the new body portal is allowed. */
+.anime-card-link .overlay{z-index:3}
+.anime-card-link .anime-hover-panel{display:none!important}
