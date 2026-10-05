@@ -89,6 +89,7 @@ function renderAnime(anime, index = 99) {
         <a href="anime.html?id=${id}" data-anime-id="${id}" class="anime-card-link">
             <div class="card">
                 <div class="image">
+                <span class="play-btn" aria-hidden="true">▶</span>
                     <img
                         src="${image}"
                         alt="${title}"
