@@ -92,6 +92,10 @@ function setupLoginForm(form) {
     });
 }
 
+function validateUsername(username) {
+    return /^[A-Za-z0-9_]{3,20}$/.test(String(username || "").trim());
+}
+
 function setupSignupForm(form) {
     const submitButton = form.querySelector("#signup-submit");
 
@@ -106,7 +110,7 @@ function setupSignupForm(form) {
         const password = form.password.value;
         const confirmPassword = form.confirmPassword.value;
 
-        if (!/^[A-Za-z0-9_]{3,20}$/.test(username)) {
+        if (!validateUsername(username)) {
             showError(
                 "Username must be 3–20 characters and can only contain letters, numbers, and underscores."
             );
