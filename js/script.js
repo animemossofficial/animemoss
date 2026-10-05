@@ -521,33 +521,67 @@ document.addEventListener("keydown", event => {
             )
         );
 
-        let top = rect.bottom + 8;
+        let top = Math.max(
+            margin,
+            rect.bottom + 8
+        );
 
         panel.style.setProperty(
             "--touch-panel-left",
-            `${left}px`
+            left + "px"
         );
 
         panel.style.setProperty(
             "--touch-panel-top",
-            `${top}px`
+            top + "px"
         );
 
         requestAnimationFrame(() => {
             const panelRect =
                 panel.getBoundingClientRect();
 
-            if (panelRect.bottom > window.innerHeight - margin) {
+            const maxLeft =
+                Math.max(
+                    margin,
+                    window.innerWidth -
+                    panelRect.width -
+                    margin
+                );
+
+            left = Math.max(
+                margin,
+                Math.min(left, maxLeft)
+            );
+
+            const maxTop =
+                Math.max(
+                    margin,
+                    window.innerHeight -
+                    panelRect.height -
+                    margin
+                );
+
+            if (top > maxTop) {
                 top = Math.max(
                     margin,
                     rect.top - panelRect.height - 8
                 );
-
-                panel.style.setProperty(
-                    "--touch-panel-top",
-                    `${top}px`
-                );
             }
+
+            top = Math.max(
+                margin,
+                Math.min(top, maxTop)
+            );
+
+            panel.style.setProperty(
+                "--touch-panel-left",
+                left + "px"
+            );
+
+            panel.style.setProperty(
+                "--touch-panel-top",
+                top + "px"
+            );
         });
     }
 
