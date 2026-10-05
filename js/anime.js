@@ -828,144 +828,107 @@ filters.forEach(filter => {
             loadAnime(1, true);
 
 /* =========================================================
-   ANIMEMOSS HOME PREMIUM SECTIONS — CLEAN REBUILD
+   HOMEPAGE DISCOVERY — bottom sections
    ========================================================= */
-(function setupPremiumHomeSections(){
-    if(!container || document.getElementById("animemoss-premium-sections")) return;
-
-    const section=document.createElement("section");
-    section.id="animemoss-premium-sections";
-    section.className="animemoss-premium-sections";
-    section.innerHTML=`
-      <article class="am-premium-panel am-most-panel">
-        <div class="am-premium-head">
-          <h2 class="am-premium-title"><span>🔥</span> MOST VIEWED</h2>
-          <div class="am-premium-tabs">
-            <button class="am-premium-tab active" data-period="all">All Time</button>
-            <button class="am-premium-tab" data-period="week">Week</button>
-            <button class="am-premium-tab" data-period="month">Month</button>
-          </div>
-        </div>
-        <div class="am-most-content"><div class="am-premium-loading">Loading...</div></div>
-      </article>
-      <article class="am-premium-panel">
-        <div class="am-premium-head">
-          <h2 class="am-premium-title"><span>✦</span> NEW RELEASES</h2>
-          <a class="am-premium-viewall" href="search.html?section=releases">View all →</a>
-        </div>
-        <div id="am-new-list" class="am-list"><div class="am-premium-loading">Loading...</div></div>
-      </article>
-      <article class="am-premium-panel">
-        <div class="am-premium-head">
-          <h2 class="am-premium-title"><span>✓</span> COMPLETED</h2>
-          <a class="am-premium-viewall" href="search.html?section=completed">View all →</a>
-        </div>
-        <div id="am-completed-list" class="am-list"><div class="am-premium-loading">Loading...</div></div>
-      </article>`;
-    container.insertAdjacentElement("afterend",section);
+(function initHomeDiscovery(){
+    const root=document.getElementById("home-discovery");
+    if(!root) return;
 
     const esc=escapeHtml;
     const title=a=>getAnimeTitle(a);
     const image=a=>getAnimeImage(a);
-    const link=a=>`anime.html?id=${encodeURIComponent(a.id)}`;
+    const href=a=>`anime.html?id=${encodeURIComponent(a.id)}`;
 
-    function renderList(el,items){
-        el.innerHTML=items.length
-          ? items.slice(0,6).map(a=>`
-              <a class="am-list-item" href="${link(a)}">
-                <img class="am-list-thumb" src="${esc(image(a))}" alt="${esc(title(a))}" loading="lazy">
-                <div class="am-item-copy">
-                  <div class="am-item-title">${esc(title(a))}</div>
-                  <div class="am-premium-meta">${esc(a?.type||"TV")} · ${a?.episodes?`${a.episodes} EP`:"Episodes"}</div>
-                </div>
-                <span class="am-list-arrow">›</span>
-              </a>`).join("")
-          : '<div class="am-premium-empty">Nothing to show right now.</div>';
+    function row(anime, extra=""){
+        return `
+            <a class="discovery-row" href="${href(anime)}">
+                <img src="${esc(image(anime))}" alt="${esc(title(anime))}" loading="lazy">
+                <span class="discovery-row-copy">
+                    <strong>${esc(title(anime))}</strong>
+                    <small>${esc(extra || (anime.episodes ? `${anime.episodes} episodes` : "Anime"))}</small>
+                </span>
+                <span class="discovery-arrow">›</span>
+            </a>`;
     }
 
-    function renderMost(items){
-        const el=section.querySelector(".am-most-content");
-        if(!items.length){
-            el.innerHTML='<div class="am-premium-empty">No views recorded yet.</div>';
-            return;
-        }
-        const [top,...rest]=items.slice(0,4);
-        el.innerHTML=`
-          <a class="am-most-feature" href="${link(top)}">
-            <img src="${esc(image(top))}" alt="${esc(title(top))}" loading="lazy">
-            <div class="am-most-feature-copy">
-              <div class="am-rank-badge">#1 · ${Number(top.views||0)} VIEWS</div>
-              <div class="am-most-feature-title">${esc(title(top))}</div>
-              <div class="am-premium-meta">${esc(top.status||"")}</div>
-            </div>
-          </a>
-          <div class="am-rank-list">
-            ${rest.map((a,i)=>`
-              <a class="am-rank-item" href="${link(a)}">
-                <span class="am-rank-number">0${i+2}</span>
-                <img class="am-rank-thumb" src="${esc(image(a))}" alt="${esc(title(a))}" loading="lazy">
-                <div class="am-item-copy">
-                  <div class="am-item-title">${esc(title(a))}</div>
-                  <div class="am-premium-meta">${Number(a.views||0)} views</div>
-                </div>
-              </a>`).join("")}
-          </div>`;
+    function state(el,text){
+        el.innerHTML=`<div class="discovery-state">${esc(text)}</div>`;
     }
 
-    async function loadMost(period){
-        const el=section.querySelector(".am-most-content");
-        el.innerHTML='<div class="am-premium-loading">Loading views...</div>';
+    async function loadMost(period="all"){
+        const el=document.getElementById("home-most-viewed");
+        state(el,"Loading ranking…");
         try{
-            const r=await fetch(`${API_BASE}/api/most-viewed?period=${period}&limit=4`,{cache:"no-store"});
-            if(!r.ok) throw new Error("HTTP "+r.status);
+            const r=await fetch(`${API_BASE}/api/most-viewed?period=${period}&limit=5`,{cache:"no-store"});
+            if(!r.ok) throw new Error(`HTTP ${r.status}`);
             const d=await r.json();
-            renderMost(Array.isArray(d.results)?d.results:[]);
-        }catch(e){
-            console.error("Most viewed:",e);
-            el.innerHTML='<div class="am-premium-empty">Views unavailable.</div>';
+            const list=Array.isArray(d.results)?d.results:[];
+            if(!list.length){state(el,"No recorded views yet.");return;}
+
+            const leader=list[0];
+            el.innerHTML=`
+                <a class="discovery-leader" href="${href(leader)}">
+                    <img src="${esc(image(leader))}" alt="${esc(title(leader))}" loading="lazy">
+                    <span class="discovery-leader-shade"></span>
+                    <span class="discovery-leader-rank">#01</span>
+                    <span class="discovery-leader-copy">
+                        <strong>${esc(title(leader))}</strong>
+                        <small>${Number(leader.views||0).toLocaleString()} website views</small>
+                    </span>
+                </a>
+                <div class="discovery-rank-list">
+                    ${list.slice(1,5).map((a,i)=>row(a,`#0${i+2} · ${Number(a.views||0).toLocaleString()} views`)).join("")}
+                </div>`;
+        }catch(err){
+            console.error("Homepage Most Viewed:",err);
+            state(el,"Ranking temporarily unavailable.");
         }
     }
 
-    async function loadLists(){
-        const releasesEl=section.querySelector("#am-new-list");
-        const completedEl=section.querySelector("#am-completed-list");
+    async function loadNewAndCompleted(){
+        const newEl=document.getElementById("home-new-releases");
+        const doneEl=document.getElementById("home-completed");
         try{
-            const [rr,cr]=await Promise.all([
+            const [nr,cr]=await Promise.all([
                 fetch(`${API_BASE}/api/recent-releases?days=14&limit=6`,{cache:"no-store"}),
                 fetch(`${API_BASE}/api/recently-completed?days=60&limit=6`,{cache:"no-store"})
             ]);
-            if(!rr.ok||!cr.ok) throw new Error("Home list API failed");
-            const [rd,cd]=await Promise.all([rr.json(),cr.json()]);
-            renderList(releasesEl,Array.isArray(rd.results)?rd.results:[]);
-            renderList(completedEl,Array.isArray(cd.results)?cd.results:[]);
-        }catch(e){
-            console.error("Home lists:",e);
-            releasesEl.innerHTML='<div class="am-premium-empty">New releases unavailable.</div>';
-            completedEl.innerHTML='<div class="am-premium-empty">Completed unavailable.</div>';
+            const [nd,cd]=await Promise.all([nr.json(),cr.json()]);
+            if(!nr.ok) throw new Error("releases");
+            if(!cr.ok) throw new Error("completed");
+
+            const releases=Array.isArray(nd.results)?nd.results:[];
+            const completed=Array.isArray(cd.results)?cd.results:[];
+
+            newEl.innerHTML=releases.length
+                ? releases.slice(0,6).map((a,i)=>row(a,`#${String(i+1).padStart(2,"0")} · ${a.latestEpisode ? `Episode ${a.latestEpisode}` : "Latest update"}`)).join("")
+                : '<div class="discovery-state">No recent releases found.</div>';
+
+            doneEl.innerHTML=completed.length
+                ? completed.slice(0,6).map((a,i)=>row(a,`#${String(i+1).padStart(2,"0")} · Finished`)).join("")
+                : '<div class="discovery-state">No newly completed anime found.</div>';
+        }catch(err){
+            console.error("Homepage discovery:",err);
+            state(newEl,"New releases temporarily unavailable.");
+            state(doneEl,"Completed list temporarily unavailable.");
         }
     }
 
-    section.querySelectorAll(".am-premium-tab").forEach(btn=>{
-        btn.addEventListener("click",()=>{
-            section.querySelectorAll(".am-premium-tab").forEach(x=>x.classList.remove("active"));
-            btn.classList.add("active");
-            loadMost(btn.dataset.period);
+    root.querySelectorAll(".discovery-period").forEach(button=>{
+        button.addEventListener("click",()=>{
+            root.querySelectorAll(".discovery-period").forEach(b=>b.classList.remove("active"));
+            button.classList.add("active");
+            loadMost(button.dataset.period);
         });
     });
 
     loadMost("all");
-    loadLists();
+    loadNewAndCompleted();
+
+    // Keep the bottom discovery data fresh while the homepage stays open.
+    window.setInterval(()=>loadMost(document.querySelector(".discovery-period.active")?.dataset.period||"all"),5*60*1000);
+    window.setInterval(loadNewAndCompleted,5*60*1000);
 })();
-
-
-
-        }
-    });
-});
-
-
-loadAnime(1, true);
-
 /* AnimeMOSS live search suggestions */
 (() => {
     if (!searchInput) return;
