@@ -1179,10 +1179,10 @@ function positionAnimeInfoPanel(card, panel) {
     panel.style.top = (desiredTop - cardRect.top) + "px";
 
     if (side === "right") {
-        panel.style.left = gap + "px";
+        panel.style.left = "calc(100% + " + gap + "px)";
         panel.style.right = "auto";
     } else {
-        panel.style.right = gap + "px";
+        panel.style.right = "calc(100% + " + gap + "px)";
         panel.style.left = "auto";
     }
 }
