@@ -100,7 +100,7 @@ function renderAnime(anime, index = 99) {
                         src="${large || fallback}"
                         data-fallback="${fallback}"
                         alt="${title}"
-                        loading="${index < 6 ? "eager" : "lazy"}"
+                        loading="${index < 4 ? "eager" : "lazy"}"
                         fetchpriority="${index < 3 ? "high" : "auto"}"
                         decoding="async"
                         width="190"
@@ -445,7 +445,7 @@ async function loadAnime(page = 1, reset = false) {
 
         // Check only the currently rendered page in the background.
         // Catalog rendering never waits for playability.
-        refreshPlayability(animeList).catch(() => {});
+        setTimeout(() => refreshPlayability(animeList).catch(() => {}), 1200);
 
         if (hasNextPage) {
             const nextSourcePage =
@@ -453,11 +453,9 @@ async function loadAnime(page = 1, reset = false) {
                     ? page + 1
                     : getDailyCatalogPage(page + 1);
 
-            fetchCatalog(
-                nextSourcePage,
-                currentSearch,
-                sort
-            ).catch(() => {});
+            setTimeout(() => {
+                fetchCatalog(nextSourcePage, currentSearch, sort).catch(() => {});
+            }, 900);
         }
 
     } catch (error) {
@@ -849,12 +847,13 @@ filters.forEach(filter => {
     const esc=escapeHtml;
     const title=a=>getAnimeTitle(a);
     const image=a=>getAnimeImage(a);
+    const imageFallback=a=>escapeHtml(a?.coverImage?.extraLarge || a?.coverImage?.medium || "");
     const href=a=>`anime.html?id=${encodeURIComponent(a.id)}`;
 
     function row(anime, extra=""){
         return `
             <a class="discovery-row" href="${href(anime)}">
-                <img src="${esc(image(anime))}" alt="${esc(title(anime))}" loading="lazy">
+                <img src="${esc(image(anime))}" data-fallback="${imageFallback(anime)}" alt="${esc(title(anime))}" loading="lazy" decoding="async">
                 <span class="discovery-row-copy">
                     <strong>${esc(title(anime))}</strong>
                     <small>${esc(extra || (anime.episodes ? `${anime.episodes} episodes` : "Anime"))}</small>
@@ -880,7 +879,7 @@ filters.forEach(filter => {
             const leader=list[0];
             el.innerHTML=`
                 <a class="discovery-leader" href="${href(leader)}">
-                    <img src="${esc(image(leader))}" alt="${esc(title(leader))}" loading="lazy">
+                    <img src="${esc(image(leader))}" data-fallback="${imageFallback(leader)}" alt="${esc(title(leader))}" loading="lazy" decoding="async">
                     <span class="discovery-leader-shade"></span>
                     <span class="discovery-leader-rank">#01</span>
                     <span class="discovery-leader-copy">
@@ -936,6 +935,7 @@ filters.forEach(filter => {
 
     loadMost("all");
     loadNewAndCompleted();
+    setupAnimeImageFallbacks(root);
 
     // Keep the bottom discovery data fresh while the homepage stays open.
     window.setInterval(()=>loadMost(document.querySelector(".discovery-period.active")?.dataset.period||"all"),5*60*1000);
