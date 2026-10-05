@@ -1156,14 +1156,25 @@ document.addEventListener("pointerover",e=>{
     if(e.pointerType!=="mouse"||amTouchDevice())return;
     const c=e.target.closest(".anime-card-link");
     if(!c||c.contains(e.relatedTarget))return;
+    clearTimeout(amInfoTimer);
     amOpenInfoPanel(c);
 });
 document.addEventListener("pointerout",e=>{
     if(e.pointerType!=="mouse"||amTouchDevice())return;
     const c=e.target.closest(".anime-card-link");
     if(!c||c.contains(e.relatedTarget))return;
-    clearTimeout(amInfoTimer);amInfoTimer=setTimeout(()=>{if(!amInfoPanel?.matches(":hover"))amCloseInfoPanel();},140);
+    clearTimeout(amInfoTimer);
+    // pointerout bubbles through children, so close only after confirming
+    // the pointer is no longer inside the card and is not over the portal.
+    amInfoTimer=setTimeout(()=>{
+        if(!amInfoCard)return;
+        if(amInfoPanel?.matches(":hover"))return;
+        const hovered=document.elementFromPoint(e.clientX,e.clientY)?.closest?.(".anime-card-link");
+        if(hovered===amInfoCard)return;
+        amCloseInfoPanel();
+    },120);
 });
+
 document.addEventListener("pointerdown",e=>{
     if(e.pointerType==="mouse"||!amTouchDevice())return;
     const c=e.target.closest(".anime-card-link");if(!c)return;
@@ -1176,193 +1187,3 @@ document.addEventListener("pointerdown",e=>{
     if(e.target.closest(".anime-card-link")===amInfoCard)return;
     amCloseInfoPanel();
 },true);
-function amRepositionInfoPanel(){if(amInfoCard&&amInfoPanel?.classList.contains("is-open"))amPlacePanel(amInfoCard);}
-addEventListener("resize",amRepositionInfoPanel);addEventListener("scroll",amRepositionInfoPanel,{passive:true});
-
-/* ANIMEMOSS PREMIUM SECTIONS */
-(function(){
-const grid=document.getElementById("anime-container");
-if(!grid||document.getElementById("animemoss-premium-sections"))return;
-const esc=v=>String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-const title=a=>a?.title?.english||a?.title?.romaji||a?.title?.native||"Unknown Anime";
-const image=a=>a?.coverImage?.extraLarge||a?.coverImage?.large||"";
-const link=a=>`anime.html?id=${encodeURIComponent(a?.id||"")}`;
-const s=document.createElement("section");
-s.id="animemoss-premium-sections";
-s.innerHTML=`
-<article class="am-premium-panel am-most-panel"><div class="am-premium-head"><h2 class="am-premium-title"><span>🔥</span> MOST VIEWED</h2><div class="am-premium-tabs"><button class="am-premium-tab active" data-period="day">Day</button><button class="am-premium-tab" data-period="week">Week</button><button class="am-premium-tab" data-period="month">Month</button></div></div><div class="am-most-content"><div class="am-premium-loading">Loading...</div></div></article>
-<article class="am-premium-panel"><div class="am-premium-head"><h2 class="am-premium-title"><span>✦</span> NEW RELEASES</h2><a class="am-premium-viewall" href="search.html?section=releases">View all →</a></div><div id="am-new-list" class="am-list"><div class="am-premium-loading">Loading...</div></div></article>
-<article class="am-premium-panel"><div class="am-premium-head"><h2 class="am-premium-title"><span>✓</span> COMPLETED</h2><a class="am-premium-viewall" href="search.html?section=completed">View all →</a></div><div id="am-completed-list" class="am-list"><div class="am-premium-loading">Loading...</div></div></article>`;
-grid.insertAdjacentElement("afterend",s);
-
-function list(el,items){el.innerHTML=items.length?items.slice(0,6).map(a=>`<a class="am-list-item" href="${link(a)}"><img class="am-list-thumb" src="${esc(image(a))}" alt="${esc(title(a))}" loading="lazy"><div class="am-item-copy"><div class="am-item-title">${esc(title(a))}</div><div class="am-premium-meta">${esc(a?.type||"TV")} · ${a?.episodes?`${a.episodes} EP`:"Episodes"}</div></div><span class="am-list-arrow">›</span></a>`).join(""):`<div class="am-premium-empty">Nothing to show right now.</div>`}
-
-function most(items){const el=s.querySelector(".am-most-content");if(!items.length){el.innerHTML='<div class="am-premium-empty">No views recorded yet.</div>';return}const [top,...rest]=items.slice(0,4);el.innerHTML=`<a class="am-most-feature" href="${link(top)}"><img src="${esc(image(top))}" alt="${esc(title(top))}" loading="lazy"><div class="am-most-feature-copy"><div class="am-rank-badge">#1 · ${Number(top.views||0)} VIEWS</div><div class="am-most-feature-title">${esc(title(top))}</div><div class="am-premium-meta">${esc(top.status||"")}</div></div></a><div class="am-rank-list">${rest.map((a,i)=>`<a class="am-rank-item" href="${link(a)}"><span class="am-rank-number">0${i+2}</span><img class="am-rank-thumb" src="${esc(image(a))}" alt="${esc(title(a))}" loading="lazy"><div class="am-item-copy"><div class="am-item-title">${esc(title(a))}</div><div class="am-premium-meta">${Number(a.views||0)} views</div></div></a>`).join("")}</div>`}
-
-async function loadMost(period){const el=s.querySelector(".am-most-content");el.innerHTML='<div class="am-premium-loading">Loading views...</div>';try{const r=await fetch(`${API_BASE}/api/most-viewed?period=${period}&limit=4`,{cache:"no-store"});const d=await r.json();most(Array.isArray(d.results)?d.results:[])}catch(e){console.error(e);el.innerHTML='<div class="am-premium-empty">Views unavailable.</div>'}}
-
-async function loadLists(){
-    const releasesEl = document.getElementById("am-new-list");
-    const completedEl = document.getElementById("am-completed-list");
-    const cacheKey = "animemoss_premium_lists";
-
-    function renderLists(releases, completed) {
-        list(releasesEl, releases);
-        list(completedEl, completed);
-    }
-
-    try {
-        const cached = sessionStorage.getItem(cacheKey);
-        if (cached) {
-            const data = JSON.parse(cached);
-
-            const releases = Array.isArray(data.releases)
-                ? data.releases
-                : [];
-
-            const completed = Array.isArray(data.completed)
-                ? data.completed
-                : [];
-
-            if (releases.length || completed.length) {
-                renderLists(releases, completed);
-            }
-        }
-    } catch {}
-
-    let lastError;
-
-    for (let attempt = 1; attempt <= 3; attempt++) {
-        const releaseController = new AbortController();
-        const completedController = new AbortController();
-
-        const timeout = setTimeout(() => {
-            releaseController.abort();
-            completedController.abort();
-        }, 7000);
-
-        try {
-            const [releasesResponse, completedResponse] =
-                await Promise.all([
-                    fetch(
-                        `${API_BASE}/api/recent-releases?days=14&limit=6`,
-                        {
-                            cache: "no-store",
-                            signal: releaseController.signal
-                        }
-                    ),
-                    fetch(
-                        `${API_BASE}/api/recently-completed?days=60&limit=6`,
-                        {
-                            cache: "no-store",
-                            signal: completedController.signal
-                        }
-                    )
-                ]);
-
-            clearTimeout(timeout);
-
-            if (!releasesResponse.ok || !completedResponse.ok) {
-                throw new Error("Premium catalog API failed");
-            }
-
-            const releasesData = await releasesResponse.json();
-            const completedData = await completedResponse.json();
-
-            const releases = Array.isArray(releasesData.results)
-                ? releasesData.results
-                : [];
-
-            const completed = Array.isArray(completedData.results)
-                ? completedData.results
-                : [];
-
-            try {
-                sessionStorage.setItem(
-                    cacheKey,
-                    JSON.stringify({ releases, completed })
-                );
-            } catch {}
-
-            renderLists(releases, completed);
-            return;
-        } catch (error) {
-            clearTimeout(timeout);
-            lastError = error;
-
-            if (attempt < 3) {
-                await new Promise(resolve =>
-                    setTimeout(resolve, 350 * attempt)
-                );
-            }
-        }
-    }
-
-    console.error("Premium catalog error:", lastError);
-
-    if (!releasesEl.children.length) {
-        releasesEl.innerHTML =
-            '<div class="am-premium-empty">New releases unavailable. Retry the page.</div>';
-    }
-
-    if (!completedEl.children.length) {
-        completedEl.innerHTML =
-            '<div class="am-premium-empty">Recently completed unavailable. Retry the page.</div>';
-    }
-}
-
-s.querySelectorAll(".am-premium-tab").forEach(b=>b.onclick=()=>{s.querySelectorAll(".am-premium-tab").forEach(x=>x.classList.remove("active"));b.classList.add("active");loadMost(b.dataset.period)});
-loadMost("day");loadLists();
-})();
-
-
-/* AnimeMOSS global image retry */
-(function setupAnimeMossImageRetry() {
-    const MAX_RETRIES = 2;
-    const RETRY_DELAY = 700;
-
-    document.addEventListener("error", function (event) {
-        const img = event.target;
-
-        if (!(img instanceof HTMLImageElement)) return;
-
-        const originalSrc =
-            img.dataset.retrySrc ||
-            img.currentSrc ||
-            img.src ||
-            "";
-
-        if (
-            !originalSrc ||
-            originalSrc.startsWith("data:") ||
-            originalSrc.startsWith("blob:")
-        ) {
-            return;
-        }
-
-        const attempt = Number(img.dataset.imageRetry || 0);
-
-        if (attempt >= MAX_RETRIES) return;
-
-        img.dataset.retrySrc = originalSrc;
-        img.dataset.imageRetry = String(attempt + 1);
-
-        setTimeout(function () {
-            try {
-                const retryUrl = new URL(
-                    originalSrc,
-                    window.location.href
-                );
-
-                retryUrl.searchParams.set(
-                    "_img_retry",
-                    String(Date.now())
-                );
-
-                img.src = retryUrl.href;
-            } catch {
-                img.src = originalSrc;
-            }
-        }, RETRY_DELAY * (attempt + 1));
-    }, true);
-})();
