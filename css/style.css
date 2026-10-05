@@ -4287,3 +4287,117 @@ body {
         z-index: 101;
     }
 }
+
+
+/* =========================================================
+   ANIMEMOSS PREMIUM ANIME CARD TITLES
+   ========================================================= */
+
+.anime-card-title {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+
+    width: 100%;
+    min-height: 42px;
+    max-height: 42px;
+    box-sizing: border-box;
+
+    padding: 10px 4px 2px;
+    margin: 0;
+
+    color: rgba(255, 255, 255, 0.96);
+    font-size: 13.5px;
+    font-weight: 700;
+    line-height: 1.55;
+    letter-spacing: 0.05px;
+    text-align: left;
+
+    text-overflow: ellipsis;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+
+    transition: color .2s ease, transform .2s ease;
+}
+
+.anime-card-link:hover .anime-card-title {
+    color: #fff;
+}
+
+.card {
+    height: auto;
+    min-width: 0;
+}
+
+@media (max-width: 600px) {
+    .anime-card-title {
+        min-height: 40px;
+        max-height: 40px;
+        padding-top: 9px;
+        font-size: 12.5px;
+        line-height: 1.55;
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVE INFO PANEL — NEVER LEAVE THE VIEWPORT
+   ========================================================= */
+
+@media (max-width: 1000px) {
+    .anime-card-link.touch-panel-active .anime-hover-panel {
+        box-sizing: border-box !important;
+        width: min(305px, calc(100vw - 24px)) !important;
+        max-width: calc(100vw - 24px) !important;
+        max-height: calc(100vh - 24px) !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+
+        padding: clamp(14px, 3vw, 20px) !important;
+        border-radius: 16px !important;
+
+        left: clamp(12px, var(--touch-panel-left, 12px), calc(100vw - 24px)) !important;
+        top: clamp(12px, var(--touch-panel-top, 12px), calc(100vh - 24px)) !important;
+    }
+
+    .anime-card-link.touch-panel-active .anime-panel-title {
+        max-width: 100% !important;
+        display: -webkit-box !important;
+        -webkit-box-orient: vertical !important;
+        -webkit-line-clamp: 3 !important;
+        overflow: hidden !important;
+        overflow-wrap: anywhere !important;
+    }
+
+    .anime-card-link.touch-panel-active .watch-series {
+        max-width: 100% !important;
+        white-space: nowrap !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .anime-card-link.touch-panel-active .anime-hover-panel {
+        width: calc(100vw - 20px) !important;
+        max-width: calc(100vw - 20px) !important;
+        max-height: calc(100vh - 20px) !important;
+        padding: 14px !important;
+        border-radius: 14px !important;
+    }
+
+    .anime-card-link.touch-panel-active .anime-panel-meta {
+        flex-wrap: wrap !important;
+        row-gap: 5px !important;
+    }
+
+    .anime-card-link.touch-panel-active .watch-series {
+        width: 100% !important;
+    }
+}
+
+@media (max-height: 520px) and (max-width: 1000px) {
+    .anime-card-link.touch-panel-active .anime-hover-panel {
+        max-height: calc(100vh - 16px) !important;
+        padding: 12px !important;
+    }
+}
