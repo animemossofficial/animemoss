@@ -890,6 +890,7 @@ filters.forEach(filter => {
                 <div class="discovery-rank-list">
                     ${list.slice(1,5).map((a,i)=>row(a,`#0${i+2} · ${Number(a.views||0).toLocaleString()} views`)).join("")}
                 </div>`;
+            setupAnimeImageFallbacks(el);
         }catch(err){
             console.error("Homepage Most Viewed:",err);
             state(el,"Ranking temporarily unavailable.");
@@ -918,6 +919,9 @@ filters.forEach(filter => {
             doneEl.innerHTML=completed.length
                 ? completed.slice(0,6).map((a,i)=>row(a,`#${String(i+1).padStart(2,"0")} · Finished`)).join("")
                 : '<div class="discovery-state">No newly completed anime found.</div>';
+
+            setupAnimeImageFallbacks(newEl);
+            setupAnimeImageFallbacks(doneEl);
         }catch(err){
             console.error("Homepage discovery:",err);
             state(newEl,"New releases temporarily unavailable.");
