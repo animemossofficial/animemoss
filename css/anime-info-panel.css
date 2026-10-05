@@ -79,3 +79,11 @@
   .anime-info-popover .anime-panel-title{font-size:15px}
   .anime-info-popover .anime-panel-meta{font-size:11px;gap:5px}
 }
+
+/* Old in-card panel is intentionally disabled; the rebuilt panel is portaled to <body>. */
+.anime-card-link .anime-hover-panel{
+  display:none!important;
+  visibility:hidden!important;
+  opacity:0!important;
+  pointer-events:none!important;
+}
