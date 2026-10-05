@@ -1131,135 +1131,214 @@ setInterval(() => {
 
 /* AUTO POSITION HOVER PANEL BASED ON AVAILABLE SPACE */
 /* =========================================================
-   ANIMEMOSS INFO PANEL — DESKTOP CURSOR ONLY
-   Rebuilt: right by default, flips left when right side is tight.
+   ANIMEMOSS INFO PANEL — FRESH ADAPTIVE BUILD
+   Mouse hover + touch long-press. Never sits over the card.
    ========================================================= */
 
-let activeInfoCard = null;
-let activeInfoPanel = null;
+let amInfoPanel = null;
+let amInfoCard = null;
+let amInfoTimer = null;
+let amSuppressClick = false;
 
-function positionAnimeInfoPanel(card, panel) {
-    if (!card || !panel) return;
+function amCreateInfoPanel(card) {
+    const old = card.querySelector(".anime-hover-panel");
+    if (!old) return null;
 
-    const gap = 12;
-    const margin = 12;
-    const viewportWidth = document.documentElement.clientWidth;
-    const viewportHeight = window.innerHeight;
+    if (!amInfoPanel) {
+        amInfoPanel = document.createElement("div");
+        amInfoPanel.className = "anime-info-popover";
+        amInfoPanel.setAttribute("role", "dialog");
+        document.body.appendChild(amInfoPanel);
+    }
 
-    panel.style.display = "block";
-    panel.style.visibility = "hidden";
-    panel.style.opacity = "0";
+    amInfoPanel.innerHTML = old.innerHTML;
+    const watch = amInfoPanel.querySelector(".watch-series");
+    if (watch) {
+        watch.onclick = (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            const id = card.getAttribute("data-anime-id");
+            window.location.href = "watch.html?id=" + encodeURIComponent(id) + "&episode=1";
+        };
+    }
 
-    const cardRect = card.getBoundingClientRect();
-    const panelRect = panel.getBoundingClientRect();
+    return amInfoPanel;
+}
 
-    const panelWidth = Math.min(
-        panelRect.width || 320,
-        viewportWidth - margin * 2
+function amPositionInfoPanel(card) {
+    if (!amInfoPanel) return;
+
+    const gap = 14;
+    const margin = 10;
+    const vw = document.documentElement.clientWidth;
+    const vh = window.innerHeight;
+    const rect = card.getBoundingClientRect();
+
+    const rightSpace = Math.max(0, vw - rect.right - gap - margin);
+    const leftSpace = Math.max(0, rect.left - gap - margin);
+    const minWidth = 155;
+    const idealWidth = 320;
+
+    // Prefer right. If it does not fit, flip left.
+    // On very small screens, use whichever side has more room and shrink.
+    let side = rightSpace >= minWidth ? "right" : "left";
+    let available = side === "right" ? rightSpace : leftSpace;
+
+    if (available < minWidth && leftSpace > rightSpace) {
+        side = "left";
+        available = leftSpace;
+    } else if (available < minWidth && rightSpace >= leftSpace) {
+        side = "right";
+        available = rightSpace;
+    }
+
+    const width = Math.max(145, Math.min(idealWidth, available));
+    amInfoPanel.style.width = width + "px";
+    amInfoPanel.style.maxWidth = width + "px";
+
+    // Temporarily measure the final height, then keep the panel in viewport.
+    amInfoPanel.style.left = "0px";
+    amInfoPanel.style.right = "auto";
+    amInfoPanel.style.top = "0px";
+
+    const panelRect = amInfoPanel.getBoundingClientRect();
+    const height = Math.min(panelRect.height || 260, vh - margin * 2);
+    const top = Math.max(
+        margin,
+        Math.min(
+            rect.top + (rect.height - height) / 2,
+            vh - height - margin
+        )
     );
 
-    const spaceRight = viewportWidth - cardRect.right - gap;
-    const spaceLeft = cardRect.left - gap;
-
-    let side = "right";
-    if (spaceRight < panelWidth && spaceLeft >= panelWidth) {
-        side = "left";
-    } else if (spaceRight < panelWidth && spaceLeft < panelWidth) {
-        side = spaceRight >= spaceLeft ? "right" : "left";
-    }
-
-    card.classList.toggle("info-panel-left", side === "left");
-    card.classList.toggle("info-panel-right", side === "right");
-
-    const measured = panel.getBoundingClientRect();
-    const height = measured.height || 250;
-    const maxTop = Math.max(margin, viewportHeight - height - margin);
-    const desiredTop = Math.max(margin, Math.min(cardRect.top, maxTop));
-
-    panel.style.top = (desiredTop - cardRect.top) + "px";
-
     if (side === "right") {
-        panel.style.left = "calc(100% + " + gap + "px)";
-        panel.style.right = "auto";
+        amInfoPanel.style.left = (rect.right + gap) + "px";
+        amInfoPanel.style.right = "auto";
     } else {
-        panel.style.right = "calc(100% + " + gap + "px)";
-        panel.style.left = "auto";
+        amInfoPanel.style.left = Math.max(
+            margin,
+            rect.left - gap - width
+        ) + "px";
+        amInfoPanel.style.right = "auto";
     }
+
+    amInfoPanel.style.top = top + "px";
 }
 
-function openAnimeInfoPanel(card) {
-    if (!card || !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+function amOpenInfoPanel(card, touchMode = false) {
+    if (!card) return;
 
-    const panel = card.querySelector(".anime-hover-panel");
+    const panel = amCreateInfoPanel(card);
     if (!panel) return;
 
-    if (activeInfoCard && activeInfoCard !== card) {
-        activeInfoCard.classList.remove("info-panel-open");
+    amInfoCard = card;
+    amPositionInfoPanel(card);
+    panel.classList.add("is-visible");
+    card.classList.add("has-info-panel");
+
+    if (touchMode) {
+        amSuppressClick = true;
+    }
+}
+
+function amCloseInfoPanel() {
+    clearTimeout(amInfoTimer);
+    amInfoTimer = null;
+
+    if (amInfoPanel) {
+        amInfoPanel.classList.remove("is-visible");
+        amInfoPanel.innerHTML = "";
     }
 
-    activeInfoCard = card;
-    activeInfoPanel = panel;
-    positionAnimeInfoPanel(card, panel);
-    card.classList.add("info-panel-open");
+    if (amInfoCard) {
+        amInfoCard.classList.remove("has-info-panel");
+    }
 
-    requestAnimationFrame(() => {
-        if (activeInfoCard === card) {
-            panel.style.visibility = "visible";
-            panel.style.opacity = "1";
+    amInfoCard = null;
+}
+
+function amIsTouchDevice() {
+    return window.matchMedia("(hover: none), (pointer: coarse)").matches;
+}
+
+// Desktop: normal cursor hover.
+document.addEventListener("pointerover", (event) => {
+    if (amIsTouchDevice() || event.pointerType !== "mouse") return;
+
+    const card = event.target.closest(".anime-card-link");
+    if (!card) return;
+
+    if (event.relatedTarget && card.contains(event.relatedTarget)) return;
+    amOpenInfoPanel(card, false);
+});
+
+document.addEventListener("pointerout", (event) => {
+    if (amIsTouchDevice() || event.pointerType !== "mouse") return;
+
+    const card = event.target.closest(".anime-card-link");
+    if (!card) return;
+
+    if (event.relatedTarget && card.contains(event.relatedTarget)) return;
+
+    // Small delay lets the cursor move from the card toward the side panel.
+    clearTimeout(amInfoTimer);
+    amInfoTimer = setTimeout(() => {
+        if (!amInfoPanel || !amInfoPanel.matches(":hover")) {
+            amCloseInfoPanel();
         }
-    });
-}
-
-function closeAnimeInfoPanel(card) {
-    if (!card) return;
-
-    const panel = card.querySelector(".anime-hover-panel");
-    card.classList.remove("info-panel-open", "info-panel-left", "info-panel-right");
-
-    if (panel) {
-        panel.style.visibility = "";
-        panel.style.opacity = "";
-        panel.style.top = "";
-        panel.style.left = "";
-        panel.style.right = "";
-        panel.style.display = "";
-    }
-
-    if (activeInfoCard === card) {
-        activeInfoCard = null;
-        activeInfoPanel = null;
-    }
-}
-
-document.addEventListener("mouseover", event => {
-    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
-    const card = event.target.closest(".anime-card-link");
-    if (!card) return;
-    const from = event.relatedTarget;
-    if (from && card.contains(from)) return;
-    openAnimeInfoPanel(card);
+    }, 100);
 });
 
-document.addEventListener("mouseout", event => {
-    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+// Touch: long press opens the panel beside the card.
+document.addEventListener("pointerdown", (event) => {
+    if (!amIsTouchDevice() || event.pointerType === "mouse") return;
+
     const card = event.target.closest(".anime-card-link");
     if (!card) return;
-    const to = event.relatedTarget;
-    if (to && card.contains(to)) return;
-    closeAnimeInfoPanel(card);
+
+    clearTimeout(amInfoTimer);
+    amInfoTimer = setTimeout(() => {
+        amOpenInfoPanel(card, true);
+    }, 450);
 });
 
-function repositionActiveAnimeInfoPanel() {
-    if (!activeInfoCard || !activeInfoPanel) return;
-    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
-        closeAnimeInfoPanel(activeInfoCard);
-        return;
+document.addEventListener("pointerup", (event) => {
+    if (!amIsTouchDevice() || event.pointerType === "mouse") return;
+    clearTimeout(amInfoTimer);
+    amInfoTimer = null;
+});
+
+document.addEventListener("pointercancel", () => {
+    clearTimeout(amInfoTimer);
+    amInfoTimer = null;
+});
+
+// Clicking outside closes the touch panel.
+document.addEventListener("pointerdown", (event) => {
+    if (!amInfoCard || amInfoPanel?.contains(event.target)) return;
+    if (event.target.closest(".anime-card-link") === amInfoCard) return;
+    amCloseInfoPanel();
+}, true);
+
+// Prevent a long-press from immediately navigating the card.
+document.addEventListener("click", (event) => {
+    if (!amSuppressClick) return;
+    const card = event.target.closest(".anime-card-link");
+    if (card && card === amInfoCard) {
+        event.preventDefault();
+        event.stopPropagation();
     }
-    positionAnimeInfoPanel(activeInfoCard, activeInfoPanel);
+    amSuppressClick = false;
+}, true);
+
+function amRepositionInfoPanel() {
+    if (!amInfoCard || !amInfoPanel?.classList.contains("is-visible")) return;
+    amPositionInfoPanel(amInfoCard);
 }
 
-window.addEventListener("resize", repositionActiveAnimeInfoPanel);
-window.addEventListener("scroll", repositionActiveAnimeInfoPanel, { passive: true });
+window.addEventListener("resize", amRepositionInfoPanel);
+window.addEventListener("scroll", amRepositionInfoPanel, { passive: true });
+
 /* ANIMEMOSS PREMIUM SECTIONS */
 (function(){
 const grid=document.getElementById("anime-container");
