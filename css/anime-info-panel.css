@@ -87,3 +87,10 @@
   opacity:0!important;
   pointer-events:none!important;
 }
+
+.anime-info-popover{
+  scrollbar-width:thin;
+}
+.anime-info-popover.is-visible{
+  pointer-events:auto;
+}
