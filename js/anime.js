@@ -404,7 +404,7 @@ async function loadAnime(page = 1, reset = false) {
             return;
         }
 
-        const sort = "-averageRating";
+        const sort = "popular";
 
         const sourcePage =
             currentSearch
@@ -836,6 +836,9 @@ filters.forEach(filter => {
             loadAvailabilityCatalog(filterName, 1);
         } else {
             loadAnime(1, true);
+        }
+    });
+});
 
 /* =========================================================
    HOMEPAGE DISCOVERY — bottom sections
