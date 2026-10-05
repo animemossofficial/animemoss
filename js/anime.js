@@ -826,6 +826,44 @@ filters.forEach(filter => {
             loadAvailabilityCatalog(filterName, 1);
         } else {
             loadAnime(1, true);
+async function loadHomeExtraSections(){
+    const sections=[
+        {container:"most-viewed-container",url:`${API_BASE}/api/most-viewed?period=week&limit=6`},
+        {container:"new-releases-container",url:`${API_BASE}/api/recent-releases?days=14&limit=6`},
+        {container:"completed-container",url:`${CATALOG_API}?page=1&search=&sort=rating`}
+    ];
+    for(const section of sections){
+        const el=document.getElementById(section.container);
+        if(!el) continue;
+        try{
+            const response=await fetch(section.url,{cache:"no-store"});
+            if(!response.ok) throw new Error(String(response.status));
+            const data=await response.json();
+            let list=Array.isArray(data.results)?data.results:[];
+            if(section.container==="completed-container"){
+                list=list.filter(a=>String(a?.status||"").toUpperCase()==="FINISHED").slice(0,6);
+            }
+            el.innerHTML="";
+            list.slice(0,6).forEach((anime,index)=>renderAnimeInto(anime,el,index));
+            if(!list.length) el.closest(".am-home-section")?.remove();
+        }catch(error){
+            console.warn("Home section failed:",section.container,error.message);
+            el.closest(".am-home-section")?.remove();
+        }
+    }
+}
+function renderAnimeInto(anime,target,index=99){
+    const before=container;
+    const title=escapeHtml(getAnimeTitle(anime)),image=escapeHtml(getAnimeImage(anime));
+    const badge=escapeHtml(getEpisodeBadge(anime)),id=encodeURIComponent(anime.id);
+    target.insertAdjacentHTML("beforeend",`
+      <a href="anime.html?id=${id}" data-anime-id="${id}" class="anime-card-link" data-info-title="${title}" data-info-score="${escapeHtml(anime.averageScore||"—")}" data-info-year="${escapeHtml(anime.seasonYear||"—")}" data-info-episodes="${escapeHtml(anime.episodes?anime.episodes+" EP":"Series")}" data-info-genres="${escapeHtml(Array.isArray(anime.genres)?anime.genres.slice(0,3).join(" · "):"")}">
+        <div class="card"><div class="image"><span class="play-btn" aria-hidden="true">▶</span><img src="${image}" alt="${title}" loading="lazy" decoding="async"><div class="overlay"></div><div class="episode">${badge}</div></div></div>
+        <div class="anime-card-title" title="${title}">${title}</div>
+      </a>`);
+}
+loadHomeExtraSections();
+
         }
     });
 });
