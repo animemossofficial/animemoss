@@ -2445,7 +2445,7 @@ textarea {
     }
 
     .container {
-        grid-template-columns: repeat(auto-fit, minmax(165px, 180px));
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     }
 
     .section-header {
@@ -2498,7 +2498,7 @@ textarea {
 
     .container {
         width: calc(100% - 28px);
-        grid-template-columns: repeat(auto-fit, minmax(160px, 180px));
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
         gap: 18px;
     }
 
@@ -2528,17 +2528,8 @@ textarea {
         display: none !important;
     }
 
-    .card:hover {
-        transform: none !important;
-    }
-
-    .card:hover .image img {
-        transform: none !important;
-    }
-
     .watch-series {
-        opacity: 1 !important;
-        transform: translate(-50%, -50%) !important;
+        opacity: 0 !important;
     }
 
     #animemoss-premium-sections {
@@ -2566,8 +2557,9 @@ textarea {
 @media (max-width: 767px) {
 
     .container {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 14px;
+        width: calc(100% - 24px);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px 14px;
     }
 
     .section-header {
@@ -4542,5 +4534,89 @@ body {
     #banner-description {
         font-size: 11px !important;
         -webkit-line-clamp: 2;
+    }
+}
+
+
+/* =========================================================
+   FINAL RESPONSIVE CARD BEHAVIOR
+   ========================================================= */
+
+@media (max-width: 520px) {
+    #anime-container,
+    .container {
+        width: calc(100% - 24px);
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 20px 14px;
+    }
+
+    #anime-container .card,
+    .container .card {
+        width: 100%;
+        min-width: 0;
+    }
+}
+
+@media (max-width: 360px) {
+    #anime-container,
+    .container {
+        grid-template-columns: minmax(0, 1fr) !important;
+        max-width: 220px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+/* Keep the existing desktop hover animation, but give touch screens
+   the same visual feedback while the card is being held. */
+@media (hover: none) and (pointer: coarse) {
+    .card:active {
+        border-color: #ff2d55;
+        box-shadow: 0 0 20px rgba(255, 45, 85, .45);
+    }
+
+    .card:active .image img {
+        transform: scale(1.08);
+    }
+
+    .card:active .image::after {
+        opacity: 1;
+    }
+
+    .card:active .play-btn {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.08);
+        background: #ff2d55;
+        box-shadow:
+            0 0 18px rgba(255, 45, 85, .6),
+            0 0 35px rgba(255, 45, 85, .35);
+    }
+
+    /* Info panel is desktop-cursor only. */
+    .anime-hover-panel {
+        display: none !important;
+    }
+}
+
+/* Cursor devices keep the original side information panel. */
+@media (hover: hover) and (pointer: fine) {
+    .anime-hover-panel {
+        display: block;
+    }
+}
+
+/* Anime detail poster: always centered when the detail layout stacks. */
+@media (max-width: 767px) {
+    .anime-info {
+        width: min(100% - 24px, 720px);
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    #poster {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        flex: 0 0 auto;
     }
 }
