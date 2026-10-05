@@ -95,6 +95,19 @@
   .container{width:calc(100% - 12px)!important;gap:12px 7px!important}
   .anime-card-title{font-size:11px;line-height:1.4;min-height:31px;max-height:31px}
 }
+/* Image stability + cheaper rendering */
+.anime-card-link .image img{
+  background:linear-gradient(135deg,#17171c,#24242b);
+  contain:paint;
+}
+.anime-card-link .image img.image-load-failed{
+  opacity:1;
+  object-fit:cover;
+  background:
+    radial-gradient(circle at 50% 35%,rgba(255,45,85,.18),transparent 42%),
+    linear-gradient(135deg,#17171c,#24242b);
+}
+
 /* Info panel is a mouse/cursor feature only. */
 @media (hover:none),(pointer:coarse){
   .anime-hover-panel{display:none!important}
