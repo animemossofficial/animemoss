@@ -26,16 +26,6 @@
 <link rel="stylesheet" href="css/anime.css">
     <link rel="stylesheet" href="css/anime-cards-clean.css">
     <link rel="stylesheet" href="css/anime-info-panel.css">
-
-<style>
-.am-home-section{width:min(1500px,95%);margin:46px auto 0}
-.am-home-section-head{display:flex;align-items:end;justify-content:space-between;margin:0 0 20px}
-.am-home-section-head h2{margin:3px 0 0;color:#fff;font-size:30px;line-height:1.1}
-.am-home-kicker{color:#ff2d55;font-size:10px;font-weight:800;letter-spacing:1.6px}
-.am-home-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:24px 16px}
-@media(max-width:1100px){.am-home-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
-@media(max-width:700px){.am-home-section{width:calc(100% - 24px)}.am-home-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 10px}.am-home-section-head h2{font-size:24px}}
-</style>
 </head>
 
 <body>
@@ -315,26 +305,6 @@
         </div>
         <div class="container" id="anime-container"></div>
 
-        <section class="am-home-section" id="most-viewed-section">
-            <div class="am-home-section-head">
-                <div><span class="am-home-kicker">TRENDING NOW</span><h2>Most Viewed</h2></div>
-            </div>
-            <div class="am-home-grid" id="most-viewed-container"></div>
-        </section>
-
-        <section class="am-home-section" id="new-releases-section">
-            <div class="am-home-section-head">
-                <div><span class="am-home-kicker">JUST UPDATED</span><h2>New Releases</h2></div>
-            </div>
-            <div class="am-home-grid" id="new-releases-container"></div>
-        </section>
-
-        <section class="am-home-section" id="completed-section">
-            <div class="am-home-section-head">
-                <div><span class="am-home-kicker">FINISHED SERIES</span><h2>Completed</h2></div>
-            </div>
-            <div class="am-home-grid" id="completed-container"></div>
-        </section>
     </main>
     <script src="js/auth.js"></script>
     <script src="js/script.js"></script>
