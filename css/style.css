@@ -4651,3 +4651,56 @@ body {
         gap: 12px 8px !important;
     }
 }
+
+
+/* =========================================================
+   FINAL MOBILE TWO-COLUMN CARD GRID
+   ========================================================= */
+
+@media (max-width: 767px) {
+    body {
+        overflow-x: hidden;
+    }
+
+    .container {
+        display: grid !important;
+        width: calc(100% - 20px) !important;
+        max-width: none !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        padding: 0 !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        grid-auto-flow: row !important;
+        gap: 18px 12px !important;
+        justify-content: stretch !important;
+    }
+
+    .container .card {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        box-sizing: border-box !important;
+    }
+
+    .container .image {
+        width: 100% !important;
+        height: auto !important;
+        aspect-ratio: 190 / 275 !important;
+    }
+}
+
+/* Even on very narrow phones, keep the requested two-up layout. */
+@media (max-width: 320px) {
+    .container {
+        width: calc(100% - 12px) !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 12px 7px !important;
+    }
+
+    .container .anime-card-title {
+        font-size: 11px;
+        line-height: 1.4;
+        min-height: 31px;
+        max-height: 31px;
+    }
+}
