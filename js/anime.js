@@ -74,51 +74,61 @@ function getEpisodeBadge(anime) {
 }
 
 function renderAnime(anime, index = 99) {
-    if (!anime) {
-        return;
-    }
+    if (!anime || !container) return;
 
     const title = escapeHtml(getAnimeTitle(anime));
-    const image = escapeHtml(getAnimeImage(anime));
+    const large = escapeHtml(anime?.coverImage?.large || "");
+    const extraLarge = escapeHtml(anime?.coverImage?.extraLarge || "");
+    const medium = escapeHtml(anime?.coverImage?.medium || "");
+    const fallback = escapeHtml(extraLarge || medium || "");
     const badge = escapeHtml(getEpisodeBadge(anime));
     const id = encodeURIComponent(anime.id);
 
-    container.insertAdjacentHTML(
-        "beforeend",
-        `
-        <a href="anime.html?id=${id}" data-anime-id="${id}" class="anime-card-link" data-info-title="${title}" data-info-score="${escapeHtml(anime.averageScore || "—")}" data-info-year="${escapeHtml(anime.seasonYear || "—")}" data-info-episodes="${escapeHtml(anime.episodes ? anime.episodes + " EP" : "Series")}" data-info-genres="${escapeHtml(Array.isArray(anime.genres) ? anime.genres.slice(0, 3).join(" · ") : "")}">
+    container.insertAdjacentHTML("beforeend", `
+        <a href="anime.html?id=${id}"
+           data-anime-id="${id}"
+           class="anime-card-link"
+           data-info-title="${title}"
+           data-info-score="${escapeHtml(anime.averageScore || "—")}"
+           data-info-year="${escapeHtml(anime.seasonYear || "—")}"
+           data-info-episodes="${escapeHtml(anime.episodes ? anime.episodes + " EP" : "Series")}"
+           data-info-genres="${escapeHtml(Array.isArray(anime.genres) ? anime.genres.slice(0, 3).join(" · ") : "")}">
             <div class="card">
                 <div class="image">
-                <span class="play-btn" aria-hidden="true">▶</span>
+                    <span class="play-btn" aria-hidden="true">▶</span>
                     <img
-                        src="${image}"
+                        src="${large || fallback}"
+                        data-fallback="${fallback}"
                         alt="${title}"
-                        loading="${index < 8 ? "eager" : "lazy"}"
-                        fetchpriority="${index < 4 ? "high" : "auto"}"
+                        loading="${index < 6 ? "eager" : "lazy"}"
+                        fetchpriority="${index < 3 ? "high" : "auto"}"
                         decoding="async"
-                        onerror="this.style.visibility='hidden';"
+                        width="190"
+                        height="275"
                     >
-
-                    <div class="overlay">
-
-</div>
-
-                        <div class="episode">
-                            ${badge}
-                        </div>
-
-                    </div>
+                    <div class="overlay"></div>
+                    <div class="episode">${badge}</div>
                 </div>
             </div>
-
-            <div class="anime-card-title" title="${title}">
-                ${title}
-            </div>
+            <div class="anime-card-title" title="${title}">${title}</div>
         </a>
-        `
-    );
+    `);
 }
 
+function setupAnimeImageFallbacks(root = document) {
+    root.querySelectorAll("img[data-fallback]").forEach(img => {
+        if (img.dataset.fallbackBound === "1") return;
+        img.dataset.fallbackBound = "1";
+        img.addEventListener("error", () => {
+            const fallback = img.dataset.fallback;
+            if (fallback && img.src !== fallback) {
+                img.src = fallback;
+                return;
+            }
+            img.classList.add("image-load-failed");
+        }, { once: false });
+    });
+}
 // Touch play feedback — active only while the finger is actually down.
 function clearPressedCards(except=null) {
     document.querySelectorAll(".anime-card-link.is-pressed").forEach((el)=>{
@@ -387,6 +397,7 @@ async function loadAnime(page = 1, reset = false) {
                 trendingList.forEach((anime, index) => {
                     renderAnime(anime, index);
                 });
+                setupAnimeImageFallbacks(container);
             }
 
             hideLoading();
@@ -427,6 +438,7 @@ async function loadAnime(page = 1, reset = false) {
             `;
         } else {
             animeList.forEach((anime, index) => renderAnime(anime, index));
+            setupAnimeImageFallbacks(container);
         }
 
         hideLoading();
