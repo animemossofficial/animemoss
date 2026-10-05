@@ -119,56 +119,32 @@ function renderAnime(anime, index = 99) {
     );
 }
 
-// Touch-only play-button interaction.
-// The info panel remains desktop-cursor-only via CSS.
-function setupAnimeCardTouchFeedback() {
-    const cards = document.querySelectorAll(".anime-card-link");
-
-    cards.forEach((card) => {
-        let timer = null;
-
-        card.addEventListener("touchstart", () => {
-            card.classList.add("is-pressed");
-            clearTimeout(timer);
-            timer = setTimeout(() => {
-                card.classList.remove("is-pressed");
-            }, 900);
-        }, { passive: true });
-
-        const clear = () => {
-            clearTimeout(timer);
-            card.classList.remove("is-pressed");
-        };
-
-        card.addEventListener("touchend", clear, { passive: true });
-        card.addEventListener("touchcancel", clear, { passive: true });
+// Touch play feedback — active only while the finger is actually down.
+function clearPressedCards(except=null) {
+    document.querySelectorAll(".anime-card-link.is-pressed").forEach((el)=>{
+        if(el!==except) el.classList.remove("is-pressed");
     });
 }
 
-
-// Delegated touch feedback also covers cards rendered later by pagination/search.
-document.addEventListener("touchstart", (event) => {
-    const card = event.target.closest(".anime-card-link");
-    if (!card) return;
-
-    document.querySelectorAll(".anime-card-link.is-pressed").forEach((el) => {
-        if (el !== card) el.classList.remove("is-pressed");
-    });
-
+document.addEventListener("touchstart",(event)=>{
+    const card=event.target.closest(".anime-card-link");
+    if(!card)return;
+    clearPressedCards(card);
     card.classList.add("is-pressed");
-}, { passive: true });
+},{passive:true});
 
-document.addEventListener("touchend", () => {
-    setTimeout(() => {
-        document.querySelectorAll(".anime-card-link.is-pressed")
-            .forEach((el) => el.classList.remove("is-pressed"));
-    }, 120);
-}, { passive: true });
+document.addEventListener("touchend",()=>{
+    clearPressedCards();
+},{passive:true});
 
-document.addEventListener("touchcancel", () => {
-    document.querySelectorAll(".anime-card-link.is-pressed")
-        .forEach((el) => el.classList.remove("is-pressed"));
-}, { passive: true });
+document.addEventListener("touchcancel",()=>{
+    clearPressedCards();
+},{passive:true});
+
+document.addEventListener("touchmove",()=>{
+    // Finger movement means the press is no longer a stable card interaction.
+    clearPressedCards();
+},{passive:true});
 
 function showLoading(message = "Loading...") {
     let loader = document.getElementById("anime-loading");
