@@ -86,7 +86,7 @@ function renderAnime(anime, index = 99) {
     container.insertAdjacentHTML(
         "beforeend",
         `
-        <a href="anime.html?id=${id}" data-anime-id="${id}" class="anime-card-link">
+        <a href="anime.html?id=${id}" data-anime-id="${id}" class="anime-card-link" data-info-title="${title}" data-info-score="${escapeHtml(anime.averageScore || "—")}" data-info-year="${escapeHtml(anime.seasonYear || "—")}" data-info-episodes="${escapeHtml(anime.episodes ? anime.episodes + " EP" : "Series")}" data-info-genres="${escapeHtml(Array.isArray(anime.genres) ? anime.genres.slice(0, 3).join(" · ") : "")}">
             <div class="card">
                 <div class="image">
                 <span class="play-btn" aria-hidden="true">▶</span>
@@ -101,38 +101,7 @@ function renderAnime(anime, index = 99) {
 
                     <div class="overlay">
 
-                        <div
-                            class="anime-hover-panel"
-                            onclick="event.stopPropagation();"
-                        >
-                            <div class="anime-panel-title">
-                                ${title}
-                            </div>
-
-                            <div class="anime-panel-meta">
-                                <span>★</span>
-                                <span>${anime.averageScore || "—"}</span>
-                                <span>${anime.seasonYear || "—"}</span>
-                                <span>${anime.episodes ? anime.episodes + " EP" : "Series"}</span>
-                            </div>
-
-                            <div class="anime-panel-genres">
-                                ${
-                                    Array.isArray(anime.genres)
-                                        ? anime.genres.slice(0, 3).map(genre => escapeHtml(genre)).join(" · ")
-                                        : ""
-                                }
-                            </div>
-
-                            <button
-                                class="watch-series"
-                                type="button"
-                                onclick="event.preventDefault(); event.stopPropagation(); window.location.href='watch.html?id=${id}&episode=1';"
-                            >
-                                <span class="watch-icon">&#9654;</span>
-                                <span>Watch Now</span>
-                            </button>
-                        </div>
+</div>
 
                         <div class="episode">
                             ${badge}
@@ -1131,213 +1100,81 @@ setInterval(() => {
 
 /* AUTO POSITION HOVER PANEL BASED ON AVAILABLE SPACE */
 /* =========================================================
-   ANIMEMOSS INFO PANEL — FRESH ADAPTIVE BUILD
-   Mouse hover + touch long-press. Never sits over the card.
+   ANIMEMOSS INFO PANEL — CLEAN REBUILD
+   One portal only. Desktop hover + touch hold.
+   Always beside the active card, never over it.
    ========================================================= */
+let amInfoPanel=null, amInfoCard=null, amInfoTimer=null;
 
-let amInfoPanel = null;
-let amInfoCard = null;
-let amInfoTimer = null;
-let amSuppressClick = false;
-
-function amCreateInfoPanel(card) {
-    const old = card.querySelector(".anime-hover-panel");
-    if (!old) return null;
-
-    if (!amInfoPanel) {
-        amInfoPanel = document.createElement("div");
-        amInfoPanel.className = "anime-info-popover";
-        amInfoPanel.setAttribute("role", "dialog");
+function amMakePanel(card){
+    if(!amInfoPanel){
+        amInfoPanel=document.createElement("aside");
+        amInfoPanel.className="am-info-panel";
+        amInfoPanel.setAttribute("role","dialog");
         document.body.appendChild(amInfoPanel);
     }
-
-    amInfoPanel.innerHTML = old.innerHTML;
-    const watch = amInfoPanel.querySelector(".watch-series");
-    if (watch) {
-        watch.onclick = (event) => {
-            event.preventDefault();
-            event.stopPropagation();
-            const id = card.getAttribute("data-anime-id");
-            window.location.href = "watch.html?id=" + encodeURIComponent(id) + "&episode=1";
-        };
-    }
-
+    const id=card.dataset.animeId||"";
+    const title=card.dataset.infoTitle||"Unknown Anime";
+    const score=card.dataset.infoScore||"—";
+    const year=card.dataset.infoYear||"—";
+    const eps=card.dataset.infoEpisodes||"Series";
+    const genres=card.dataset.infoGenres||"";
+    amInfoPanel.innerHTML='<div class="am-info-head"><div class="am-info-kicker">ANIME DETAILS</div><button class="am-info-close" type="button" aria-label="Close">×</button></div><h3 class="am-info-title"></h3><div class="am-info-stats"><span>★ '+escapeHtml(score)+'</span><span>'+escapeHtml(year)+'</span><span>'+escapeHtml(eps)+'</span></div><div class="am-info-genres">'+escapeHtml(genres)+'</div><button class="am-info-watch" type="button"><span>▶</span> Watch Now</button>';
+    amInfoPanel.querySelector(".am-info-title").textContent=title;
+    amInfoPanel.querySelector(".am-info-watch").onclick=(e)=>{e.preventDefault();e.stopPropagation();window.location.href="watch.html?id="+encodeURIComponent(id)+"&episode=1";};
+    amInfoPanel.querySelector(".am-info-close").onclick=(e)=>{e.preventDefault();e.stopPropagation();amCloseInfoPanel();};
     return amInfoPanel;
 }
-
-function amPositionInfoPanel(card) {
-    if (!amInfoPanel) return;
-
-    const gap = 14;
-    const margin = 10;
-    const vw = document.documentElement.clientWidth;
-    const vh = window.innerHeight;
-    const rect = card.getBoundingClientRect();
-
-    const rightSpace = Math.max(0, vw - rect.right - gap - margin);
-    const leftSpace = Math.max(0, rect.left - gap - margin);
-    const minWidth = 155;
-    const idealWidth = 320;
-
-    // Prefer right. If it does not fit, flip left.
-    // On very small screens, use whichever side has more room and shrink.
-    let side = rightSpace >= minWidth ? "right" : "left";
-    let available = side === "right" ? rightSpace : leftSpace;
-
-    if (available < minWidth && leftSpace > rightSpace) {
-        side = "left";
-        available = leftSpace;
-    } else if (available < minWidth && rightSpace >= leftSpace) {
-        side = "right";
-        available = rightSpace;
-    }
-
-    const width = Math.max(145, Math.min(idealWidth, available));
-    amInfoPanel.style.width = width + "px";
-    amInfoPanel.style.maxWidth = width + "px";
-
-    // Temporarily measure the final height, then keep the panel in viewport.
-    amInfoPanel.style.left = "0px";
-    amInfoPanel.style.right = "auto";
-    amInfoPanel.style.top = "0px";
-
-    const panelRect = amInfoPanel.getBoundingClientRect();
-    const height = Math.min(panelRect.height || 260, vh - margin * 2);
-    const top = Math.max(
-        margin,
-        Math.min(
-            rect.top + (rect.height - height) / 2,
-            vh - height - margin
-        )
-    );
-
-    if (side === "right") {
-        amInfoPanel.style.left = (rect.right + gap) + "px";
-        amInfoPanel.style.right = "auto";
-    } else {
-        amInfoPanel.style.left = Math.max(
-            margin,
-            rect.left - gap - width
-        ) + "px";
-        amInfoPanel.style.right = "auto";
-    }
-
-    amInfoPanel.style.top = top + "px";
+function amPlacePanel(card){
+    if(!amInfoPanel) return;
+    const r=card.getBoundingClientRect(),gap=12,edge=10,vw=innerWidth,vh=innerHeight;
+    const right=Math.max(0,vw-r.right-gap-edge),left=Math.max(0,r.left-gap-edge);
+    const side=right>=left?"right":"left",space=side==="right"?right:left;
+    const width=Math.max(140,Math.min(310,space));
+    amInfoPanel.style.width=width+"px";amInfoPanel.style.maxWidth=width+"px";
+    amInfoPanel.style.left="0px";amInfoPanel.style.top="0px";
+    const h=Math.min(amInfoPanel.getBoundingClientRect().height,vh-edge*2);
+    const top=Math.max(edge,Math.min(r.top+(r.height-h)/2,vh-h-edge));
+    amInfoPanel.style.top=top+"px";
+    amInfoPanel.style.left=(side==="right"?r.right+gap:Math.max(edge,r.left-gap-width))+"px";
 }
-
-function amOpenInfoPanel(card, touchMode = false) {
-    if (!card) return;
-
-    const panel = amCreateInfoPanel(card);
-    if (!panel) return;
-
-    amInfoCard = card;
-    amPositionInfoPanel(card);
-    panel.classList.add("is-visible");
-    card.classList.add("has-info-panel");
-
-    if (touchMode) {
-        amSuppressClick = true;
-    }
+function amOpenInfoPanel(card){
+    if(!card)return;
+    if(amInfoCard&&amInfoCard!==card)amCloseInfoPanel();
+    amInfoCard=card;amMakePanel(card);amPlacePanel(card);
+    requestAnimationFrame(()=>amInfoPanel?.classList.add("is-open"));
 }
-
-function amCloseInfoPanel() {
-    clearTimeout(amInfoTimer);
-    amInfoTimer = null;
-
-    if (amInfoPanel) {
-        amInfoPanel.classList.remove("is-visible");
-        amInfoPanel.innerHTML = "";
-    }
-
-    if (amInfoCard) {
-        amInfoCard.classList.remove("has-info-panel");
-    }
-
-    amInfoCard = null;
+function amCloseInfoPanel(){
+    clearTimeout(amInfoTimer);amInfoTimer=null;
+    amInfoPanel?.classList.remove("is-open");amInfoCard=null;
 }
-
-function amIsTouchDevice() {
-    return window.matchMedia("(hover: none), (pointer: coarse)").matches;
-}
-
-// Desktop: normal cursor hover.
-document.addEventListener("pointerover", (event) => {
-    if (amIsTouchDevice() || event.pointerType !== "mouse") return;
-
-    const card = event.target.closest(".anime-card-link");
-    if (!card) return;
-
-    if (event.relatedTarget && card.contains(event.relatedTarget)) return;
-    amOpenInfoPanel(card, false);
+function amTouchDevice(){return matchMedia("(pointer:coarse)").matches;}
+document.addEventListener("pointerover",e=>{
+    if(e.pointerType!=="mouse"||amTouchDevice())return;
+    const c=e.target.closest(".anime-card-link");
+    if(!c||c.contains(e.relatedTarget))return;
+    amOpenInfoPanel(c);
 });
-
-document.addEventListener("pointerout", (event) => {
-    if (amIsTouchDevice() || event.pointerType !== "mouse") return;
-
-    const card = event.target.closest(".anime-card-link");
-    if (!card) return;
-
-    if (event.relatedTarget && card.contains(event.relatedTarget)) return;
-
-    // Small delay lets the cursor move from the card toward the side panel.
-    clearTimeout(amInfoTimer);
-    amInfoTimer = setTimeout(() => {
-        if (!amInfoPanel || !amInfoPanel.matches(":hover")) {
-            amCloseInfoPanel();
-        }
-    }, 100);
+document.addEventListener("pointerout",e=>{
+    if(e.pointerType!=="mouse"||amTouchDevice())return;
+    const c=e.target.closest(".anime-card-link");
+    if(!c||c.contains(e.relatedTarget))return;
+    clearTimeout(amInfoTimer);amInfoTimer=setTimeout(()=>{if(!amInfoPanel?.matches(":hover"))amCloseInfoPanel();},140);
 });
-
-// Touch: long press opens the panel beside the card.
-document.addEventListener("pointerdown", (event) => {
-    if (!amIsTouchDevice() || event.pointerType === "mouse") return;
-
-    const card = event.target.closest(".anime-card-link");
-    if (!card) return;
-
-    clearTimeout(amInfoTimer);
-    amInfoTimer = setTimeout(() => {
-        amOpenInfoPanel(card, true);
-    }, 450);
+document.addEventListener("pointerdown",e=>{
+    if(e.pointerType==="mouse"||!amTouchDevice())return;
+    const c=e.target.closest(".anime-card-link");if(!c)return;
+    clearTimeout(amInfoTimer);amInfoTimer=setTimeout(()=>amOpenInfoPanel(c),450);
 });
-
-document.addEventListener("pointerup", (event) => {
-    if (!amIsTouchDevice() || event.pointerType === "mouse") return;
-    clearTimeout(amInfoTimer);
-    amInfoTimer = null;
-});
-
-document.addEventListener("pointercancel", () => {
-    clearTimeout(amInfoTimer);
-    amInfoTimer = null;
-});
-
-// Clicking outside closes the touch panel.
-document.addEventListener("pointerdown", (event) => {
-    if (!amInfoCard || amInfoPanel?.contains(event.target)) return;
-    if (event.target.closest(".anime-card-link") === amInfoCard) return;
+document.addEventListener("pointerup",e=>{if(e.pointerType!=="mouse"){clearTimeout(amInfoTimer);amInfoTimer=null;}});
+document.addEventListener("pointercancel",()=>{clearTimeout(amInfoTimer);amInfoTimer=null;});
+document.addEventListener("pointerdown",e=>{
+    if(!amInfoCard||amInfoPanel?.contains(e.target))return;
+    if(e.target.closest(".anime-card-link")===amInfoCard)return;
     amCloseInfoPanel();
-}, true);
-
-// Prevent a long-press from immediately navigating the card.
-document.addEventListener("click", (event) => {
-    if (!amSuppressClick) return;
-    const card = event.target.closest(".anime-card-link");
-    if (card && card === amInfoCard) {
-        event.preventDefault();
-        event.stopPropagation();
-    }
-    amSuppressClick = false;
-}, true);
-
-function amRepositionInfoPanel() {
-    if (!amInfoCard || !amInfoPanel?.classList.contains("is-visible")) return;
-    amPositionInfoPanel(amInfoCard);
-}
-
-window.addEventListener("resize", amRepositionInfoPanel);
-window.addEventListener("scroll", amRepositionInfoPanel, { passive: true });
+},true);
+function amRepositionInfoPanel(){if(amInfoCard&&amInfoPanel?.classList.contains("is-open"))amPlacePanel(amInfoCard);}
+addEventListener("resize",amRepositionInfoPanel);addEventListener("scroll",amRepositionInfoPanel,{passive:true});
 
 /* ANIMEMOSS PREMIUM SECTIONS */
 (function(){
