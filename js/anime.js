@@ -1288,11 +1288,20 @@ document.addEventListener("pointerdown",e=>{
     if(e.pointerType==="mouse"||!amTouchDevice())return;
     const c=e.target.closest(".anime-card-link");if(!c)return;
     clearTimeout(amInfoTimer);
-    // Touch devices: open immediately on touch, no long-press delay.
     amOpenInfoPanel(c);
 });
-document.addEventListener("pointerup",e=>{if(e.pointerType!=="mouse"){clearTimeout(amInfoTimer);amInfoTimer=null;}});
-document.addEventListener("pointercancel",()=>{clearTimeout(amInfoTimer);amInfoTimer=null;});
+document.addEventListener("pointerup",e=>{
+    if(e.pointerType!=="mouse"){
+        clearTimeout(amInfoTimer);amInfoTimer=null;
+        // Close immediately after the finger leaves the screen.
+        requestAnimationFrame(()=>amCloseInfoPanel());
+    }
+});
+document.addEventListener("pointercancel",e=>{
+    if(e.pointerType!=="mouse") amCloseInfoPanel();
+});
+document.addEventListener("touchend",()=>amCloseInfoPanel(),{passive:true});
+document.addEventListener("touchcancel",()=>amCloseInfoPanel(),{passive:true});
 document.addEventListener("pointerdown",e=>{
     if(!amInfoCard||amInfoPanel?.contains(e.target))return;
     if(e.target.closest(".anime-card-link")===amInfoCard)return;
