@@ -176,6 +176,31 @@ function setupAnimeCardTouchFeedback() {
     });
 }
 
+
+// Delegated touch feedback also covers cards rendered later by pagination/search.
+document.addEventListener("touchstart", (event) => {
+    const card = event.target.closest(".anime-card-link");
+    if (!card) return;
+
+    document.querySelectorAll(".anime-card-link.is-pressed").forEach((el) => {
+        if (el !== card) el.classList.remove("is-pressed");
+    });
+
+    card.classList.add("is-pressed");
+}, { passive: true });
+
+document.addEventListener("touchend", () => {
+    setTimeout(() => {
+        document.querySelectorAll(".anime-card-link.is-pressed")
+            .forEach((el) => el.classList.remove("is-pressed"));
+    }, 120);
+}, { passive: true });
+
+document.addEventListener("touchcancel", () => {
+    document.querySelectorAll(".anime-card-link.is-pressed")
+        .forEach((el) => el.classList.remove("is-pressed"));
+}, { passive: true });
+
 function showLoading(message = "Loading...") {
     let loader = document.getElementById("anime-loading");
 
