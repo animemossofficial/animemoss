@@ -1,0 +1,81 @@
+/* Animemoss — rebuilt adaptive anime info panel */
+.anime-info-popover{
+  position:fixed;
+  z-index:100000;
+  box-sizing:border-box;
+  width:320px;
+  max-width:320px;
+  max-height:min(520px,calc(100vh - 24px));
+  overflow:auto;
+  padding:18px;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:18px;
+  background:
+    radial-gradient(circle at 100% 0,rgba(255,35,80,.12),transparent 38%),
+    linear-gradient(145deg,#242229 0%,#111116 100%);
+  color:#fff;
+  box-shadow:0 24px 70px rgba(0,0,0,.62),0 0 34px rgba(255,35,80,.12);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transform:translateY(4px) scale(.97);
+  transform-origin:center;
+  transition:opacity .18s ease,transform .18s ease,visibility .18s ease;
+}
+.anime-info-popover.is-visible{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+  transform:translateY(0) scale(1);
+}
+.anime-info-popover .anime-panel-title{
+  margin:0 0 10px;
+  font-size:18px;
+  line-height:1.25;
+  font-weight:800;
+  color:#fff;
+  overflow-wrap:anywhere;
+}
+.anime-info-popover .anime-panel-meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-bottom:11px;
+  color:rgba(255,255,255,.72);
+  font-size:12px;
+}
+.anime-info-popover .anime-panel-meta span{
+  padding:4px 7px;
+  border-radius:8px;
+  background:rgba(255,255,255,.07);
+}
+.anime-info-popover .anime-panel-genres{
+  margin-bottom:15px;
+  color:rgba(255,255,255,.58);
+  font-size:12px;
+  line-height:1.5;
+  overflow-wrap:anywhere;
+}
+.anime-info-popover .watch-series{
+  width:100%;
+  min-height:40px;
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:10px;
+  background:linear-gradient(135deg,#ff174f,#d9003d);
+  color:#fff;
+  font-weight:700;
+  cursor:pointer;
+}
+.anime-info-popover::-webkit-scrollbar{width:5px}
+.anime-info-popover::-webkit-scrollbar-thumb{
+  background:rgba(255,35,80,.45);
+  border-radius:10px;
+}
+@media (max-width:767px){
+  .anime-info-popover{
+    border-radius:15px;
+    padding:14px;
+  }
+  .anime-info-popover .anime-panel-title{font-size:15px}
+  .anime-info-popover .anime-panel-meta{font-size:11px;gap:5px}
+}
