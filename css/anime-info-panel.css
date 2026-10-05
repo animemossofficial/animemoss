@@ -94,3 +94,15 @@
 .anime-info-popover.is-visible{
   pointer-events:auto;
 }
+
+/* FINAL STACKING FIX: the portal must always sit above every card/grid layer. */
+.anime-info-popover{
+  position:fixed!important;
+  z-index:2147483647!important;
+  isolation:isolate;
+  transform:translateY(4px) scale(.97);
+}
+.anime-info-popover.is-visible{
+  z-index:2147483647!important;
+  transform:translateY(0) scale(1);
+}
