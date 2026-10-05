@@ -179,3 +179,93 @@
     box-shadow: 0 12px 30px rgba(0,0,0,.38);
 }
 
+
+
+/* =========================================================
+   PREMIUM ANIME PAGE INFO LAYOUT — FLUID ON SMALL SCREENS
+   ========================================================= */
+
+.anime-info {
+    width: min(1180px, calc(100% - 32px));
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+}
+
+.anime-info .details {
+    min-width: 0;
+    max-width: 100%;
+}
+
+.anime-info .details h1,
+.anime-info .details h3,
+.anime-info .details p {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 900px) {
+    .anime-info {
+        width: min(720px, calc(100% - 24px));
+        gap: clamp(14px, 3vw, 24px);
+    }
+}
+
+@media (max-width: 640px) {
+    .anime-info {
+        width: calc(100% - 20px);
+        padding: 0;
+        gap: 14px;
+        align-items: flex-start;
+    }
+
+    .anime-info .details {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .anime-info .details h1 {
+        font-size: clamp(22px, 7vw, 34px);
+        line-height: 1.12;
+        overflow-wrap: anywhere;
+    }
+
+    .anime-info .details h3 {
+        font-size: clamp(12px, 3.5vw, 16px);
+        line-height: 1.4;
+        overflow-wrap: anywhere;
+    }
+
+    .anime-info .stats,
+    .anime-info .genres,
+    .anime-info .buttons {
+        max-width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .back-library-btn {
+        top: 10px;
+        left: 10px;
+        max-width: calc(100vw - 20px);
+        box-sizing: border-box;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+@media (max-width: 420px) {
+    .anime-info {
+        width: calc(100% - 16px);
+    }
+
+    .anime-info .details h1 {
+        font-size: clamp(20px, 7.5vw, 29px);
+    }
+
+    .back-library-btn {
+        padding: 8px 12px;
+        gap: 6px;
+        font-size: 12px;
+    }
+}
