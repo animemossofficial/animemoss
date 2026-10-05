@@ -1162,6 +1162,13 @@ filters.forEach(filter => {
 })();
 
 
+/* HOMEPAGE INITIAL LOAD */
+if (container) {
+    loadAnime(1, true).catch(error => {
+        console.error("Homepage initial catalog load failed:", error);
+    });
+}
+
 let catalogRotationDay = getRotationDay();
 
 setInterval(() => {
