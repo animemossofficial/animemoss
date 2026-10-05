@@ -358,3 +358,87 @@
       0 0 24px rgba(255,45,85,.22);
   }
 }
+
+
+/* =========================================================
+   FINAL REBUILT INFO PANEL
+   JS controls side + vertical position on cursor devices.
+   ========================================================= */
+
+@media (hover:hover) and (pointer:fine){
+  .anime-card-link{
+    position:relative;
+    z-index:1;
+  }
+
+  .anime-card-link .card{
+    overflow:visible!important;
+  }
+
+  .anime-card-link .image{
+    overflow:visible!important;
+  }
+
+  .anime-card-link .anime-hover-panel{
+    position:absolute!important;
+    z-index:9999!important;
+    width:320px!important;
+    max-width:min(320px,calc(100vw - 24px))!important;
+    max-height:calc(100vh - 24px)!important;
+    overflow-y:auto!important;
+    box-sizing:border-box!important;
+    padding:20px!important;
+    border-radius:18px!important;
+    background:
+      linear-gradient(145deg,rgba(34,33,42,.99),rgba(15,14,20,.99))!important;
+    border:1px solid rgba(255,255,255,.12)!important;
+    box-shadow:
+      0 24px 60px rgba(0,0,0,.58),
+      0 0 35px rgba(255,45,85,.10)!important;
+    opacity:0!important;
+    visibility:hidden!important;
+    pointer-events:none!important;
+    transform:translateX(0) scale(.97)!important;
+    transform-origin:center!important;
+    transition:
+      opacity .16s ease,
+      transform .16s ease,
+      visibility .16s ease!important;
+  }
+
+  .anime-card-link.info-panel-open .anime-hover-panel{
+    opacity:1!important;
+    visibility:visible!important;
+    pointer-events:auto!important;
+    transform:scale(1)!important;
+  }
+
+  .anime-card-link .anime-hover-panel.panel-left,
+  .anime-card-link.info-panel-left .anime-hover-panel{
+    transform-origin:right center!important;
+  }
+
+  .anime-card-link .anime-hover-panel.panel-right,
+  .anime-card-link.info-panel-right .anime-hover-panel{
+    transform-origin:left center!important;
+  }
+
+  .anime-card-link .anime-hover-panel::-webkit-scrollbar{
+    width:5px;
+  }
+
+  .anime-card-link .anime-hover-panel::-webkit-scrollbar-thumb{
+    background:rgba(255,45,85,.38);
+    border-radius:10px;
+  }
+}
+
+/* Touch devices: panel does not exist, play animation remains separate. */
+@media (hover:none),(pointer:coarse){
+  .anime-card-link .anime-hover-panel{
+    display:none!important;
+    visibility:hidden!important;
+    opacity:0!important;
+    pointer-events:none!important;
+  }
+}
