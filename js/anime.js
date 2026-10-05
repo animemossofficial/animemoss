@@ -140,6 +140,10 @@ function renderAnime(anime, index = 99) {
                     </div>
                 </div>
             </div>
+
+            <div class="anime-card-title" title="${title}">
+                ${title}
+            </div>
         </a>
         `
     );
