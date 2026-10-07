@@ -592,3 +592,84 @@
   .am-info-title{font-size:15px!important}
   .am-info-watch{min-height:38px!important}
 }
+
+
+/* =========================================================
+   FINAL ROW-BASED CARD GRID
+   Keep every complete row filled and make only the last
+   card of each row open its info panel to the left.
+   ========================================================= */
+#anime-container,
+#search-results-container,
+.anime-grid,
+.cards-grid{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  grid-auto-flow:row!important;
+  align-items:start!important;
+}
+#anime-container .anime-card-link,
+#search-results-container .anime-card-link{
+  min-width:0!important;
+  width:100%!important;
+}
+
+/* The 4th, 8th, 12th... cards are row-end cards. */
+#anime-container .anime-card-link:nth-child(4n),
+#search-results-container .anime-card-link:nth-child(4n){
+  --info-side:left;
+}
+
+/* The remaining cards open to the right. */
+#anime-container .anime-card-link:not(:nth-child(4n)),
+#search-results-container .anime-card-link:not(:nth-child(4n)){
+  --info-side:right;
+}
+
+/* On smaller widths reduce columns so rows remain complete. */
+@media (max-width:1100px){
+  #anime-container,
+  #search-results-container,
+  .anime-grid,
+  .cards-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  }
+  #anime-container .anime-card-link:nth-child(4n),
+  #search-results-container .anime-card-link:nth-child(4n){
+    --info-side:right;
+  }
+  #anime-container .anime-card-link:nth-child(3n),
+  #search-results-container .anime-card-link:nth-child(3n){
+    --info-side:left;
+  }
+}
+@media (max-width:760px){
+  #anime-container,
+  #search-results-container,
+  .anime-grid,
+  .cards-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+  #anime-container .anime-card-link:nth-child(3n),
+  #search-results-container .anime-card-link:nth-child(3n){
+    --info-side:right;
+  }
+  #anime-container .anime-card-link:nth-child(2n),
+  #search-results-container .anime-card-link:nth-child(2n){
+    --info-side:left;
+  }
+}
+@media (max-width:430px){
+  #anime-container,
+  #search-results-container,
+  .anime-grid,
+  .cards-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+}
+
+/* Shared body panel follows the row-end decision. */
+.anime-card-link.info-panel-left,
+.anime-card-link.info-panel-right{
+  z-index:20!important;
+}
