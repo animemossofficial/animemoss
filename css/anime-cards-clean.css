@@ -595,80 +595,67 @@
 
 
 /* =========================================================
-   FINAL ROW-BASED CARD GRID
-   Keep every complete row filled and make only the last
-   card of each row open its info panel to the left.
+   FINAL RESPONSIVE CARD GRID
+   Card width stays fixed; only the number of cards per row changes.
+   Mobile always keeps two cards when the viewport can fit them.
    ========================================================= */
 #anime-container,
 #search-results-container,
 .anime-grid,
 .cards-grid{
   display:grid!important;
-  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  grid-template-columns:repeat(auto-fill,180px)!important;
   grid-auto-flow:row!important;
+  justify-content:space-between!important;
   align-items:start!important;
+  column-gap:18px!important;
+  row-gap:28px!important;
 }
 #anime-container .anime-card-link,
 #search-results-container .anime-card-link{
-  min-width:0!important;
-  width:100%!important;
+  width:180px!important;
+  min-width:180px!important;
+  max-width:180px!important;
 }
 
-/* The 4th, 8th, 12th... cards are row-end cards. */
-#anime-container .anime-card-link:nth-child(4n),
-#search-results-container .anime-card-link:nth-child(4n){
-  --info-side:left;
+/* Keep the actual poster/card dimensions identical everywhere. */
+#anime-container .anime-card-link .card,
+#search-results-container .anime-card-link .card{
+  width:180px!important;
+}
+#anime-container .anime-card-link .image,
+#search-results-container .anime-card-link .image{
+  width:180px!important;
+  height:261px!important;
+  aspect-ratio:auto!important;
 }
 
-/* The remaining cards open to the right. */
-#anime-container .anime-card-link:not(:nth-child(4n)),
-#search-results-container .anime-card-link:not(:nth-child(4n)){
-  --info-side:right;
-}
-
-/* On smaller widths reduce columns so rows remain complete. */
-@media (max-width:1100px){
+/* On narrow phones, two fixed cards fit without becoming huge. */
+@media (max-width:399px){
   #anime-container,
   #search-results-container,
   .anime-grid,
   .cards-grid{
-    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    grid-template-columns:repeat(2,150px)!important;
+    justify-content:space-between!important;
+    column-gap:10px!important;
   }
-  #anime-container .anime-card-link:nth-child(4n),
-  #search-results-container .anime-card-link:nth-child(4n){
-    --info-side:right;
+  #anime-container .anime-card-link,
+  #search-results-container .anime-card-link,
+  #anime-container .anime-card-link .card,
+  #search-results-container .anime-card-link .card{
+    width:150px!important;
+    min-width:150px!important;
+    max-width:150px!important;
   }
-  #anime-container .anime-card-link:nth-child(3n),
-  #search-results-container .anime-card-link:nth-child(3n){
-    --info-side:left;
-  }
-}
-@media (max-width:760px){
-  #anime-container,
-  #search-results-container,
-  .anime-grid,
-  .cards-grid{
-    grid-template-columns:repeat(2,minmax(0,1fr))!important;
-  }
-  #anime-container .anime-card-link:nth-child(3n),
-  #search-results-container .anime-card-link:nth-child(3n){
-    --info-side:right;
-  }
-  #anime-container .anime-card-link:nth-child(2n),
-  #search-results-container .anime-card-link:nth-child(2n){
-    --info-side:left;
-  }
-}
-@media (max-width:430px){
-  #anime-container,
-  #search-results-container,
-  .anime-grid,
-  .cards-grid{
-    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  #anime-container .anime-card-link .image,
+  #search-results-container .anime-card-link .image{
+    width:150px!important;
+    height:217px!important;
   }
 }
 
-/* Shared body panel follows the row-end decision. */
+/* Last card in each actual CSS-grid row is handled by JS. */
 .anime-card-link.info-panel-left,
 .anime-card-link.info-panel-right{
   z-index:20!important;
