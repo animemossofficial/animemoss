@@ -158,72 +158,48 @@ function getBadge(anime) {
 function renderCard(anime) {
     const title = escapeHtml(getTitle(anime));
     const image = escapeHtml(getImage(anime));
+    const fallback = escapeHtml(
+        anime?.coverImage?.large ||
+        anime?.coverImage?.medium ||
+        ""
+    );
     const badge = escapeHtml(getBadge(anime));
     const id = encodeURIComponent(anime.id);
+    const genres = Array.isArray(anime.genres)
+        ? anime.genres.slice(0, 3).map(genre => escapeHtml(genre)).join(" · ")
+        : "";
 
-    resultsContainer.insertAdjacentHTML(
-        "beforeend",
-        `
-        <a href="anime.html?id=${id}" class="anime-card-link">
+    resultsContainer.insertAdjacentHTML("beforeend", `
+        <a
+            href="anime.html?id=${id}"
+            class="anime-card-link"
+            data-anime-id="${id}"
+            data-info-title="${title}"
+            data-info-score="${escapeHtml(anime.averageScore || "—")}"
+            data-info-year="${escapeHtml(anime.seasonYear || "—")}"
+            data-info-episodes="${escapeHtml(anime.episodes ? anime.episodes + " EP" : "Series")}"
+            data-info-genres="${genres}"
+        >
             <div class="card">
                 <div class="image">
+                    <span class="play-btn" aria-hidden="true">▶</span>
                     <img
                         src="${image}"
+                        data-fallback="${fallback}"
                         alt="${title}"
                         loading="lazy"
-                        onerror="this.style.visibility='hidden';"
+                        decoding="async"
+                        width="190"
+                        height="275"
                     >
-
-                    <div class="overlay">
-
-                        <div
-                            class="anime-hover-panel"
-                            onclick="event.stopPropagation();"
-                        >
-                            <div class="anime-panel-title">
-                                ${title}
-                            </div>
-
-                            <div class="anime-panel-meta">
-                                <span>★</span>
-                                <span>${anime.averageScore || "—"}</span>
-                                <span>${anime.seasonYear || "—"}</span>
-                                <span>${anime.episodes ? anime.episodes + " EP" : "Series"}</span>
-                            </div>
-
-                            <div class="anime-panel-genres">
-                                ${
-                                    Array.isArray(anime.genres)
-                                        ? anime.genres
-                                            .slice(0, 3)
-                                            .map(genre => escapeHtml(genre))
-                                            .join(" · ")
-                                        : ""
-                                }
-                            </div>
-
-                            <button
-                                class="watch-series"
-                                type="button"
-                                onclick="event.preventDefault(); event.stopPropagation(); window.location.href='watch.html?id=${id}&episode=1';"
-                            >
-                                <span class="watch-icon">&#9654;</span>
-                                <span>Watch Series</span>
-                            </button>
-                        </div>
-
-                        <div class="episode">
-                            ${badge}
-                        </div>
-
-                    </div>
+                    <div class="overlay"></div>
+                    <div class="episode">${badge}</div>
                 </div>
             </div>
+            <div class="anime-card-title" title="${title}">${title}</div>
         </a>
-        `
-    );
+    `);
 }
-
 async function loadSearchResults(page = 1) {
     if (loading) {
         return;
@@ -526,43 +502,112 @@ if (section === "schedule") {
     }, 1000);
 }
 
-document.addEventListener("mouseover", event => {
-    const card = event.target.closest("#search-results-container .card");
 
-    if (!card) {
-        return;
+let searchInfoPanel = null;
+let searchInfoCard = null;
+
+function closeSearchInfoPanel(){
+    searchInfoPanel?.classList.remove("is-open");
+    searchInfoCard = null;
+}
+
+function openSearchInfoPanel(card){
+    if(!card) return;
+    if(!searchInfoPanel){
+        searchInfoPanel=document.createElement("aside");
+        searchInfoPanel.className="am-info-panel";
+        document.body.appendChild(searchInfoPanel);
     }
+    const id=card.dataset.animeId||"";
+    searchInfoPanel.innerHTML=`
+        <div class="am-info-head">
+            <div class="am-info-kicker">ANIME DETAILS</div>
+            <button class="am-info-close" type="button" aria-label="Close">×</button>
+        </div>
+        <h3 class="am-info-title"></h3>
+        <div class="am-info-stats">
+            <span>★ ${escapeHtml(card.dataset.infoScore||"—")}</span>
+            <span>${escapeHtml(card.dataset.infoYear||"—")}</span>
+            <span>${escapeHtml(card.dataset.infoEpisodes||"Series")}</span>
+        </div>
+        <div class="am-info-genres">${escapeHtml(card.dataset.infoGenres||"")}</div>
+        <button class="am-info-watch" type="button"><span>▶</span> Watch Now</button>
+    `;
+    searchInfoPanel.querySelector(".am-info-title").textContent=card.dataset.infoTitle||"Unknown Anime";
+    searchInfoPanel.querySelector(".am-info-watch").onclick=()=>{
+        window.location.href="watch.html?id="+encodeURIComponent(id)+"&episode=1";
+    };
+    searchInfoPanel.querySelector(".am-info-close").onclick=closeSearchInfoPanel;
 
-    const cards = Array.from(
-        document.querySelectorAll("#search-results-container .card")
-    );
+    const r=card.getBoundingClientRect(), gap=12, edge=10;
+    const right=Math.max(0,innerWidth-r.right-gap-edge);
+    const left=Math.max(0,r.left-gap-edge);
+    const side=right>=left?"right":"left";
+    const space=side==="right"?right:left;
+    const width=Math.min(300,Math.max(150,space));
+    searchInfoPanel.style.width=width+"px";
+    searchInfoPanel.style.minWidth=width+"px";
+    searchInfoPanel.style.maxWidth=width+"px";
+    searchInfoPanel.style.left="0px";
+    searchInfoPanel.style.top="0px";
+    const h=Math.min(searchInfoPanel.getBoundingClientRect().height,innerHeight-edge*2);
+    const top=Math.max(edge,Math.min(r.top+(r.height-h)/2,innerHeight-h-edge));
+    searchInfoPanel.style.top=top+"px";
+    searchInfoPanel.style.left=(side==="right"?r.right+gap:Math.max(edge,r.left-gap-width))+"px";
+    searchInfoPanel.classList.add("is-open");
+    searchInfoCard=card;
+}
 
-    if (!cards.length) {
-        return;
-    }
-
-    const hoveredRect = card.getBoundingClientRect();
-
-    const sameRow = cards.filter(item => {
-        const rect = item.getBoundingClientRect();
-
-        return Math.abs(rect.top - hoveredRect.top) < 8;
-    });
-
-    const rightmostCard = sameRow.reduce((rightmost, item) => {
-        const itemRect = item.getBoundingClientRect();
-        const rightmostRect = rightmost.getBoundingClientRect();
-
-        return itemRect.left > rightmostRect.left
-            ? item
-            : rightmost;
-    });
-
-    cards.forEach(item => {
-        item.classList.remove("panel-open-left");
-    });
-
-    if (rightmostCard === card) {
-        card.classList.add("panel-open-left");
-    }
+document.addEventListener("pointerover",e=>{
+    if(e.pointerType!=="mouse") return;
+    const c=e.target.closest("#search-results-container .anime-card-link");
+    if(c && !c.contains(e.relatedTarget)) openSearchInfoPanel(c);
 });
+document.addEventListener("pointerout",e=>{
+    if(e.pointerType!=="mouse") return;
+    const c=e.target.closest("#search-results-container .anime-card-link");
+    if(!c || c.contains(e.relatedTarget)) return;
+    setTimeout(()=>{
+        if(searchInfoPanel?.matches(":hover")) return;
+        const over=document.elementFromPoint(e.clientX,e.clientY)?.closest?.(".anime-card-link");
+        if(over!==c) closeSearchInfoPanel();
+    },100);
+});
+document.addEventListener("pointerdown",e=>{
+    if(e.pointerType==="mouse") return;
+    const c=e.target.closest("#search-results-container .anime-card-link");
+    if(c) openSearchInfoPanel(c);
+});
+document.addEventListener("pointerup",e=>{
+    if(e.pointerType!=="mouse") requestAnimationFrame(closeSearchInfoPanel);
+});
+document.addEventListener("pointercancel",e=>{
+    if(e.pointerType!=="mouse") closeSearchInfoPanel();
+});
+document.addEventListener("touchend",closeSearchInfoPanel,{passive:true});
+document.addEventListener("touchcancel",closeSearchInfoPanel,{passive:true});
+document.addEventListener("pointerdown",e=>{
+    if(!searchInfoCard) return;
+    if(searchInfoPanel?.contains(e.target)) return;
+    if(e.target.closest("#search-results-container .anime-card-link")===searchInfoCard) return;
+    closeSearchInfoPanel();
+},true);
+
+function setupSearchImageFallbacks(){
+    document.querySelectorAll("#search-results-container img[data-fallback]").forEach(img=>{
+        if(img.dataset.fallbackBound==="1") return;
+        img.dataset.fallbackBound="1";
+        img.addEventListener("error",()=>{
+            const fallback=img.dataset.fallback;
+            if(fallback && img.src!==fallback){
+                img.src=fallback;
+            }else{
+                img.classList.add("image-load-failed");
+            }
+        });
+    });
+}
+
+const searchObserver=new MutationObserver(setupSearchImageFallbacks);
+if(resultsContainer) searchObserver.observe(resultsContainer,{childList:true,subtree:true});
+setupSearchImageFallbacks();
