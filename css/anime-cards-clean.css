@@ -459,3 +459,136 @@
 /* INFO PANEL REBUILD OVERRIDE — only the new body portal is allowed. */
 .anime-card-link .overlay{z-index:3}
 .anime-card-link .anime-hover-panel{display:none!important}
+
+
+/* =========================================================
+   SHARED CARD SYSTEM — ALL LISTING PAGES
+   The old inline anime-hover-panel is intentionally disabled.
+   Every page uses the same body-level info panel below.
+   ========================================================= */
+
+.anime-card-link .anime-hover-panel{
+  display:none!important;
+  visibility:hidden!important;
+  opacity:0!important;
+  pointer-events:none!important;
+}
+
+.am-info-panel{
+  position:fixed!important;
+  z-index:2147483647!important;
+  box-sizing:border-box!important;
+  padding:18px!important;
+  border:1px solid rgba(255,255,255,.13)!important;
+  border-radius:20px!important;
+  background:
+    radial-gradient(circle at 100% 0%,rgba(255,45,85,.16),transparent 38%),
+    linear-gradient(145deg,rgba(29,28,37,.985),rgba(12,12,17,.99))!important;
+  color:#fff!important;
+  box-shadow:0 24px 70px rgba(0,0,0,.65),0 0 35px rgba(255,45,85,.12)!important;
+  backdrop-filter:blur(18px)!important;
+  -webkit-backdrop-filter:blur(18px)!important;
+  opacity:0!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+  transform:translateY(4px) scale(.97)!important;
+  transform-origin:center!important;
+  transition:opacity .14s ease,transform .14s ease,visibility .14s ease!important;
+  overflow:auto!important;
+  max-height:calc(100vh - 20px)!important;
+}
+.am-info-panel.is-open{
+  opacity:1!important;
+  visibility:visible!important;
+  pointer-events:auto!important;
+  transform:translateY(0) scale(1)!important;
+}
+.am-info-head{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:10px!important;
+  margin-bottom:12px!important;
+}
+.am-info-kicker{
+  font-size:10px!important;
+  font-weight:800!important;
+  letter-spacing:.14em!important;
+  color:rgba(255,255,255,.5)!important;
+}
+.am-info-close{
+  width:28px!important;
+  height:28px!important;
+  padding:0!important;
+  border:1px solid rgba(255,255,255,.1)!important;
+  border-radius:50%!important;
+  background:rgba(255,255,255,.06)!important;
+  color:#fff!important;
+  cursor:pointer!important;
+  font-size:18px!important;
+  line-height:1!important;
+}
+.am-info-title{
+  margin:0 0 13px!important;
+  color:#fff!important;
+  font-size:18px!important;
+  font-weight:800!important;
+  line-height:1.25!important;
+  display:-webkit-box!important;
+  -webkit-line-clamp:2!important;
+  -webkit-box-orient:vertical!important;
+  overflow:hidden!important;
+}
+.am-info-stats{
+  display:flex!important;
+  flex-wrap:wrap!important;
+  gap:7px!important;
+  margin-bottom:12px!important;
+}
+.am-info-stats span{
+  display:inline-flex!important;
+  align-items:center!important;
+  min-height:25px!important;
+  padding:0 8px!important;
+  border-radius:8px!important;
+  background:rgba(255,255,255,.065)!important;
+  color:rgba(255,255,255,.78)!important;
+  font-size:11px!important;
+  font-weight:700!important;
+}
+.am-info-stats span:first-child{color:#ffd45c!important}
+.am-info-genres{
+  min-height:18px!important;
+  margin-bottom:16px!important;
+  color:rgba(255,255,255,.55)!important;
+  font-size:11px!important;
+  line-height:1.5!important;
+}
+.am-info-watch{
+  width:100%!important;
+  min-height:42px!important;
+  border:0!important;
+  border-radius:11px!important;
+  background:linear-gradient(135deg,#ff2d55,#e91e48)!important;
+  color:#fff!important;
+  font-size:12px!important;
+  font-weight:800!important;
+  cursor:pointer!important;
+  box-shadow:0 10px 24px rgba(255,45,85,.22)!important;
+  transition:transform .15s ease,box-shadow .15s ease,filter .15s ease!important;
+}
+.am-info-watch:hover{
+  transform:translateY(-1px)!important;
+  filter:brightness(1.06)!important;
+  box-shadow:0 13px 30px rgba(255,45,85,.32)!important;
+}
+.am-info-watch span{margin-right:6px!important}
+
+@media (max-width:520px){
+  .am-info-panel{
+    padding:14px!important;
+    border-radius:16px!important;
+  }
+  .am-info-title{font-size:15px!important}
+  .am-info-watch{min-height:38px!important}
+}
