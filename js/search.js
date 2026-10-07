@@ -608,6 +608,33 @@ function setupSearchImageFallbacks(){
     });
 }
 
+
+/* Same touch play feedback as the homepage. */
+const searchCardPointerState = new WeakSet();
+document.addEventListener("pointerdown",e=>{
+  if(e.pointerType==="mouse") return;
+  const card=e.target.closest("#search-results-container .anime-card-link");
+  if(card){
+    searchCardPointerState.add(card);
+    card.classList.add("is-pressed");
+  }
+});
+document.addEventListener("pointerup",e=>{
+  if(e.pointerType==="mouse") return;
+  const card=e.target.closest("#search-results-container .anime-card-link");
+  if(card){
+    card.classList.remove("is-pressed");
+    searchCardPointerState.delete(card);
+  }
+});
+document.addEventListener("pointercancel",e=>{
+  if(e.pointerType==="mouse") return;
+  document.querySelectorAll("#search-results-container .anime-card-link.is-pressed").forEach(card=>card.classList.remove("is-pressed"));
+});
+document.addEventListener("touchend",()=>{
+  document.querySelectorAll("#search-results-container .anime-card-link.is-pressed").forEach(card=>card.classList.remove("is-pressed"));
+},{passive:true});
+
 const searchObserver=new MutationObserver(setupSearchImageFallbacks);
 if(resultsContainer) searchObserver.observe(resultsContainer,{childList:true,subtree:true});
 setupSearchImageFallbacks();
