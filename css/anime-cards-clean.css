@@ -606,9 +606,9 @@
   display:grid!important;
   grid-template-columns:repeat(auto-fill,180px)!important;
   grid-auto-flow:row!important;
-  justify-content:space-between!important;
+  justify-content:center!important;
   align-items:start!important;
-  column-gap:18px!important;
+  column-gap:10px!important;
   row-gap:28px!important;
 }
 #anime-container .anime-card-link,
@@ -637,8 +637,8 @@
   .anime-grid,
   .cards-grid{
     grid-template-columns:repeat(2,150px)!important;
-    justify-content:space-between!important;
-    column-gap:10px!important;
+    justify-content:center!important;
+    column-gap:8px!important;
   }
   #anime-container .anime-card-link,
   #search-results-container .anime-card-link,
