@@ -15,8 +15,8 @@ function setAnimeSeo(anime) {
         .trim()
         .slice(0, 160);
 
-    const pageUrl = `https://animemoss.bid/anime.html?id=${encodeURIComponent(id)}`;
-    const image = anime?.coverImage?.extraLarge || anime?.bannerImage || "https://animemoss.bid/favicon.ico";
+    const pageUrl = `https://animemossofficial.github.io/animemoss/anime.html?id=${encodeURIComponent(id)}`;
+    const image = anime?.coverImage?.extraLarge || anime?.bannerImage || "https://animemossofficial.github.io/animemoss/favicon.ico";
 
     document.title = `${title} — AnimeMOSS`;
 
