@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://animemoss-api-production.up.railway.app/sitemap.xml
+Sitemap: https://animemossofficial.github.io/animemoss/sitemap.xml
