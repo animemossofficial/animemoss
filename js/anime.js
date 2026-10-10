@@ -406,10 +406,9 @@ async function loadAnime(page = 1, reset = false) {
 
         const sort = "popular";
 
-        const sourcePage =
-            currentSearch
-                ? page
-                : getDailyCatalogPage(page);
+        // Use real API page numbers. Daily rotation can point at an
+        // empty/out-of-range page and make the All catalog appear blank.
+        const sourcePage = page;
 
         const pageData = await fetchCatalog(
             sourcePage,
@@ -448,10 +447,7 @@ async function loadAnime(page = 1, reset = false) {
         setTimeout(() => refreshPlayability(animeList).catch(() => {}), 1200);
 
         if (hasNextPage) {
-            const nextSourcePage =
-                currentSearch
-                    ? page + 1
-                    : getDailyCatalogPage(page + 1);
+            const nextSourcePage = page + 1;
 
             setTimeout(() => {
                 fetchCatalog(nextSourcePage, currentSearch, sort).catch(() => {});
@@ -829,14 +825,10 @@ filters.forEach(filter => {
             searchInput.value = "";
         }
 
-        // All / Sub / Dub / Trending use the same fast AniList
-        // catalog. Actual audio/subtitle availability is resolved
-        // by the watch player, avoiding slow provider scans here.
-        if (filterName === "sub" || filterName === "dub") {
-            loadAvailabilityCatalog(filterName, 1);
-        } else {
-            loadAnime(1, true);
-        }
+        // Keep catalog tabs responsive. Provider availability checks
+        // can stall and return empty results when providers time out;
+        // actual sub/dub playback modes are resolved by the watch page.
+        loadAnime(1, true);
     });
 });
 
