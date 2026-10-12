@@ -72,14 +72,14 @@ function getAnimeDescription(anime) {
 
     // Catalog descriptions can contain HTML markup; show readable synopsis text.
     const description = String(rawDescription)
-        .replace(/<br\\s*\\/?\\s*>/gi, " ")
-        .replace(/<\\/(p|div|li)>/gi, " ")
+        .replace(/<br\s*\/?\s*>/gi, " ")
+        .replace(/<\/(p|div|li)>/gi, " ")
         .replace(/<[^>]*>/g, " ")
         .replace(/&nbsp;/gi, " ")
         .replace(/&amp;/gi, "&")
         .replace(/&quot;/gi, '"')
         .replace(/&#39;/gi, "'")
-        .replace(/\\s+/g, " ")
+        .replace(/\s+/g, " ")
         .trim();
 
     return description || "Discover this anime and start watching now.";
