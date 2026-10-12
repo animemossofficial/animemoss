@@ -139,3 +139,10 @@ html:has(.moss-single-hero) .moss-single-hero .moss-banner-title-panel{height:12
 html:has(.moss-single-hero) .moss-single-hero #banner-title{height:auto!important;min-height:0!important;max-height:2.24em!important;min-width:0!important;line-height:1.12!important;padding:0 0 3px!important;overflow:hidden!important;-webkit-line-clamp:2!important;overflow-wrap:break-word!important;word-break:normal!important}
 @media(max-width:900px){html:has(.moss-single-hero) .moss-single-hero .moss-banner-title-panel{height:102px!important;min-height:102px!important;max-height:102px!important}}
 @media(max-width:600px){html:has(.moss-single-hero) .moss-single-hero .moss-banner-title-panel{height:90px!important;min-height:90px!important;max-height:90px!important;margin-bottom:13px!important}html:has(.moss-single-hero) .moss-single-hero #banner-title{height:auto!important;min-height:0!important;max-height:2.24em!important;font-size:clamp(28px,7.8vw,39px)!important;line-height:1.12!important}}
+
+/* Tighten the spotlight copy stack without moving the title panel or CTA row */
+html:has(.moss-single-hero) .moss-single-hero .banner-content{transform:translateY(-35%)!important}
+html:has(.moss-single-hero) .moss-single-hero #banner-tag{margin-bottom:7px!important}
+html:has(.moss-single-hero) .moss-single-hero .moss-banner-title-panel{margin-bottom:8px!important}
+html:has(.moss-single-hero) .moss-single-hero #banner-description{margin-bottom:14px!important}
+@media(max-width:600px){html:has(.moss-single-hero) .moss-single-hero .banner-content{bottom:88px!important;transform:none!important}html:has(.moss-single-hero) .moss-single-hero #banner-tag{margin-bottom:6px!important}html:has(.moss-single-hero) .moss-single-hero .moss-banner-title-panel{margin-bottom:7px!important}html:has(.moss-single-hero) .moss-single-hero #banner-description{margin-bottom:13px!important}}
