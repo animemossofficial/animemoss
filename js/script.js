@@ -39,18 +39,25 @@ function getAnimeTitle(anime) {
 }
 
 function getAnimeImage(anime) {
-    // The catalog API has used both AniList-style and database-style image fields.
-    return (
+    // Keep this in sync with the fields used by the working catalog cards.
+    const image =
         anime?.coverImage?.extraLarge ||
         anime?.coverImage?.large ||
         anime?.coverImage?.medium ||
+        anime?.coverImage?.url ||
+        anime?.coverImage?.original ||
+        (typeof anime?.coverImage === "string" ? anime.coverImage : "") ||
         anime?.cover_image ||
-        anime?.coverImage ||
-        anime?.bannerImage ||
-        anime?.banner_image ||
         anime?.image ||
-        ""
-    );
+        anime?.poster ||
+        anime?.bannerImage?.extraLarge ||
+        anime?.bannerImage?.large ||
+        anime?.bannerImage?.url ||
+        (typeof anime?.bannerImage === "string" ? anime.bannerImage : "") ||
+        anime?.banner_image ||
+        "";
+
+    return typeof image === "string" ? image.trim() : "";
 }
 
 function getAnimeDescription(anime) {
@@ -90,7 +97,16 @@ function showAnime(index) {
         return;
     }
 
-    bannerImage.src = getAnimeImage(anime);
+    const imageUrl = getAnimeImage(anime);
+    if (imageUrl) {
+        bannerImage.src = imageUrl;
+        bannerImage.style.display = "block";
+        bannerImage.dataset.imageFailed = "false";
+    } else {
+        console.warn("Featured anime has no usable image URL:", anime?.id, anime);
+        bannerImage.removeAttribute("src");
+        bannerImage.dataset.imageFailed = "true";
+    }
     bannerImage.alt = getAnimeTitle(anime);
 
     bannerTag.textContent =
