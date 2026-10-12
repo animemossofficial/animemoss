@@ -38,4 +38,11 @@
       }
     });
   });
+  // Keep the navbar clear at the very top; add a subtle glass tint after a small scroll.
+  const topbar = document.querySelector(".moss-topbar");
+  if (topbar) {
+    const updateTopbar = () => topbar.classList.toggle("is-scrolled", window.scrollY > 12);
+    updateTopbar();
+    window.addEventListener("scroll", updateTopbar, { passive: true });
+  }
 })();

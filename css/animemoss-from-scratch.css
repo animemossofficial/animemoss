@@ -183,3 +183,9 @@ body.moss-v2:after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:n
 .moss-catalog-error{grid-column:1/-1!important;display:flex;flex-direction:column;align-items:center;gap:10px;padding:35px 18px;text-align:center;color:#f8eaf6;border:1px solid #ff9ed72b;border-radius:13px;background:#211727}
 .moss-catalog-error p{margin:0;color:#c9b9d0;font-size:12px}
 .moss-catalog-error button{border:0;border-radius:9px;padding:11px 18px;background:linear-gradient(100deg,#ffa8dc,#d6a7ff);color:#25152a;font-weight:800;cursor:pointer}
+
+
+/* Glass navbar: transparent at the top, softly frosted after scrolling. */
+.moss-topbar.moss-idol-topbar{position:sticky;top:0;z-index:10000;width:100%;background:rgba(11,11,16,.12);border-bottom-color:transparent;backdrop-filter:blur(0);-webkit-backdrop-filter:blur(0);transition:background .28s ease,border-color .28s ease,backdrop-filter .28s ease,box-shadow .28s ease;}
+.moss-topbar.moss-idol-topbar.is-scrolled{background:rgba(11,11,16,.76);border-bottom-color:rgba(255,255,255,.09);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 8px 26px rgba(0,0,0,.16)}
+@media(prefers-reduced-motion:reduce){.moss-topbar.moss-idol-topbar{transition:none}}
