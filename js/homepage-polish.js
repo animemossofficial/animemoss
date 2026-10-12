@@ -38,7 +38,7 @@
       }
     });
   });
-  // Keep the navbar fixed on screen and reserve its original layout space.
+  // Keep the navbar fixed to the viewport, outside transformed page wrappers.
   const topbar = document.querySelector(".moss-topbar.moss-idol-topbar");
   if (topbar) {
     let spacer = document.querySelector(".moss-topbar-spacer");
@@ -46,8 +46,16 @@
       spacer = document.createElement("div");
       spacer.className = "moss-topbar-spacer";
       spacer.setAttribute("aria-hidden", "true");
-      topbar.parentNode.insertBefore(spacer, topbar.nextSibling);
+      topbar.parentNode.insertBefore(spacer, topbar);
     }
+    // A transformed/filtered ancestor can make position:fixed behave like absolute.
+    // Move the header directly under body so it stays attached to the viewport.
+    if (topbar.parentElement !== document.body) document.body.appendChild(topbar);
+    topbar.style.setProperty("position", "fixed", "important");
+    topbar.style.setProperty("top", "0", "important");
+    topbar.style.setProperty("left", "0", "important");
+    topbar.style.setProperty("right", "0", "important");
+    topbar.style.setProperty("z-index", "2147483000", "important");
     const syncTopbarHeight = () => {
       const height = Math.ceil(topbar.getBoundingClientRect().height);
       spacer.style.height = height + "px";
