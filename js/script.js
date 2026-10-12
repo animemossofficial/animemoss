@@ -154,6 +154,16 @@ setInterval(() => {
     loadFeaturedAnime();
 }, FEATURED_ROTATION_MS);
 
+document.querySelectorAll("[data-hero-step]").forEach(button => {
+    button.addEventListener("click", event => {
+        event.preventDefault();
+        event.stopPropagation();
+        if (!animeList.length) return;
+        current = (current + Number(button.dataset.heroStep) + animeList.length) % animeList.length;
+        showAnime(current);
+    });
+});
+
 dots.forEach((dot, index) => {
     dot.addEventListener("click", event => {
         event.stopPropagation();
