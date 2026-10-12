@@ -85,3 +85,13 @@
 @media(max-width:1200px){.moss-idol-topbar>.moss-quick-links{margin-left:auto!important}.moss-idol-topbar .moss-nav-search{max-width:300px!important}}
 @media(max-width:900px){.moss-idol-topbar>.moss-quick-links{display:none!important}.moss-idol-topbar .moss-nav-search{max-width:none!important;flex:1 1 160px!important}.moss-idol-topbar>.moss-share-rail{margin-left:auto!important}}
 @media(max-width:600px){.moss-idol-topbar{gap:8px!important}.moss-idol-topbar>.moss-share-rail{margin-left:0!important}.moss-single-hero .watch-btn,.moss-single-hero a.watch-btn,.moss-single-hero .moss-secondary-cta{height:45px!important;min-height:45px!important;padding:0 16px!important;font-size:12px!important}.moss-single-hero .banner-buttons{gap:9px!important}.moss-single-hero .banner-content{transform:none!important}}
+
+/* Transparent navbar overlays the same featured artwork; remove frame edge */
+html:has(.moss-single-hero) .moss-idol-topbar{position:absolute!important;top:0!important;left:0!important;right:0!important;background:linear-gradient(180deg,rgba(10,8,22,.62),rgba(10,8,22,.22) 72%,transparent)!important;border-bottom:0!important;box-shadow:none!important;backdrop-filter:none!important}
+html:has(.moss-single-hero) .moss-page{margin-top:-82px!important;padding-top:0!important}
+.moss-single-hero .featured-banner{border:0!important;outline:0!important;border-radius:0!important;box-shadow:none!important}
+.moss-single-hero .banner-buttons{display:flex!important;align-items:center!important;gap:14px!important;min-height:56px!important}
+.moss-single-hero .banner-buttons>a{position:relative!important;top:0!important;transform:none!important;vertical-align:middle!important}
+.moss-single-hero .banner-buttons>a:hover,.moss-single-hero .banner-buttons>a:focus-visible{top:0!important;transform:none!important;scale:1!important}
+.moss-single-hero .moss-secondary-cta{background:rgba(28,23,43,.52)!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important}
+@media(max-width:600px){html:has(.moss-single-hero) .moss-page{margin-top:-64px!important}.moss-single-hero .banner-buttons{min-height:47px!important;gap:9px!important}}
