@@ -60,11 +60,30 @@ function getAnimeImage(anime) {
 }
 
 function getAnimeDescription(anime) {
-    return (
+    // Catalog providers can expose the synopsis under different field names.
+    const rawDescription =
         anime?.description ||
         anime?.synopsis ||
-        "Discover this anime and start watching now."
-    );
+        anime?.summary ||
+        anime?.overview ||
+        anime?.attributes?.synopsis ||
+        anime?.media?.description ||
+        anime?.media?.synopsis ||
+        "";
+
+    // Keep the banner text readable if a provider returns HTML markup.
+    const description = String(rawDescription)
+        .replace(/<br\s*\/?>/gi, " ")
+        .replace(/<\/(p|div|li)>/gi, " ")
+        .replace(/<[^>]*>/g, " ")
+        .replace(/&nbsp;/gi, " ")
+        .replace(/&amp;/gi, "&")
+        .replace(/&quot;/gi, '"')
+        .replace(/&#39;|&apos;/gi, "'")
+        .replace(/\s+/g, " ")
+        .trim();
+
+    return description || "Discover this anime and start watching now.";
 }
 
 function showAnime(index) {
