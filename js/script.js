@@ -61,24 +61,27 @@ function getAnimeImage(anime) {
 }
 
 function getAnimeDescription(anime) {
-    const rawDescription =
+    const raw =
         anime?.description ||
         anime?.synopsis ||
         anime?.about ||
-        anime?.overview ||
         anime?.summary ||
+        anime?.overview ||
         anime?.descriptionEnglish ||
+        anime?.attributes?.synopsis ||
+        anime?.media?.description ||
+        anime?.media?.synopsis ||
         "";
 
-    // Catalog descriptions can contain HTML markup; show readable synopsis text.
-    const description = String(rawDescription)
+    // Convert HTML descriptions into readable synopsis text.
+    const description = String(raw)
         .replace(/<br\s*\/?\s*>/gi, " ")
         .replace(/<\/(p|div|li)>/gi, " ")
         .replace(/<[^>]*>/g, " ")
         .replace(/&nbsp;/gi, " ")
         .replace(/&amp;/gi, "&")
         .replace(/&quot;/gi, '"')
-        .replace(/&#39;/gi, "'")
+        .replace(/&#39;|&apos;/gi, "'")
         .replace(/\s+/g, " ")
         .trim();
 
