@@ -1,415 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <!-- Google Analytics 4 -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9LVXRHSSHS"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-9LVXRHSSHS');
-    </script>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AnimeMOSS — Discover & Watch Anime</title>
-    <meta name="description" content="Discover anime, explore popular and new releases, track your favorites, and find your next series on AnimeMOSS.">
-    <meta name="robots" content="index, follow">
-    <meta name="google-site-verification" content="xBbT8b1ba_ME0abeuw91OgHV2luD8v-VDEFQzAFCthk" />
-    <link rel="canonical" href="https://animemossofficial.github.io/animemoss/">
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="AnimeMOSS">
-    <meta property="og:title" content="AnimeMOSS — Discover & Watch Anime">
-    <meta property="og:description" content="Discover anime, explore popular and new releases, track your favorites, and find your next series on AnimeMOSS.">
-    <meta property="og:url" content="https://animemossofficial.github.io/animemoss/">
-    <meta property="og:image" content="https://animemossofficial.github.io/animemoss/favicon.ico">
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="AnimeMOSS — Discover & Watch Anime">
-    <meta name="twitter:description" content="Discover anime, explore popular and new releases, track your favorites, and find your next series on AnimeMOSS.">
-    <style>
-        * {
-            /* outline: 1px solid red; */
-        }
-
-     
-    </style>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Bebas+Neue&display=swap"
-        rel="stylesheet">
-
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-        <link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/anime.css">
-    <link rel="stylesheet" href="css/anime-cards-clean.css">
-    <link rel="stylesheet" href="css/anime-info-panel.css">
-    <link rel="stylesheet" href="css/animemoss-cinematic.css?v=20261012">
-    <link rel="stylesheet" href="css/animemoss-cinematic-redesign.css?v=1">
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "AnimeMOSS",
-      "url": "https://animemossofficial.github.io/animemoss/",
-      "description": "Discover anime, explore popular and new releases, track your favorites, and find your next series on AnimeMOSS."
-    }
-    </script>
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9LVXRHSSHS"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-9LVXRHSSHS');</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AnimeMOSS — Anime, Reimagined</title>
+  <meta name="description" content="Discover trending anime, new episodes, seasonal favorites and your next binge on AnimeMOSS.">
+  <meta name="robots" content="index, follow">
+  <meta name="google-site-verification" content="xBbT8b1ba_ME0abeuw91OgHV2luD8v-VDEFQzAFCthk">
+  <link rel="canonical" href="https://animemossofficial.github.io/animemoss/">
+  <meta property="og:type" content="website"><meta property="og:site_name" content="AnimeMOSS">
+  <meta property="og:title" content="AnimeMOSS — Anime, Reimagined">
+  <meta property="og:description" content="Discover trending anime, new episodes and your next binge.">
+  <meta property="og:url" content="https://animemossofficial.github.io/animemoss/">
+  <meta property="og:image" content="https://animemossofficial.github.io/animemoss/favicon.ico">
+  <meta name="twitter:card" content="summary">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/anime.css">
+  <link rel="stylesheet" href="css/anime-cards-clean.css">
+  <link rel="stylesheet" href="css/anime-info-panel.css">
+  <link rel="stylesheet" href="css/animemoss-cinematic.css?v=20261012">
+  <link rel="stylesheet" href="css/animemoss-cinematic-redesign.css?v=2">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"AnimeMOSS","url":"https://animemossofficial.github.io/animemoss/","description":"Discover trending anime, new episodes and your next binge on AnimeMOSS."}</script>
 </head>
-
-<body>
-    <header class="header">
-
-        <a href="domain-update.html" class="logo">
-            <span class="anime">Anime</span>
-            <span class="moss">MOSS</span>
-
-            <span class="play">
-                ▶
-            </span>
-        </a>
-        <nav class="navbar">
-    <ul>
-
-        <li class="nav-dropdown">
-            <button type="button" class="nav-dropdown-toggle">
-                Genres <span>⌄</span>
-            </button>
-
-            <div class="nav-dropdown-menu nav-genres-menu">
-                <a href="search.html?genre=Action">Action</a>
-                <a href="search.html?genre=Adventure">Adventure</a>
-                <a href="search.html?genre=Comedy">Comedy</a>
-                <a href="search.html?genre=Drama">Drama</a>
-                <a href="search.html?genre=Fantasy">Fantasy</a>
-                <a href="search.html?genre=Horror">Horror</a>
-                <a href="search.html?genre=Mystery">Mystery</a>
-                <a href="search.html?genre=Romance">Romance</a>
-                <a href="search.html?genre=Sci-Fi">Sci-Fi</a>
-                <a href="search.html?genre=Sports">Sports</a>
-                <a href="search.html?genre=Supernatural">Supernatural</a>
-                <a href="search.html?genre=Thriller">Thriller</a>
-                <a href="search.html?genre=Psychological">Psychological</a>
-                <a href="search.html?genre=Slice%20of%20Life">Slice of Life</a>
-                <a href="search.html?genre=Ecchi">Ecchi</a>
-                <a href="search.html?genre=Music">Music</a>
-                <a href="search.html?genre=School">School</a>
-                <a href="search.html?genre=Historical">Historical</a>
-            </div>
-        </li>
-
-        <li class="nav-dropdown">
-            <button type="button" class="nav-dropdown-toggle">
-                Types <span>⌄</span>
-            </button>
-
-            <div class="nav-dropdown-menu nav-types-menu">
-                <a href="search.html?type=MOVIE">Movie</a>
-                
-                <a href="search.html?type=ONA">ONA</a>
-                <a href="search.html?type=OVA">OVA</a>
-                <a href="search.html?type=SPECIAL">Special</a>
-                <a href="search.html?type=TV">TV</a>
-                
-                
-                
-            </div>
-        </li>
-
-        <li><a href="search.html?section=popular">Popular</a></li>
-        <li><a href="search.html?section=schedule">Schedule</a></li>
-        <li><a href="search.html?section=ongoing">Ongoing</a></li>
-
-    </ul>
-</nav>
-
-
-<button class="mobile-menu-button" id="mobileMenuButton" type="button" aria-label="Open menu" aria-expanded="false">
-    <span></span>
-    <span></span>
-    <span></span>
-</button>
-
-<div class="mobile-drawer-overlay" id="mobileDrawerOverlay"></div>
-
-<aside class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
-    <div class="mobile-drawer-header">
-        <span>AnimeMOSS</span>
-        <button id="mobileDrawerClose" type="button" aria-label="Close menu">×</button>
+<body class="am-home">
+  <header class="header am-header">
+    <a href="index.html" class="logo" aria-label="AnimeMOSS home"><span class="anime">Anime</span><span class="moss">MOSS</span><span class="play">▶</span></a>
+    <nav class="navbar" aria-label="Main navigation"><ul>
+      <li><a class="nav-home active" href="index.html"><i class="fa-solid fa-house"></i> Home</a></li>
+      <li class="nav-dropdown"><button type="button" class="nav-dropdown-toggle">Genres <i class="fa-solid fa-chevron-down"></i></button><div class="nav-dropdown-menu nav-genres-menu">
+        <a href="search.html?genre=Action">Action</a><a href="search.html?genre=Adventure">Adventure</a><a href="search.html?genre=Comedy">Comedy</a><a href="search.html?genre=Drama">Drama</a><a href="search.html?genre=Fantasy">Fantasy</a><a href="search.html?genre=Horror">Horror</a><a href="search.html?genre=Mystery">Mystery</a><a href="search.html?genre=Romance">Romance</a><a href="search.html?genre=Sci-Fi">Sci-Fi</a><a href="search.html?genre=Sports">Sports</a><a href="search.html?genre=Supernatural">Supernatural</a><a href="search.html?genre=Thriller">Thriller</a><a href="search.html?genre=Psychological">Psychological</a><a href="search.html?genre=Slice%20of%20Life">Slice of Life</a><a href="search.html?genre=Music">Music</a><a href="search.html?genre=School">School</a><a href="search.html?genre=Historical">Historical</a>
+      </div></li>
+      <li class="nav-dropdown"><button type="button" class="nav-dropdown-toggle">Explore <i class="fa-solid fa-chevron-down"></i></button><div class="nav-dropdown-menu nav-types-menu">
+        <a href="search.html?section=popular">Popular anime</a><a href="search.html?section=schedule">Release schedule</a><a href="search.html?section=ongoing">Ongoing series</a><a href="search.html?type=MOVIE">Movies</a><a href="search.html?type=OVA">OVA / Specials</a>
+      </div></li>
+      <li><a href="search.html?section=popular">Trending</a></li>
+      <li><a href="search.html?section=schedule">Schedule</a></li>
+    </ul></nav>
+    <div class="am-header-actions">
+      <a class="am-icon-link" href="search.html" aria-label="Search anime"><i class="fa-solid fa-magnifying-glass"></i></a>
+      <div class="login" id="auth-desktop"><a id="auth-login-link" href="login.html"><i class="fa-regular fa-user"></i> Login</a></div>
     </div>
+    <button class="mobile-menu-button" id="mobileMenuButton" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    <div class="mobile-drawer-overlay" id="mobileDrawerOverlay"></div>
+    <aside class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
+      <div class="mobile-drawer-header"><span>AnimeMOSS</span><button id="mobileDrawerClose" type="button" aria-label="Close menu">×</button></div>
+      <div class="mobile-drawer-content">
+        <a class="mobile-drawer-link" href="index.html">Home</a><a class="mobile-drawer-link" href="search.html?section=popular">Trending</a><a class="mobile-drawer-link" href="search.html?section=schedule">Schedule</a><a class="mobile-drawer-link" href="search.html?section=ongoing">Ongoing</a>
+        <div class="mobile-drawer-group"><div class="mobile-drawer-heading">Genres</div><div class="mobile-drawer-submenu"><a href="search.html?genre=Action">Action</a><a href="search.html?genre=Adventure">Adventure</a><a href="search.html?genre=Comedy">Comedy</a><a href="search.html?genre=Drama">Drama</a><a href="search.html?genre=Fantasy">Fantasy</a><a href="search.html?genre=Romance">Romance</a><a href="search.html?genre=Sci-Fi">Sci-Fi</a></div></div>
+        <a class="mobile-drawer-link" id="auth-mobile-link" href="login.html">Login / Account</a>
+      </div>
+    </aside>
+  </header>
 
-    <div class="mobile-drawer-content">
+  <div class="am-status-strip"><span class="am-live-dot"></span><span>YOUR NEXT ANIME OBSESSION STARTS HERE</span><span class="am-strip-divider"></span><span>Discover · Watch · Repeat</span></div>
 
-        <div class="mobile-drawer-group">
-            <div class="mobile-drawer-heading">Genres</div>
-
-            <div class="mobile-drawer-submenu">
-                <a href="search.html?genre=Action">Action</a>
-                <a href="search.html?genre=Adventure">Adventure</a>
-                <a href="search.html?genre=Comedy">Comedy</a>
-                <a href="search.html?genre=Drama">Drama</a>
-                <a href="search.html?genre=Fantasy">Fantasy</a>
-                <a href="search.html?genre=Horror">Horror</a>
-                <a href="search.html?genre=Mystery">Mystery</a>
-                <a href="search.html?genre=Romance">Romance</a>
-                <a href="search.html?genre=Sci-Fi">Sci-Fi</a>
-                <a href="search.html?genre=Sports">Sports</a>
-                <a href="search.html?genre=Supernatural">Supernatural</a>
-                <a href="search.html?genre=Thriller">Thriller</a>
-                <a href="search.html?genre=Psychological">Psychological</a>
-                <a href="search.html?genre=Slice%20of%20Life">Slice of Life</a>
-                <a href="search.html?genre=Ecchi">Ecchi</a>
-                <a href="search.html?genre=Music">Music</a>
-                <a href="search.html?genre=School">School</a>
-                <a href="search.html?genre=Historical">Historical</a>
-            </div>
-        </div>
-
-        <div class="mobile-drawer-group">
-            <div class="mobile-drawer-heading">Types</div>
-
-            <div class="mobile-drawer-submenu">
-                <a href="search.html?type=MOVIE">Movie</a>
-                <a href="search.html?type=ONA">ONA</a>
-                <a href="search.html?type=OVA">OVA</a>
-                <a href="search.html?type=SPECIAL">Special</a>
-                <a href="search.html?type=TV">TV</a>
-            </div>
-        </div>
-
-        <a class="mobile-drawer-link" href="search.html?section=popular">Popular</a>
-        <a class="mobile-drawer-link" href="search.html?section=schedule">Schedule</a>
-        <a class="mobile-drawer-link" href="search.html?section=ongoing">Ongoing</a>
-        <a class="mobile-drawer-link" id="auth-mobile-link" href="login.html">Login</a>
-
+  <section class="hero am-search-hero">
+    <div class="hero-content">
+      <div class="am-kicker"><span></span> THE ANIME UNIVERSE, IN ONE PLACE</div>
+      <h1>Find your <em>next world.</em></h1>
+      <p>From all-time legends to the newest episodes — your next obsession is one search away.</p>
+      <form class="search-box" action="search.html" method="GET" role="search">
+        <i class="fa-solid fa-magnifying-glass am-search-icon"></i>
+        <input type="search" name="search" placeholder="Search anime, genre, or a character..." autocomplete="off" enterkeyhint="search" aria-label="Search anime">
+        <button type="submit">Explore <i class="fa-solid fa-arrow-right"></i></button>
+      </form>
+      <div class="am-quick-links"><span>Quick explore</span><a href="search.html?genre=Action">Action</a><a href="search.html?genre=Romance">Romance</a><a href="search.html?genre=Fantasy">Fantasy</a><a href="search.html?section=popular">Popular</a></div>
     </div>
-</aside>
+    <div class="am-hero-orbit am-orbit-one"></div><div class="am-hero-orbit am-orbit-two"></div>
+  </section>
 
-
-        <div class="login" id="auth-desktop">
-
-            <a id="auth-login-link" href="login.html">
-                Login
-            </a>
-
-        </div>
-
-    </header>
-    <!-- HERO -->
-    <section class="hero">
-
-
-        <div class="hero-content">
-
-            <h1>Find Your Next Anime Obsession</h1>
-
-            <p>Discover worlds. Follow stories. Make every episode count.</p>
-
-            <form class="search-box" action="search.html" method="GET">
-                <input
-                    type="search"
-                    name="search"
-                    placeholder="Search anime..."
-                    autocomplete="off"
-                    enterkeyhint="search"
-                >
-                <button type="submit">Search</button>
-            </form>
-
-            <div class="domain-alert">
-                📢 Please bookmark <a href="https://animemossofficial.github.io/animemoss/">AnimeMOSS</a> to stay updated with our latest announcements. Thank you!
-            </div>
-
-        </div>
-
-    </section>
-    <section class="share-section">
-
-        <p class="share-title">
-            <span class="love">
-                ❤️ Love AnimeMOSS?
-            </span>
-
-            Help more anime fans discover their next favorite series by sharing AnimeMOSS with your
-            friends. Every share helps us grow!
-
-        </p>
-
-        <div class="share-buttons">
-
-            <a href="domain-update.html" class="facebook" title="Facebook">
-                <i class="fa-brands fa-facebook-f"></i>
-            </a>
-
-            <a href="domain-update.html" class="twitter" title="X">
-                <i class="fa-brands fa-x-twitter"></i>
-            </a>
-
-            <a href="domain-update.html" class="reddit" title="Reddit">
-                <i class="fa-brands fa-reddit-alien"></i>
-            </a>
-
-            <a href="domain-update.html" class="whatsapp" title="WhatsApp">
-                <i class="fa-brands fa-whatsapp"></i>
-            </a>
-
-            <a href="domain-update.html" class="telegram" title="Telegram">
-                <i class="fa-brands fa-telegram"></i>
-            </a>
-
-            <a href="domain-update.html" class="other" title="Share">
-                <i class="fa-solid fa-share-nodes"></i>
-            </a>
-
-        </div>
-
+  <main class="main am-main">
+    <section class="featured-banner am-featured" aria-label="Featured anime">
+      <img id="banner-image" src="" alt="Featured anime artwork">
+      <div class="banner-overlay"></div>
+      <div class="am-featured-grain"></div>
+      <div class="banner-content">
+        <span id="banner-tag" class="banner-tag">FEATURED THIS WEEK</span>
+        <div class="am-featured-kicker"><span class="am-live-dot"></span> EDITOR'S SPOTLIGHT</div>
+        <h2 id="banner-title">Discover your next favorite</h2>
+        <p id="banner-description">A new adventure is waiting.</p>
+        <div class="banner-buttons"><a href="anime.html" id="watch-btn" class="watch-btn"><i class="fa-solid fa-play"></i> Watch now</a><a class="am-more-btn" href="search.html?section=popular">Explore anime <i class="fa-solid fa-arrow-right"></i></a></div>
+      </div>
+      <div class="am-featured-side-label">ANIMEMOSS ORIGINAL DISCOVERY</div>
+      <div class="banner-dots"><span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
     </section>
 
-    <main class="main">
-        <div class="section-divider"></div>
+    <div class="am-section-intro"><div><span class="am-eyebrow">RIGHT NOW ON ANIMEMOSS</span><h2>Catch the <em>latest.</em></h2><p>Fresh episodes and stories worth staying up for.</p></div><a href="search.html?section=ongoing" class="am-text-link">View all anime <i class="fa-solid fa-arrow-right"></i></a></div>
+    <section class="am-catalog-shell" aria-label="Latest anime episodes">
+      <div class="section-header am-catalog-header"><div class="title"><span class="latest">JUST UPDATED</span><h2 class="episodes">Latest Episodes</h2></div>
+        <div class="filters"><a href="#" class="active">All</a><a href="#">Sub</a><a href="#">Dub</a><a href="#">Trending</a><div class="catalog-pagination"><button id="catalog-prev" type="button" aria-label="Previous page"><i class="fa-solid fa-chevron-left"></i></button><button id="catalog-next" type="button" aria-label="Next page"><i class="fa-solid fa-chevron-right"></i></button></div></div>
+      </div>
+      <div class="container" id="anime-container" aria-live="polite"></div>
+    </section>
 
-        <section class="featured-banner">
+    <section class="am-discovery-heading"><div><span class="am-eyebrow">YOUR WATCHLIST STARTS HERE</span><h2>Explore what’s <em>next.</em></h2></div><p>Community favorites, fresh arrivals and stories that have reached their finale.</p></section>
+    <section id="home-discovery" class="home-discovery" aria-label="Anime discovery">
+      <div class="discovery-grid">
+        <article class="discovery-card discovery-popular"><header class="discovery-head"><div><span class="discovery-eyebrow">COMMUNITY RANKING</span><h2><i class="fa-solid fa-fire"></i> Most Viewed</h2></div><div class="discovery-periods" role="tablist" aria-label="Most viewed period"><button class="discovery-period active" data-period="all" type="button">All time</button><button class="discovery-period" data-period="week" type="button">7D</button><button class="discovery-period" data-period="month" type="button">30D</button></div></header><div id="home-most-viewed" class="discovery-body"><div class="discovery-state">Loading ranking…</div></div></article>
+        <article class="discovery-card"><header class="discovery-head"><div><span class="discovery-eyebrow">JUST ARRIVED</span><h2><i class="fa-solid fa-sparkles"></i> New Releases</h2></div><span class="discovery-mark">NEW</span></header><div id="home-new-releases" class="discovery-list"><div class="discovery-state">Loading releases…</div></div></article>
+        <article class="discovery-card"><header class="discovery-head"><div><span class="discovery-eyebrow">THE FINAL CHAPTER</span><h2><i class="fa-solid fa-circle-check"></i> Completed</h2></div><span class="discovery-mark">DONE</span></header><div id="home-completed" class="discovery-list"><div class="discovery-state">Loading completed…</div></div></article>
+      </div>
+    </section>
 
-            <img id="banner-image" src="" alt="Featured Anime">
+    <section class="am-bottom-cta"><div class="am-cta-symbol"><i class="fa-solid fa-compass"></i></div><div><span class="am-eyebrow">THERE'S ALWAYS MORE TO DISCOVER</span><h2>Your next favorite is out there.</h2><p>Browse by genre, explore what's trending, and follow the stories you love.</p></div><a href="search.html" class="am-cta-button">Explore the catalog <i class="fa-solid fa-arrow-right"></i></a></section>
+  </main>
 
-            <div class="banner-overlay"></div>
+  <footer class="site-footer am-footer"><div class="site-footer-disclaimer"><strong>Disclaimer:</strong> This site does not store any files on its server. All contents are provided by non-affiliated third parties.</div><div class="site-footer-links"><a href="about.html">About</a><a href="contact.html">Contact</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="copyright.html">Copyright</a></div><div class="site-footer-copy">© 2026 AnimeMOSS. Discover your next world.</div></footer>
 
-            <div class="banner-content">
-
-                <span id="banner-tag" class="banner-tag">
-                </span>
-
-                <h1 id="banner-title"></h1>
-
-                <p id="banner-description"></p>
-
-                <div class="banner-buttons">
-
-                    <a href="domain-update.html" id="watch-btn" class="watch-btn">
-
-                        ▶ Watch Now
-
-                    </a>
-
-
-                </div>
-
-            </div>
-
-            <div class="banner-dots">
-
-                <span class="dot active"></span>
-
-                <span class="dot"></span>
-
-                <span class="dot"></span>
-
-                <span class="dot"></span>
-
-            </div>
-
-        </section>
-
-        <div class="section-header">
-
-            <div class="title">
-                <span class="latest">Latest</span>
-                <h2 class="episodes">Episodes</h2>
-            </div>
-
-            <div class="filters">
-                <a href="#" class="active">All</a>
-                <a href="#">Sub</a>
-                <a href="#">Dub</a>
-                <a href="#">Trending</a>
-
-                <div class="catalog-pagination">
-                    <button id="catalog-prev" type="button" aria-label="Previous page">&lt;</button>
-                    <button id="catalog-next" type="button" aria-label="Next page">&gt;</button>
-                </div>
-            </div>
-
-        </div>
-        <div class="container" id="anime-container"></div>
-
-        <section id="home-discovery" class="home-discovery" aria-label="Anime discovery">
-            <div class="discovery-grid">
-                <article class="discovery-card discovery-popular">
-                    <header class="discovery-head">
-                        <div>
-                            <span class="discovery-eyebrow">LIVE RANKING</span>
-                            <h2>Most Viewed</h2>
-                        </div>
-                        <div class="discovery-periods" role="tablist" aria-label="Most viewed period">
-                            <button class="discovery-period active" data-period="all" type="button">All Time</button>
-                            <button class="discovery-period" data-period="week" type="button">7D</button>
-                            <button class="discovery-period" data-period="month" type="button">30D</button>
-                        </div>
-                    </header>
-                    <div id="home-most-viewed" class="discovery-body">
-                        <div class="discovery-state">Loading ranking…</div>
-                    </div>
-                </article>
-
-                <article class="discovery-card">
-                    <header class="discovery-head">
-                        <div>
-                            <span class="discovery-eyebrow">FRESH ON SITE</span>
-                            <h2>New Releases</h2>
-                        </div>
-                        <span class="discovery-mark">NEW</span>
-                    </header>
-                    <div id="home-new-releases" class="discovery-list">
-                        <div class="discovery-state">Loading releases…</div>
-                    </div>
-                </article>
-
-                <article class="discovery-card">
-                    <header class="discovery-head">
-                        <div>
-                            <span class="discovery-eyebrow">JUST FINISHED</span>
-                            <h2>Completed</h2>
-                        </div>
-                        <span class="discovery-mark">DONE</span>
-                    </header>
-                    <div id="home-completed" class="discovery-list">
-                        <div class="discovery-state">Loading completed…</div>
-                    </div>
-                </article>
-            </div>
-        </section>
-
-    </main>
-    <script src="js/auth.js"></script>
-    <script src="js/script.js"></script>
-    <script src="js/anime.js?v=20261005"></script>
-    <script src="js/auth-ui.js"></script>
-
-
-    <footer class="site-footer">
-        <div class="site-footer-disclaimer">
-            <strong>Disclaimer:</strong>
-            This site does not store any files on its server.
-            All contents are provided by non-affiliated third parties.
-        </div>
-
-        <div class="site-footer-links">
-            <a href="about.html">About</a>
-            <a href="contact.html">Contact</a>
-            <a href="privacy.html">Privacy</a>
-            <a href="terms.html">Terms</a>
-            <a href="copyright.html">Copyright</a>
-        </div>
-
-        <div class="site-footer-copy">
-            © 2026 AnimeMOSS. All rights reserved.
-        </div>
-    </footer>
-
+  <script src="js/auth.js"></script><script src="js/script.js"></script><script src="js/anime.js?v=20261012"></script><script src="js/auth-ui.js"></script>
 </body>
-
 </html>
