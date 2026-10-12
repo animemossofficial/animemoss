@@ -39,11 +39,24 @@ function getAnimeTitle(anime) {
 }
 
 function getAnimeImage(anime) {
-    return (
-        anime?.coverImage?.extraLarge ||
-        anime?.coverImage?.large ||
-        ""
-    );
+    const cover = anime?.coverImage;
+    const image =
+        cover?.extraLarge ||
+        cover?.large ||
+        cover?.medium ||
+        cover?.url ||
+        cover?.original ||
+        (typeof cover === "string" ? cover : "") ||
+        anime?.cover_image ||
+        anime?.image ||
+        anime?.poster ||
+        anime?.bannerImage?.extraLarge ||
+        anime?.bannerImage?.large ||
+        anime?.bannerImage?.url ||
+        (typeof anime?.bannerImage === "string" ? anime.bannerImage : "") ||
+        anime?.banner_image ||
+        "";
+    return typeof image === "string" ? image.trim() : "";
 }
 
 function getAnimeDescription(anime) {
@@ -66,7 +79,14 @@ function showAnime(index) {
         return;
     }
 
-    bannerImage.src = getAnimeImage(anime);
+    const imageUrl = getAnimeImage(anime);
+    if (imageUrl) {
+        bannerImage.src = imageUrl;
+        bannerImage.style.display = "block";
+    } else {
+        bannerImage.removeAttribute("src");
+        console.warn("Featured anime has no usable image URL:", anime?.id, anime);
+    }
     bannerImage.alt = getAnimeTitle(anime);
 
     bannerTag.textContent =
