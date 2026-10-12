@@ -81,6 +81,11 @@ function showAnime(index) {
     watchBtn.href =
         `watch.html?id=${encodeURIComponent(animeId)}&episode=1`;
 
+    const detailBtn = document.getElementById("detail-btn");
+    if (detailBtn) {
+        detailBtn.href = `anime.html?id=${encodeURIComponent(animeId)}`;
+    }
+
     banner.dataset.animeId = animeId;
 
     dots.forEach(dot => {
