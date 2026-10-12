@@ -39,9 +39,16 @@ function getAnimeTitle(anime) {
 }
 
 function getAnimeImage(anime) {
+    // The catalog API has used both AniList-style and database-style image fields.
     return (
         anime?.coverImage?.extraLarge ||
         anime?.coverImage?.large ||
+        anime?.coverImage?.medium ||
+        anime?.cover_image ||
+        anime?.coverImage ||
+        anime?.bannerImage ||
+        anime?.banner_image ||
+        anime?.image ||
         ""
     );
 }
