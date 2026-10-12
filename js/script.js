@@ -39,7 +39,11 @@ function getAnimeTitle(anime) {
 }
 
 function getAnimeImage(anime) {
+    // Prefer a wide cinematic banner when the catalog provides one.
+    // Fall back to existing cover art so older API responses still work.
     return (
+        anime?.bannerImage ||
+        anime?.banner ||
         anime?.coverImage?.extraLarge ||
         anime?.coverImage?.large ||
         ""
