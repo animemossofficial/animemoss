@@ -38,11 +38,25 @@
       }
     });
   });
-  // Keep the navbar clear at the very top; add a subtle glass tint after a small scroll.
-  const topbar = document.querySelector(".moss-topbar");
+  // Keep the navbar fixed on screen and reserve its original layout space.
+  const topbar = document.querySelector(".moss-topbar.moss-idol-topbar");
   if (topbar) {
+    let spacer = document.querySelector(".moss-topbar-spacer");
+    if (!spacer) {
+      spacer = document.createElement("div");
+      spacer.className = "moss-topbar-spacer";
+      spacer.setAttribute("aria-hidden", "true");
+      topbar.parentNode.insertBefore(spacer, topbar.nextSibling);
+    }
+    const syncTopbarHeight = () => {
+      const height = Math.ceil(topbar.getBoundingClientRect().height);
+      spacer.style.height = height + "px";
+      document.documentElement.style.setProperty("--moss-topbar-height", height + "px");
+    };
     const updateTopbar = () => topbar.classList.toggle("is-scrolled", window.scrollY > 12);
+    syncTopbarHeight();
     updateTopbar();
+    window.addEventListener("resize", syncTopbarHeight, { passive: true });
     window.addEventListener("scroll", updateTopbar, { passive: true });
   }
 })();
