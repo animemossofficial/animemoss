@@ -6,8 +6,6 @@ const bannerTag = document.getElementById("banner-tag");
 const bannerTitle = document.getElementById("banner-title");
 const bannerDescription = document.getElementById("banner-description");
 const watchBtn = document.getElementById("watch-btn");
-const dots = document.querySelectorAll(".dot");
-
 let animeList = [];
 let current = 0;
 
@@ -98,6 +96,10 @@ function showAnime(index) {
         return;
     }
 
+    banner.classList.remove("is-sliding");
+    void banner.offsetWidth;
+    banner.classList.add("is-sliding");
+
     const imageUrl = getAnimeImage(anime);
     if (imageUrl) {
         bannerImage.src = imageUrl;
@@ -122,13 +124,9 @@ function showAnime(index) {
 
     banner.dataset.animeId = animeId;
 
-    dots.forEach(dot => {
-        dot.classList.remove("active");
-    });
-
-    if (dots[index]) {
-        dots[index].classList.add("active");
-    }
+    window.setTimeout(() => {
+        banner.classList.remove("is-sliding");
+    }, 750);
 }
 
 async function loadFeaturedAnime() {
@@ -159,7 +157,7 @@ async function loadFeaturedAnime() {
 
         animeList = result.results
             .filter(anime => anime && anime.id)
-            .slice(0, dots.length || 5);
+            .slice(0, 10);
 
         if (!animeList.length) {
             return;
@@ -192,19 +190,6 @@ setInterval(() => {
 setInterval(() => {
     loadFeaturedAnime();
 }, FEATURED_ROTATION_MS);
-
-dots.forEach((dot, index) => {
-    dot.addEventListener("click", event => {
-        event.stopPropagation();
-
-        if (!animeList[index]) {
-            return;
-        }
-
-        current = index;
-        showAnime(current);
-    });
-});
 
 banner.addEventListener("click", event => {
     if (event.target.closest("#watch-btn")) {
