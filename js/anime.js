@@ -54,9 +54,15 @@ function getAnimeTitle(anime) {
 }
 
 function getAnimeImage(anime) {
+    // Support current API responses and older cached catalog image fields.
     return (
-        anime?.coverImage?.large ||
         anime?.coverImage?.extraLarge ||
+        anime?.coverImage?.large ||
+        anime?.coverImage?.medium ||
+        anime?.cover_image ||
+        (typeof anime?.coverImage === "string" ? anime.coverImage : "") ||
+        anime?.image ||
+        anime?.poster ||
         ""
     );
 }
@@ -77,10 +83,11 @@ function renderAnime(anime, index = 99) {
     if (!anime || !container) return;
 
     const title = escapeHtml(getAnimeTitle(anime));
-    const large = escapeHtml(anime?.coverImage?.large || "");
-    const extraLarge = escapeHtml(anime?.coverImage?.extraLarge || "");
-    const medium = escapeHtml(anime?.coverImage?.medium || "");
-    const fallback = escapeHtml(extraLarge || medium || "");
+    const primaryImage = escapeHtml(getAnimeImage(anime));
+    const large = escapeHtml(anime?.coverImage?.large || primaryImage);
+    const extraLarge = escapeHtml(anime?.coverImage?.extraLarge || anime?.cover_image || anime?.image || "");
+    const medium = escapeHtml(anime?.coverImage?.medium || anime?.poster || "");
+    const fallback = escapeHtml(extraLarge || medium || primaryImage || "");
     const badge = escapeHtml(getEpisodeBadge(anime));
     const id = encodeURIComponent(anime.id);
 
@@ -459,12 +466,15 @@ async function loadAnime(page = 1, reset = false) {
 
         hideLoading();
 
-        if (reset) {
+        if (reset && container) {
             container.innerHTML = `
-                <h2 style="color:white;text-align:center;width:100%;">
-                    Failed to load anime.
-                </h2>
+                <div class="moss-catalog-error" role="status">
+                    <strong>Anime catalog temporarily unavailable.</strong>
+                    <p>Check your connection, then try loading the catalog again.</p>
+                    <button type="button" id="retry-anime-catalog">Try again</button>
+                </div>
             `;
+            document.getElementById("retry-anime-catalog")?.addEventListener("click", () => loadAnime(1, true));
         }
 
     } finally {
