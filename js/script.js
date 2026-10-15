@@ -84,7 +84,7 @@ function getAnimeDescription(anime) {
     return description || "Discover this anime and start watching now.";
 }
 
-function showAnime(index) {
+function showAnime(index, direction = 1) {
     if (!animeList.length) {
         return;
     }
@@ -96,6 +96,7 @@ function showAnime(index) {
         return;
     }
 
+    banner.style.setProperty("--featured-slide-direction", direction >= 0 ? "1" : "-1");
     banner.classList.remove("is-sliding");
     void banner.offsetWidth;
     banner.classList.add("is-sliding");
@@ -131,41 +132,27 @@ function showAnime(index) {
 
 async function loadFeaturedAnime() {
     try {
-        const page = getFeaturedRotationPage();
-
-        const params = new URLSearchParams({
-            page: String(page),
-            search: "",
-            sort: "-averageRating"
-        });
-
-        const response = await fetch(
-            `${FEATURED_CATALOG_API}?${params.toString()}`
-        );
-
-        if (!response.ok) {
-            throw new Error(
-                `Featured catalog request failed: ${response.status}`
-            );
-        }
-
-        const result = await response.json();
-
-        if (!Array.isArray(result.results)) {
-            throw new Error("Invalid catalog response.");
-        }
-
-        animeList = result.results
-            .filter(anime => anime && anime.id)
-            .slice(0, 10);
-
-        if (!animeList.length) {
-            return;
-        }
-
+        const firstPage = getFeaturedRotationPage();
+        const secondPage = (firstPage % FEATURED_PAGE_COUNT) + 1;
+        const fetchPage = async page => {
+            const params = new URLSearchParams({ page: String(page), search: "", sort: "-averageRating" });
+            const response = await fetch(FEATURED_CATALOG_API + "?" + params.toString());
+            if (!response.ok) throw new Error("Featured catalog request failed: " + response.status);
+            const result = await response.json();
+            if (!Array.isArray(result.results)) throw new Error("Invalid catalog response.");
+            return result.results;
+        };
+        // Combine two catalog pages because a response may contain fewer than ten items.
+        const pages = await Promise.all([fetchPage(firstPage), fetchPage(secondPage)]);
+        const seen = new Set();
+        animeList = pages.flat().filter(anime => {
+            if (!anime || !anime.id || seen.has(String(anime.id))) return false;
+            seen.add(String(anime.id));
+            return true;
+        }).slice(0, 10);
+        if (!animeList.length) return;
         current = 0;
-        showAnime(current);
-
+        showAnime(current, 1);
     } catch (error) {
         console.error("Featured anime error:", error);
     }
@@ -173,18 +160,24 @@ async function loadFeaturedAnime() {
 
 loadFeaturedAnime();
 
+document.querySelectorAll("[data-hero-step]").forEach(button => {
+    button.addEventListener("click", event => {
+        event.preventDefault();
+        event.stopPropagation();
+        if (!animeList.length) return;
+        const step = Number(button.dataset.heroStep) || 1;
+        current = (current + step + animeList.length) % animeList.length;
+        showAnime(current, step);
+    });
+});
+
 setInterval(() => {
     if (!animeList.length) {
         return;
     }
 
-    current++;
-
-    if (current >= animeList.length) {
-        current = 0;
-    }
-
-    showAnime(current);
+    current = (current + 1) % animeList.length;
+    showAnime(current, 1);
 }, 5000);
 
 setInterval(() => {
