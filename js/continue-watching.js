@@ -5,13 +5,10 @@
   const list = document.getElementById("continue-watching-list");
 
 
-  function identity(user) {
-    return user ? String(user.id || user.userId || user.email || user.username || user.handle || "signed-in") : "guest";
-  }
-  function storageKey(user) { return "animemoss-continue-watching:" + identity(user); }
-  function readHistory(user) {
+  function storageKey() { return "animemoss-continue-watching"; }
+  function readHistory() {
     try {
-      const data = JSON.parse(localStorage.getItem(storageKey(user)) || "[]");
+      const data = JSON.parse(localStorage.getItem(storageKey()) || "[]");
       return Array.isArray(data) ? data : [];
     } catch { return []; }
   }
@@ -20,9 +17,7 @@
   }
   async function load() {
     if (!section || !list) return;
-    let user = null;
-    try { user = await window.AnimeMossAuth?.getCurrentUser?.() || null; } catch {}
-    const history = readHistory(user).sort((a,b) => Number(b.updatedAt || 0) - Number(a.updatedAt || 0)).slice(0, 8);
+    const history = readHistory().sort((a,b) => Number(b.updatedAt || 0) - Number(a.updatedAt || 0)).slice(0, 8);
     if (!history.length) {
       section.hidden = true;
       return;
@@ -33,7 +28,8 @@
       try {
         const response = await fetch(API + "/anime/" + encodeURIComponent(item.animeId));
         if (!response.ok) throw new Error("Anime unavailable");
-        const anime = await response.json();
+        const payload = await response.json();
+        const anime = payload?.anime || payload?.data || payload;
         return { ...item, anime };
       } catch { return { ...item, anime: null }; }
     }));
@@ -62,10 +58,8 @@
   window.AnimeMossContinueWatching = {
     save: async function(animeId, episode, type) {
       if (!animeId || !episode) return;
-      let user = null;
-      try { user = await window.AnimeMossAuth?.getCurrentUser?.() || null; } catch {}
-      const key = storageKey(user);
-      const history = readHistory(user);
+      const key = storageKey();
+      const history = readHistory();
       const id = String(animeId);
       const record = { animeId: id, episode: Math.max(1, Number(episode) || 1), type: type === "dub" ? "dub" : "sub", updatedAt: Date.now() };
       const next = [record, ...history.filter(item => String(item.animeId) !== id)].slice(0, 20);
