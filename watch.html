@@ -2106,6 +2106,13 @@ async function loadSeasons() {
         loadEpisode = async function(episode) {
             const result = await originalAnimeMossLoadEpisode(episode);
 
+            // Remember the most recently selected episode for the user's Continue Watching shelf.
+            try {
+                window.AnimeMossContinueWatching?.save(animeId, episode, currentMode);
+            } catch (error) {
+                console.warn("Continue Watching save failed:", error);
+            }
+
             if (episode === currentEpisode) {
                 loadCommentsForEpisode(episode, true);
             }
