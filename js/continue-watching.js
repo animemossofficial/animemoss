@@ -3,7 +3,7 @@
   const API = "https://animemoss-api-production.up.railway.app";
   const section = document.getElementById("continue-watching-section");
   const list = document.getElementById("continue-watching-list");
-  if (!section || !list) return;
+
 
   function identity(user) {
     return user ? String(user.id || user.userId || user.email || user.username || user.handle || "signed-in") : "guest";
@@ -19,6 +19,7 @@
     return String(value ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
   }
   async function load() {
+    if (!section || !list) return;
     let user = null;
     try { user = await window.AnimeMossAuth?.getCurrentUser?.() || null; } catch {}
     const history = readHistory(user).sort((a,b) => Number(b.updatedAt || 0) - Number(a.updatedAt || 0)).slice(0, 8);
