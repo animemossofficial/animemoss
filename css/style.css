@@ -4917,3 +4917,34 @@ html body.drawer-open{overflow:hidden!important}
 @media(prefers-reduced-motion:reduce){
  html body .mobile-drawer.moss-drawer,html body .mobile-drawer-overlay{transition:none!important}
 }
+
+/* Drawer final correction: overlay covers the whole viewport, header remains crisp. */
+html body .mobile-drawer-overlay{
+  position:fixed!important;inset:0!important;
+  z-index:2147483001!important;
+  opacity:0;visibility:hidden;pointer-events:none;
+  background:rgba(7,6,13,0)!important;
+  -webkit-backdrop-filter:blur(0);backdrop-filter:blur(0);
+  transition:opacity 420ms ease,background-color 420ms ease,backdrop-filter 420ms ease,-webkit-backdrop-filter 420ms ease,visibility 0s linear 420ms!important;
+}
+html body .mobile-drawer-overlay.active{
+  opacity:1!important;visibility:visible!important;pointer-events:auto!important;
+  background:rgba(7,6,13,.4)!important;
+  -webkit-backdrop-filter:blur(5px)!important;backdrop-filter:blur(5px)!important;
+  transition:opacity 420ms ease,background-color 420ms ease,backdrop-filter 420ms ease,-webkit-backdrop-filter 420ms ease!important;
+}
+html body .mobile-drawer.moss-drawer{
+  position:fixed!important;inset:0 auto 0 0!important;
+  z-index:2147483002!important;
+  width:min(365px,88vw)!important;
+  transform:translate3d(-102%,0,0)!important;
+  transition:transform 520ms cubic-bezier(.16,1,.3,1)!important;
+  will-change:transform;backface-visibility:hidden;
+}
+html body .mobile-drawer.moss-drawer.active{transform:translate3d(0,0,0)!important}
+.moss-drawer .mobile-drawer-header{justify-content:space-between!important}
+.moss-drawer-brand b{display:block!important;color:#fff!important;font:700 21px 'Space Grotesk',sans-serif!important;letter-spacing:-.65px!important}
+html body .moss-topbar.moss-idol-topbar{z-index:2147483000!important}
+@media(prefers-reduced-motion:reduce){
+ html body .mobile-drawer.moss-drawer,html body .mobile-drawer-overlay{transition:none!important}
+}
