@@ -4873,15 +4873,23 @@ html body .mobile-drawer.moss-drawer{z-index:2147482998}
 @media(max-height:720px){.moss-drawer-welcome{margin-top:10px;padding:10px 13px}.moss-drawer .mobile-drawer-header{min-height:64px}.moss-drawer .moss-drawer-navlink{min-height:41px}.moss-drawer .moss-drawer-content{padding-bottom:14px}}
 @media(prefers-reduced-motion:reduce){html body .mobile-drawer.moss-drawer{transition:none}}
 
-/* Final drawer polish: lavender/pink palette, smooth entrance, immediate page blur. */
+
+/* Drawer final pass: smooth compositor-based motion + subtle backdrop blur only.
+   Do not apply filter:blur() to page content; backdrop-filter blurs what is behind the overlay. */
 html body .mobile-drawer.moss-drawer{
-  background:radial-gradient(ellipse at 0 0,rgba(235,143,220,.13),transparent 43%),
+  left:0!important;right:auto!important;
+  transform:translate3d(-102%,0,0)!important;
+  transition:transform 460ms cubic-bezier(.22,1,.36,1)!important;
+  will-change:transform;
+  backface-visibility:hidden;
+  background:
+    radial-gradient(ellipse at 0 0,rgba(235,143,220,.13),transparent 43%),
     radial-gradient(ellipse at 100% 45%,rgba(159,125,255,.10),transparent 44%),
     linear-gradient(165deg,#191522 0%,#11101a 55%,#0b0b11 100%)!important;
   border-right-color:rgba(221,174,255,.2)!important;
-  transition:transform .42s cubic-bezier(.2,.82,.2,1),box-shadow .42s ease!important;
-  will-change:transform;
-  backface-visibility:hidden;
+}
+html body .mobile-drawer.moss-drawer.active{
+  transform:translate3d(0,0,0)!important;
 }
 .moss-drawer-brand-mark{border-color:rgba(236,160,226,.28)!important;background:linear-gradient(145deg,rgba(236,160,226,.17),rgba(159,125,255,.08))!important;color:#f0a7e7!important;box-shadow:0 5px 24px rgba(222,128,222,.08)!important}
 .moss-drawer-welcome{background:linear-gradient(115deg,rgba(236,160,226,.10),rgba(159,125,255,.10))!important}
@@ -4892,24 +4900,20 @@ html body .mobile-drawer.moss-drawer{
 .moss-drawer .moss-drawer-grid a:hover,.moss-drawer .moss-drawer-grid a:focus-visible{border-color:rgba(236,160,226,.3)!important;background:rgba(236,160,226,.08)!important;color:#ffe1fa!important}
 .moss-drawer .moss-drawer-grid a:hover:before{background:#f0a7e7!important}
 html body .mobile-drawer-overlay{
-  position:fixed!important;inset:0!important;opacity:0;visibility:hidden;pointer-events:none;
-  background:rgba(6,5,12,.48)!important;
-  backdrop-filter:blur(0);-webkit-backdrop-filter:blur(0);
-  transition:opacity .3s ease,backdrop-filter .3s ease,visibility .3s ease!important;
+  position:fixed!important;inset:0!important;z-index:2147482997!important;
+  opacity:0;visibility:hidden;pointer-events:none;
+  background:rgba(6,5,12,0)!important;
+  -webkit-backdrop-filter:blur(0);backdrop-filter:blur(0);
+  transition:opacity 360ms ease,background-color 360ms ease,backdrop-filter 360ms ease,-webkit-backdrop-filter 360ms ease,visibility 0s linear 360ms!important;
 }
 html body .mobile-drawer-overlay.active{
   opacity:1!important;visibility:visible!important;pointer-events:auto!important;
-  background:rgba(6,5,12,.56)!important;
-  backdrop-filter:blur(9px)!important;-webkit-backdrop-filter:blur(9px)!important;
+  background:rgba(6,5,12,.38)!important;
+  -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
+  transition:opacity 360ms ease,background-color 360ms ease,backdrop-filter 360ms ease,-webkit-backdrop-filter 360ms ease!important;
 }
-html body.drawer-open #app,html body.drawer-open main,html body.drawer-open .moss-page,
-html body.drawer-open .moss-single-hero,html body.drawer-open .moss-topbar,
-html body.drawer-open .moss-topbar.moss-idol-topbar{
-  filter:blur(5px)!important;transition:filter .3s ease!important;
-}
+html body .mobile-drawer.moss-drawer{z-index:2147482998!important}
 html body.drawer-open{overflow:hidden!important}
 @media(prefers-reduced-motion:reduce){
  html body .mobile-drawer.moss-drawer,html body .mobile-drawer-overlay{transition:none!important}
- html body.drawer-open #app,html body.drawer-open main,html body.drawer-open .moss-page,
- html body.drawer-open .moss-single-hero,html body.drawer-open .moss-topbar{transition:none!important}
 }
