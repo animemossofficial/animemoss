@@ -4925,20 +4925,20 @@ html body .mobile-drawer-overlay{
   opacity:0;visibility:hidden;pointer-events:none;
   background:rgba(7,6,13,0)!important;
   -webkit-backdrop-filter:blur(0);backdrop-filter:blur(0);
-  transition:opacity 420ms ease,background-color 420ms ease,backdrop-filter 420ms ease,-webkit-backdrop-filter 420ms ease,visibility 0s linear 420ms!important;
+  transition:opacity 650ms ease,background-color 650ms ease,backdrop-filter 650ms ease,-webkit-backdrop-filter 650ms ease,visibility 0s linear 650ms!important;
 }
 html body .mobile-drawer-overlay.active{
   opacity:1!important;visibility:visible!important;pointer-events:auto!important;
   background:rgba(7,6,13,.4)!important;
   -webkit-backdrop-filter:blur(5px)!important;backdrop-filter:blur(5px)!important;
-  transition:opacity 420ms ease,background-color 420ms ease,backdrop-filter 420ms ease,-webkit-backdrop-filter 420ms ease!important;
+  transition:opacity 650ms ease,background-color 650ms ease,backdrop-filter 650ms ease,-webkit-backdrop-filter 650ms ease!important;
 }
 html body .mobile-drawer.moss-drawer{
   position:fixed!important;inset:0 auto 0 0!important;
   z-index:2147483002!important;
   width:min(365px,88vw)!important;
   transform:translate3d(-105%,0,0)!important;
-  transition:transform 820ms cubic-bezier(.22,1,.36,1)!important;
+  transition:transform 1250ms cubic-bezier(.16,1,.3,1)!important;
   will-change:transform;backface-visibility:hidden;
   contain:layout paint;
 }
