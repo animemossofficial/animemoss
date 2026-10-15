@@ -190,9 +190,10 @@ html body .moss-topbar.moss-idol-topbar.is-scrolled{background:rgba(11,11,16,.48
 .moss-topbar-spacer{display:block;width:100%;height:var(--moss-topbar-height,72px);pointer-events:none}
 @media(prefers-reduced-motion:reduce){html body .moss-topbar.moss-idol-topbar{transition:none!important}}
 
-/* Featured banner slides between anime instead of hard-switching. */
-.moss-single-hero .featured-banner.is-sliding #banner-image{animation:animemoss-feature-image-slide .72s cubic-bezier(.22,.75,.25,1) both!important}
-.moss-single-hero .featured-banner.is-sliding .banner-content{animation:animemoss-feature-content-slide .72s cubic-bezier(.22,.75,.25,1) both!important}
-@keyframes animemoss-feature-image-slide{0%{opacity:.25;transform:translateX(calc(var(--featured-slide-direction,1)*34px)) scale(1.025)}100%{opacity:1;transform:translateX(0) scale(1)}}
-@keyframes animemoss-feature-content-slide{0%{opacity:0;transform:translateX(calc(var(--featured-slide-direction,1)*22px))}100%{opacity:1;transform:translateX(0)}}
+
+/* Slide transition uses opacity and clipping, avoiding legacy transform:none rules. */
+.moss-single-hero .featured-banner.is-sliding #banner-image{animation:animemoss-feature-image-reveal .72s cubic-bezier(.22,.75,.25,1) both!important}
+.moss-single-hero .featured-banner.is-sliding .banner-content{animation:animemoss-feature-text-reveal .62s cubic-bezier(.22,.75,.25,1) both!important}
+@keyframes animemoss-feature-image-reveal{0%{opacity:.15;clip-path:inset(0 0 0 22%)}100%{opacity:1;clip-path:inset(0 0 0 0)}}
+@keyframes animemoss-feature-text-reveal{0%{opacity:0;clip-path:inset(0 0 0 24%)}100%{opacity:1;clip-path:inset(0 0 0 0)}}
 @media(prefers-reduced-motion:reduce){.moss-single-hero .featured-banner.is-sliding #banner-image,.moss-single-hero .featured-banner.is-sliding .banner-content{animation:none!important}}
