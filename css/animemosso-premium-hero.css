@@ -150,3 +150,7 @@ html:has(.moss-single-hero) .moss-single-hero .banner-content{transform:translat
 html:has(.moss-single-hero) .moss-single-hero .moss-anime-about-label{display:block!important;margin:0 0 5px!important;color:#ffb1df!important;font-size:10px!important;font-weight:700!important;letter-spacing:1.7px!important;line-height:1.4!important}
 html:has(.moss-single-hero) .moss-single-hero #banner-description{height:5.1em!important;min-height:5.1em!important;max-height:5.1em!important;margin:0 0 14px!important;-webkit-line-clamp:3!important;line-height:1.7!important}
 @media(max-width:600px){html:has(.moss-single-hero) .moss-single-hero .banner-content{bottom:88px!important;transform:none!important}html:has(.moss-single-hero) .moss-single-hero .moss-anime-about-label{margin-bottom:4px!important;font-size:9px!important}html:has(.moss-single-hero) .moss-single-hero #banner-description{height:6.8em!important;min-height:6.8em!important;max-height:6.8em!important;margin-bottom:13px!important;-webkit-line-clamp:4!important}}
+
+/* Enlarge only the Watch now label, not the button dimensions. */
+html:has(.moss-single-hero) .moss-single-hero #watch-btn{font-size:15px!important}
+html:has(.moss-single-hero) .moss-single-hero #watch-btn i{font-size:13px!important}
