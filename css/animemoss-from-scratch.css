@@ -205,3 +205,22 @@ html body .moss-topbar.moss-idol-topbar.is-scrolled{background:rgba(11,11,16,.48
 .moss-ad-contact a{color:#ffb6e4;font-weight:800;text-decoration:none;text-underline-offset:3px;overflow-wrap:anywhere}
 .moss-ad-contact a:hover{text-decoration:underline;color:#fff}
 @media(max-width:600px){.moss-ad-contact{gap:5px;margin:13px auto 25px;padding:23px 14px;min-height:96px;width:calc(100% - 24px);font-size:12px;border-radius:11px}}
+
+
+/* Personalized Continue Watching shelf */
+.moss-continue-section{width:min(100% - 36px,1420px);margin:0 auto 34px}
+.moss-continue-section[hidden]{display:none!important}
+.moss-continue-section .moss-section-heading{margin-bottom:16px}
+.moss-continue-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:15px}
+.moss-continue-card{position:relative;display:grid;grid-template-columns:94px minmax(0,1fr);gap:13px;min-width:0;padding:12px;border:1px solid rgba(255,165,220,.17);border-radius:14px;background:linear-gradient(120deg,rgba(255,143,207,.07),rgba(165,139,255,.07)),rgba(20,20,28,.88);color:#f5f4f8;text-decoration:none;overflow:hidden;transition:transform .2s ease,border-color .2s ease,background .2s ease}
+.moss-continue-card:hover{transform:translateY(-3px);border-color:rgba(255,165,220,.46);background:linear-gradient(120deg,rgba(255,143,207,.12),rgba(165,139,255,.12)),rgba(20,20,28,.96)}
+.moss-continue-poster{width:94px;height:126px;object-fit:cover;border-radius:9px;background:#24202d}
+.moss-continue-copy{align-self:center;min-width:0}
+.moss-continue-title{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin:0 0 8px;font-size:14px;font-weight:800;line-height:1.35}
+.moss-continue-episode{color:#ffb6e4;font-size:12px;font-weight:800}
+.moss-continue-hint{display:block;margin-top:6px;color:#a2a0b2;font-size:11px}
+.moss-continue-progress{height:4px;margin-top:12px;overflow:hidden;border-radius:8px;background:#ffffff14}
+.moss-continue-progress span{display:block;height:100%;border-radius:8px;background:linear-gradient(90deg,#ff8fcf,#b99bff)}
+.moss-continue-play{display:inline-flex;align-items:center;gap:6px;margin-top:12px;padding:7px 10px;border-radius:8px;background:linear-gradient(100deg,#ffa8dc,#d6a7ff);color:#24152a;font-size:11px;font-weight:900}
+.moss-continue-loading,.moss-continue-empty{grid-column:1/-1;padding:18px;color:#a2a0b2;border:1px dashed rgba(255,165,220,.22);border-radius:12px;font-size:13px}
+@media(max-width:600px){.moss-continue-section{width:calc(100% - 24px);margin-bottom:26px}.moss-continue-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.moss-continue-card{grid-template-columns:1fr;gap:9px;padding:9px}.moss-continue-poster{width:100%;height:auto;aspect-ratio:3/4}.moss-continue-copy{align-self:start}.moss-continue-title{font-size:12px}.moss-continue-hint{font-size:10px}.moss-continue-play{margin-top:9px}}
