@@ -158,18 +158,20 @@ async function loadFeaturedAnime() {
     }
 }
 
-loadFeaturedAnime();
+// Delegate slider controls from the banner in capture phase so the banner's
+// own click-to-details handler can never swallow previous/next clicks.
+banner.addEventListener("click", event => {
+    const button = event.target.closest("[data-hero-step]");
+    if (!button) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    if (!animeList.length) return;
+    const step = Number(button.dataset.heroStep) || 1;
+    current = (current + step + animeList.length) % animeList.length;
+    showAnime(current, step);
+}, true);
 
-document.querySelectorAll("[data-hero-step]").forEach(button => {
-    button.addEventListener("click", event => {
-        event.preventDefault();
-        event.stopPropagation();
-        if (!animeList.length) return;
-        const step = Number(button.dataset.heroStep) || 1;
-        current = (current + step + animeList.length) % animeList.length;
-        showAnime(current, step);
-    });
-});
+loadFeaturedAnime();
 
 setInterval(() => {
     if (!animeList.length) {
