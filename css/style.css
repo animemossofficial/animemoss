@@ -4937,9 +4937,10 @@ html body .mobile-drawer.moss-drawer{
   position:fixed!important;inset:0 auto 0 0!important;
   z-index:2147483002!important;
   width:min(365px,88vw)!important;
-  transform:translate3d(-102%,0,0)!important;
-  transition:transform 520ms cubic-bezier(.16,1,.3,1)!important;
+  transform:translate3d(-105%,0,0)!important;
+  transition:transform 820ms cubic-bezier(.22,1,.36,1)!important;
   will-change:transform;backface-visibility:hidden;
+  contain:layout paint;
 }
 html body .mobile-drawer.moss-drawer.active{transform:translate3d(0,0,0)!important}
 .moss-drawer .mobile-drawer-header{justify-content:space-between!important}
