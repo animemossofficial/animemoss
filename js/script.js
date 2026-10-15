@@ -319,6 +319,7 @@ function closeMobileDrawer() {
     mobileMenuButton.classList.remove("active");
     mobileDrawer.classList.remove("active");
     mobileDrawerOverlay.classList.remove("active");
+    document.body.classList.remove("drawer-open");
 
     mobileMenuButton.setAttribute("aria-expanded", "false");
     mobileDrawer.setAttribute("aria-hidden", "true");
@@ -332,6 +333,7 @@ function openMobileDrawer() {
     mobileMenuButton.classList.add("active");
     mobileDrawer.classList.add("active");
     mobileDrawerOverlay.classList.add("active");
+    document.body.classList.add("drawer-open");
 
     mobileMenuButton.setAttribute("aria-expanded", "true");
     mobileDrawer.setAttribute("aria-hidden", "false");
