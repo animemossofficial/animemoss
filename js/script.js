@@ -499,3 +499,15 @@ document.addEventListener("keydown", event => {
 })();
 
 
+
+
+// Premium drawer genre/type accordion controls.
+document.querySelectorAll(".moss-drawer-section-toggle").forEach(toggle => {
+    toggle.addEventListener("click", () => {
+        const panel = document.getElementById(toggle.getAttribute("aria-controls"));
+        if (!panel) return;
+        const expanded = toggle.getAttribute("aria-expanded") === "true";
+        toggle.setAttribute("aria-expanded", String(!expanded));
+        panel.hidden = expanded;
+    });
+});
