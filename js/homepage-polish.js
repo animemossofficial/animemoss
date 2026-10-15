@@ -38,7 +38,7 @@
       }
     });
   });
-  // Keep the navbar fixed to the viewport, outside transformed page wrappers.
+  // Navbar controller: pin it to the viewport and set the glass state directly.
   const topbar = document.querySelector(".moss-topbar.moss-idol-topbar");
   if (topbar) {
     let spacer = document.querySelector(".moss-topbar-spacer");
@@ -48,23 +48,37 @@
       spacer.setAttribute("aria-hidden", "true");
       topbar.parentNode.insertBefore(spacer, topbar);
     }
-    // A transformed/filtered ancestor can make position:fixed behave like absolute.
-    // Move the header directly under body so it stays attached to the viewport.
+
+    // A transformed ancestor can break fixed positioning, so keep the header under body.
     if (topbar.parentElement !== document.body) document.body.appendChild(topbar);
-    topbar.style.setProperty("position", "fixed", "important");
-    topbar.style.setProperty("top", "0", "important");
-    topbar.style.setProperty("left", "0", "important");
-    topbar.style.setProperty("right", "0", "important");
-    topbar.style.setProperty("z-index", "2147483000", "important");
-    const syncTopbarHeight = () => {
-      const height = Math.ceil(topbar.getBoundingClientRect().height);
-      spacer.style.height = height + "px";
-      document.documentElement.style.setProperty("--moss-topbar-height", height + "px");
+
+    const pinTopbar = () => {
+      topbar.style.setProperty("position", "fixed", "important");
+      topbar.style.setProperty("top", "0", "important");
+      topbar.style.setProperty("left", "0", "important");
+      topbar.style.setProperty("right", "0", "important");
+      topbar.style.setProperty("z-index", "2147483000", "important");
+      topbar.style.setProperty("width", "100%", "important");
     };
-    const updateTopbar = () => topbar.classList.toggle("is-scrolled", window.scrollY > 12);
+    const syncTopbarHeight = () => {
+      spacer.style.height = Math.ceil(topbar.getBoundingClientRect().height) + "px";
+    };
+    const updateTopbar = () => {
+      const scrolled = window.scrollY > 12;
+      topbar.classList.toggle("is-scrolled", scrolled);
+      // Inline important values ensure another stylesheet cannot turn the glass opaque.
+      topbar.style.setProperty("background", scrolled ? "rgba(11,11,16,.48)" : "rgba(11,11,16,.10)", "important");
+      topbar.style.setProperty("background-color", scrolled ? "rgba(11,11,16,.48)" : "rgba(11,11,16,.10)", "important");
+      topbar.style.setProperty("backdrop-filter", scrolled ? "blur(14px)" : "blur(0)", "important");
+      topbar.style.setProperty("-webkit-backdrop-filter", scrolled ? "blur(14px)" : "blur(0)", "important");
+      topbar.style.setProperty("border-bottom-color", scrolled ? "rgba(255,255,255,.10)" : "transparent", "important");
+      topbar.style.setProperty("box-shadow", scrolled ? "0 6px 22px rgba(0,0,0,.14)" : "none", "important");
+    };
+
+    pinTopbar();
     syncTopbarHeight();
     updateTopbar();
-    window.addEventListener("resize", syncTopbarHeight, { passive: true });
+    window.addEventListener("resize", () => { pinTopbar(); syncTopbarHeight(); }, { passive: true });
     window.addEventListener("scroll", updateTopbar, { passive: true });
   }
 })();
