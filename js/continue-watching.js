@@ -6,6 +6,19 @@
 
 
   function storageKey() { return "animemoss-continue-watching"; }
+  function normalizeAnime(payload) {
+    let anime = payload?.anime || payload?.data || payload;
+    if (Array.isArray(anime)) anime = anime[0];
+    if (!anime || typeof anime !== "object") return null;
+    if (typeof anime.coverImage === "string") anime.coverImage = { large: anime.coverImage, extraLarge: anime.coverImage };
+    if (anime.title && typeof anime.title === "string") anime.title = { english: anime.title, romaji: anime.title };
+    if (!anime.title) anime.title = { english: anime.titleEnglish || anime.title_english || anime.name || `Anime #${anime.id || ""}`, romaji: anime.titleRomaji || anime.title_romaji };
+    if (!anime.coverImage) {
+      const cover = anime.cover_image || anime.coverImageUrl || anime.image || "";
+      anime.coverImage = typeof cover === "string" ? { large: cover, extraLarge: cover } : cover;
+    }
+    return anime;
+  }
   function readHistory() {
     try {
       const data = JSON.parse(localStorage.getItem(storageKey()) || "[]");
@@ -29,25 +42,26 @@
         const response = await fetch(API + "/anime/" + encodeURIComponent(item.animeId));
         if (!response.ok) throw new Error("Anime unavailable");
         const payload = await response.json();
-        const anime = payload?.anime || payload?.data || payload;
+        const anime = normalizeAnime(payload);
+        if (!anime) throw new Error("Invalid anime response");
         return { ...item, anime };
       } catch { return { ...item, anime: null }; }
     }));
-    const valid = items.filter(item => item.anime);
+    const valid = items;
     if (!valid.length) {
       list.innerHTML = '<div class="moss-continue-empty">Your recent watch history could not be loaded. It will appear here when you watch again.</div>';
       return;
     }
     list.innerHTML = valid.map(item => {
       const anime = item.anime;
-      const title = anime.title?.english || anime.title?.romaji || anime.title?.native || "Anime";
-      const image = anime.coverImage?.extraLarge || anime.coverImage?.large || anime.coverImage || "";
+      const title = anime?.title?.english || anime?.title?.romaji || anime?.title?.native || `Anime #${item.animeId}`;
+      const image = anime?.coverImage?.extraLarge || anime?.coverImage?.large || "";
       const episode = Math.max(1, Number(item.episode) || 1);
       const total = Math.max(0, Number(anime.episodes) || 0);
       const progress = total ? Math.min(100, Math.round(episode / total * 100)) : 0;
       const href = "watch.html?id=" + encodeURIComponent(item.animeId) + "&episode=" + episode + (item.type === "dub" ? "&type=dub" : "");
       return '<a class="moss-continue-card" href="' + href + '">' +
-        '<img class="moss-continue-poster" src="' + escapeHtml(image) + '" alt="' + escapeHtml(title) + '" loading="lazy" decoding="async">' +
+        (image ? '<img class="moss-continue-poster" src="' + escapeHtml(image) + '" alt="' + escapeHtml(title) + '" loading="lazy" decoding="async">' : '<div class="moss-continue-poster moss-continue-placeholder" aria-hidden="true"><i class="fa-solid fa-play"></i></div>') +
         '<span class="moss-continue-copy"><span class="moss-continue-title">' + escapeHtml(title) + '</span>' +
         '<span class="moss-continue-episode">Episode ' + episode + '</span>' +
         '<span class="moss-continue-hint">' + (total ? 'of ' + total + ' episodes' : 'Continue your episode') + '</span>' +
@@ -63,7 +77,11 @@
       const id = String(animeId);
       const record = { animeId: id, episode: Math.max(1, Number(episode) || 1), type: type === "dub" ? "dub" : "sub", updatedAt: Date.now() };
       const next = [record, ...history.filter(item => String(item.animeId) !== id)].slice(0, 20);
-      try { localStorage.setItem(key, JSON.stringify(next)); } catch (error) { console.warn("Could not save watch history", error); }
+      try {
+        localStorage.setItem(key, JSON.stringify(next));
+        // Keep the shelf in sync immediately if it exists on this page.
+        if (section && !section.hidden) load();
+      } catch (error) { console.warn("Could not save watch history", error); }
     },
     refresh: load
   };
