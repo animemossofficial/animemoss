@@ -197,3 +197,11 @@ html body .moss-topbar.moss-idol-topbar.is-scrolled{background:rgba(11,11,16,.48
 @keyframes animemoss-feature-image-reveal{0%{opacity:.15;clip-path:inset(0 0 0 22%)}100%{opacity:1;clip-path:inset(0 0 0 0)}}
 @keyframes animemoss-feature-text-reveal{0%{opacity:0;clip-path:inset(0 0 0 24%)}100%{opacity:1;clip-path:inset(0 0 0 0)}}
 @media(prefers-reduced-motion:reduce){.moss-single-hero .featured-banner.is-sliding #banner-image,.moss-single-hero .featured-banner.is-sliding .banner-content{animation:none!important}}
+
+
+/* Homepage ad contact strip directly beneath the featured hero. */
+.moss-ad-contact{position:relative;display:flex;align-items:center;justify-content:center;gap:9px;flex-wrap:wrap;margin:18px auto 34px;padding:17px 22px;width:min(100% - 36px,1180px);box-sizing:border-box;text-align:center;color:#f9eaf7;background:linear-gradient(110deg,rgba(255,143,207,.10),rgba(190,139,255,.12),rgba(255,143,207,.07));border:1px solid rgba(255,165,220,.28);border-radius:13px;box-shadow:0 8px 28px rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.04);font-size:14px;line-height:1.6}
+.moss-ad-contact .moss-ad-sparkle{color:#ff9ed8;font-size:15px}
+.moss-ad-contact a{color:#ffb6e4;font-weight:800;text-decoration:none;text-underline-offset:3px;overflow-wrap:anywhere}
+.moss-ad-contact a:hover{text-decoration:underline;color:#fff}
+@media(max-width:600px){.moss-ad-contact{gap:5px;margin:13px auto 25px;padding:13px 14px;width:calc(100% - 24px);font-size:12px;border-radius:11px}}
