@@ -304,11 +304,18 @@ document.addEventListener("click", event => {
 const mobileMenuButton =
     document.getElementById("mobileMenuButton");
 
-const mobileDrawer =
-    document.getElementById("mobileDrawer");
+const mobileDrawer = document.getElementById("mobileDrawer");
 
-const mobileDrawerOverlay =
-    document.getElementById("mobileDrawerOverlay");
+const mobileDrawerOverlay = document.getElementById("mobileDrawerOverlay");
+
+// Keep the drawer and its backdrop at the document root so the fixed navbar
+// cannot sit above the backdrop and escape the blur.
+if (mobileDrawerOverlay && mobileDrawerOverlay.parentElement !== document.body) {
+    document.body.appendChild(mobileDrawerOverlay);
+}
+if (mobileDrawer && mobileDrawer.parentElement !== document.body) {
+    document.body.appendChild(mobileDrawer);
+}
 
 const mobileDrawerClose =
     document.getElementById("mobileDrawerClose");
