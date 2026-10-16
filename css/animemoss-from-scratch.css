@@ -363,3 +363,23 @@ html body .moss-topbar.moss-idol-topbar.is-scrolled{background:rgba(11,11,16,.48
   border:0!important;
   box-shadow:none!important;
 }
+
+
+/* Continue Watching: plain heading, one text color, no decorative rules */
+.moss-continue-section,
+.moss-continue-section *{background-image:none!important}
+.moss-continue-section:before,
+.moss-continue-section:after,
+.moss-continue-section .moss-section-heading:before,
+.moss-continue-section .moss-section-heading:after,
+.moss-continue-section .moss-section-heading>div:before,
+.moss-continue-section .moss-section-heading>div:after,
+.moss-continue-section .moss-overline:before,
+.moss-continue-section .moss-overline:after{
+  content:none!important;display:none!important;border:0!important;box-shadow:none!important
+}
+.moss-continue-section .moss-section-heading h2,
+.moss-continue-section .moss-section-heading h2 span{
+  color:#fff!important;background:none!important;-webkit-text-fill-color:#fff!important
+}
+.moss-continue-section .moss-overline{color:#f39bd5!important}
