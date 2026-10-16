@@ -40,11 +40,29 @@
     try {
       const response = await fetch(API + "/anime/" + encodeURIComponent(item.animeId), { cache:"no-store" });
       if (!response.ok) throw new Error("Anime endpoint returned " + response.status);
-      return normalize(await response.json(), item.animeId);
+      const anime = normalize(await response.json(), item.animeId);
+      if (anime && (anime.title?.english || anime.title?.romaji) && (anime.coverImage?.large || anime.coverImage?.extraLarge)) return anime;
     } catch (error) {
-      console.warn("[Continue Watching] anime details unavailable", item.animeId, error);
-      return null;
+      console.warn("[Continue Watching] primary anime details unavailable; trying AniList", item.animeId, error);
     }
+    // The site's IDs are AniList media IDs. Use AniList directly if the app API cache is empty.
+    try {
+      const response = await fetch("https://graphql.anilist.co", {
+        method:"POST",
+        headers:{"Content-Type":"application/json","Accept":"application/json"},
+        body:JSON.stringify({
+          query:"query ($id: Int) { Media(id: $id, type: ANIME) { id title { english romaji native } episodes coverImage { large extraLarge } } }",
+          variables:{id:Number(item.animeId)}
+        })
+      });
+      if (!response.ok) throw new Error("AniList returned " + response.status);
+      const payload = await response.json();
+      const anime = normalize(payload?.data?.Media, item.animeId);
+      if (anime) return anime;
+    } catch (error) {
+      console.warn("[Continue Watching] AniList fallback unavailable", item.animeId, error);
+    }
+    return null;
   }
   async function getEpisodeThumbnail(item) {
     try {
@@ -53,7 +71,8 @@
       const payload = await response.json();
       const episodes = Array.isArray(payload?.episodes) ? payload.episodes : [];
       const exact = episodes.find(ep => Number(ep.number) === Number(item.episode));
-      return exact?.thumbnail || "";
+      // Current API episode rows may have null thumbnails; never treat a missing thumbnail as a failed card.
+      return typeof exact?.thumbnail === "string" ? exact.thumbnail : "";
     } catch (error) {
       console.warn("[Continue Watching] episode thumbnail unavailable", item.animeId, item.episode, error);
       return "";
