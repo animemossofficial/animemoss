@@ -420,3 +420,35 @@ html body .moss-topbar.moss-idol-topbar.is-scrolled{background:rgba(11,11,16,.48
   background: transparent !important;
   letter-spacing: .17em !important;
 }
+
+
+/* Continue Watching: remove only stray decorative rules; preserve original title colors */
+#continue-watching-section .moss-section-heading,
+#continue-watching-section .moss-section-heading > div {
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  background-image: none !important;
+}
+#continue-watching-section::before,
+#continue-watching-section::after,
+#continue-watching-section .moss-section-heading::before,
+#continue-watching-section .moss-section-heading::after,
+#continue-watching-section .moss-section-heading > div::before,
+#continue-watching-section .moss-section-heading > div::after,
+#continue-watching-section .moss-overline::before,
+#continue-watching-section .moss-overline::after {
+  content: none !important;
+  display: none !important;
+}
+#continue-watching-section .moss-section-heading h2 {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+}
+#continue-watching-section .moss-section-heading h2 span {
+  color: #f39bd5 !important;
+  -webkit-text-fill-color: #f39bd5 !important;
+  background: none !important;
+  background-image: none !important;
+}
