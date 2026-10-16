@@ -302,3 +302,32 @@ html body .moss-topbar.moss-idol-topbar.is-scrolled{background:rgba(11,11,16,.48
 .moss-continue-grid::-webkit-scrollbar-thumb{background:linear-gradient(90deg,#f29bd8,#b99aff)!important;border-radius:20px!important;border:2px solid #2a1c32!important}
 @media(max-width:1050px){.moss-continue-grid{grid-auto-columns:calc((100% - 36px)/3)!important}}
 @media(max-width:650px){.moss-continue-grid{grid-auto-columns:78%!important;grid-template-columns:none!important;gap:14px!important;overflow-x:scroll!important;scrollbar-width:auto!important}.moss-continue-grid::-webkit-scrollbar{height:7px!important}}
+
+
+/* Continue Watching final refinement: compact cards and a single-color scrollbar */
+.moss-continue-grid{
+  grid-auto-columns: minmax(0, 1fr) !important;
+  grid-template-columns: none !important;
+  grid-auto-columns: 230px !important;
+  gap: 16px !important;
+  padding: 2px 2px 12px !important;
+  overflow-x: auto !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: #b88bb8 transparent !important;
+  scrollbar-gutter: auto !important;
+}
+.moss-continue-grid::-webkit-scrollbar{display:block!important;height:5px!important}
+.moss-continue-grid::-webkit-scrollbar-track{background:transparent!important;border-radius:8px!important}
+.moss-continue-grid::-webkit-scrollbar-thumb{background:#b88bb8!important;border:0!important;border-radius:8px!important}
+.moss-continue-grid::-webkit-scrollbar-thumb:hover{background:#c9a2c9!important}
+.moss-continue-art{aspect-ratio:16/9!important}
+.moss-continue-badge{background:#b88bb8!important;color:#24172d!important;box-shadow:none!important}
+.moss-continue-copy{padding:10px 2px 6px!important}
+.moss-continue-title{font-size:13px!important;line-height:1.3!important;margin-bottom:7px!important}
+@media(max-width:1050px){.moss-continue-grid{grid-auto-columns:210px!important;gap:14px!important}}
+@media(max-width:650px){
+ .moss-continue-grid{grid-auto-columns:72%!important;gap:12px!important;padding-bottom:10px!important}
+ .moss-continue-art{aspect-ratio:16/10!important}
+ .moss-continue-title{font-size:12px!important}
+ .moss-continue-grid::-webkit-scrollbar{height:4px!important}
+}
