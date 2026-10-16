@@ -348,3 +348,18 @@ html body .moss-topbar.moss-idol-topbar.is-scrolled{background:rgba(11,11,16,.48
 .moss-continue-grid::-webkit-scrollbar-button{display:none!important;width:0!important;height:0!important}
 @media(max-width:1050px){.moss-continue-grid{grid-auto-columns:240px!important;gap:16px!important}}
 @media(max-width:650px){.moss-continue-grid{grid-auto-columns:82%!important;gap:14px!important;padding-bottom:8px!important}.moss-continue-grid::-webkit-scrollbar{height:3px!important}}
+
+
+/* Remove decorative line accents from Continue Watching only */
+.moss-continue-section .moss-overline:before,
+.moss-continue-section .moss-overline:after,
+.moss-continue-section .moss-section-heading:before,
+.moss-continue-section .moss-section-heading:after,
+.moss-continue-section .moss-section-heading>div:before,
+.moss-continue-section .moss-section-heading>div:after{
+  content:none!important;
+  display:none!important;
+  background:none!important;
+  border:0!important;
+  box-shadow:none!important;
+}
