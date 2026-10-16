@@ -383,3 +383,40 @@ html body .moss-topbar.moss-idol-topbar.is-scrolled{background:rgba(11,11,16,.48
   color:#fff!important;background:none!important;-webkit-text-fill-color:#fff!important
 }
 .moss-continue-section .moss-overline{color:#f39bd5!important}
+
+
+/* HARD RESET — Continue Watching heading only */
+#continue-watching-section .moss-section-heading,
+#continue-watching-section .moss-section-heading > div,
+#continue-watching-section .moss-section-heading h2,
+#continue-watching-section .moss-section-heading h2 span {
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  text-decoration: none !important;
+  -webkit-text-fill-color: #ffffff !important;
+  color: #ffffff !important;
+}
+#continue-watching-section::before,
+#continue-watching-section::after,
+#continue-watching-section .moss-section-heading::before,
+#continue-watching-section .moss-section-heading::after,
+#continue-watching-section .moss-section-heading > div::before,
+#continue-watching-section .moss-section-heading > div::after,
+#continue-watching-section .moss-overline::before,
+#continue-watching-section .moss-overline::after {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  border: 0 !important;
+  background: none !important;
+  box-shadow: none !important;
+}
+#continue-watching-section .moss-overline {
+  display: block !important;
+  color: #f39bd5 !important;
+  background: transparent !important;
+  letter-spacing: .17em !important;
+}
