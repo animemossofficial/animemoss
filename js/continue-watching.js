@@ -91,8 +91,7 @@
       '<span class="moss-continue-badge">EP ' + episode + (total ? ' / ' + total : '') + '</span><span class="moss-continue-overlay"><i class="fa-solid fa-play"></i></span></div>' +
       '<span class="moss-continue-copy"><span class="moss-continue-title">' + escape(title) + '</span>' +
       '<span class="moss-continue-episode">Episode ' + episode + '</span>' +
-      '<span class="moss-continue-hint">' + (total ? (progress + '% watched') : 'Continue your episode') + '</span>' +
-      '<span class="moss-continue-progress"><span style="width:' + progress + '%"></span></span></span></a>';
+      '</span></a>';
   }
   let renderToken = 0;
   async function render() {
