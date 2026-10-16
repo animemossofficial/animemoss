@@ -293,3 +293,12 @@ html body .moss-topbar.moss-idol-topbar.is-scrolled{background:rgba(11,11,16,.48
 .moss-continue-section .moss-overline:before{content:none!important;display:none!important}
 .moss-continue-section .moss-overline{gap:0!important}
 .moss-continue-badge{background:linear-gradient(110deg,#e98bcf,#a98bfa)!important;color:#211226!important;box-shadow:0 3px 12px #0004!important;border-radius:7px!important}
+
+
+/* Force a real horizontal Continue Watching rail and keep its scrollbar visible */
+.moss-continue-grid{display:grid!important;grid-auto-flow:column!important;grid-template-columns:none!important;grid-auto-columns:calc((100% - 54px)/4)!important;overflow-x:scroll!important;overflow-y:hidden!important;overscroll-behavior-x:contain;scrollbar-width:auto!important;scrollbar-color:#d98bd0 #2a1c32!important;scrollbar-gutter:auto!important;padding:2px 2px 14px!important}
+.moss-continue-grid::-webkit-scrollbar{display:block!important;width:auto!important;height:9px!important}
+.moss-continue-grid::-webkit-scrollbar-track{background:#2a1c32!important;border-radius:20px!important}
+.moss-continue-grid::-webkit-scrollbar-thumb{background:linear-gradient(90deg,#f29bd8,#b99aff)!important;border-radius:20px!important;border:2px solid #2a1c32!important}
+@media(max-width:1050px){.moss-continue-grid{grid-auto-columns:calc((100% - 36px)/3)!important}}
+@media(max-width:650px){.moss-continue-grid{grid-auto-columns:78%!important;grid-template-columns:none!important;gap:14px!important;overflow-x:scroll!important;scrollbar-width:auto!important}.moss-continue-grid::-webkit-scrollbar{height:7px!important}}
