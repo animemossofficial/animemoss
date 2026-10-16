@@ -452,3 +452,27 @@ html body .moss-topbar.moss-idol-topbar.is-scrolled{background:rgba(11,11,16,.48
   background: none !important;
   background-image: none !important;
 }
+
+
+/* Kawaii Corner — transparent-art feature section */
+.moss-kawaii-section{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(220px,30%) minmax(0,1fr);align-items:center;gap:clamp(18px,3vw,42px);margin:34px 0 42px;padding:30px clamp(18px,3vw,42px);min-height:330px;overflow:hidden;border:1px solid rgba(222,160,255,.13);border-radius:24px;background:radial-gradient(ellipse at 12% 55%,rgba(179,108,203,.13),transparent 40%),linear-gradient(115deg,rgba(26,19,40,.94),rgba(17,17,31,.96) 65%,rgba(36,22,48,.9));}
+.moss-kawaii-art{align-self:stretch;position:relative;display:flex;align-items:flex-end;justify-content:center;min-width:0;min-height:270px;}
+.moss-kawaii-art img{display:block;width:100%;height:100%;max-height:390px;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 12px 28px rgba(0,0,0,.24));}
+.moss-kawaii-content{min-width:0;position:relative;z-index:1}
+.moss-kawaii-kicker{display:inline-flex;align-items:center;gap:8px;color:#f3a4dc;font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}
+.moss-kawaii-content h2{margin:10px 0 8px;color:#fff;font-size:clamp(29px,3.2vw,42px);line-height:1.08;letter-spacing:-.035em}
+.moss-kawaii-content h2 span{color:#f39bd5}
+.moss-kawaii-content>p{max-width:560px;margin:0;color:#c7c2d5;font-size:14px;line-height:1.7}
+.moss-kawaii-pills{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 20px}
+.moss-kawaii-pills span{padding:6px 11px;border:1px solid rgba(243,155,213,.22);border-radius:999px;color:#e4d5e8;background:rgba(243,155,213,.07);font-size:11px}
+.moss-kawaii-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.moss-kawaii-card{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:5px;min-width:0;padding:14px 13px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.035);text-decoration:none;transition:transform .2s ease,border-color .2s ease,background .2s ease}
+.moss-kawaii-card:hover{transform:translateY(-3px);border-color:rgba(243,155,213,.4);background:rgba(243,155,213,.07)}
+.moss-kawaii-card-icon{display:grid;place-items:center;width:30px;height:30px;margin-bottom:4px;border-radius:10px;color:#f5a6dc;background:rgba(243,155,213,.12)}
+.moss-kawaii-card strong{color:#f7f3fb;font-size:13px;font-weight:700}
+.moss-kawaii-card small{color:#aaa4bb;font-size:11px}
+.moss-kawaii-arrow{position:absolute;right:12px;top:14px;color:#a89ab9;font-size:11px}
+.moss-kawaii-browse{display:inline-flex;align-items:center;gap:9px;margin-top:18px;color:#f4a5dc;font-size:13px;font-weight:750;text-decoration:none}
+.moss-kawaii-browse:hover{color:#fff}
+@media(max-width:760px){.moss-kawaii-section{grid-template-columns:1fr;gap:8px;padding:22px 16px;margin:26px 0 32px}.moss-kawaii-art{min-height:0;height:190px;margin:-10px 0 0}.moss-kawaii-art img{max-height:230px;width:100%}.moss-kawaii-content h2{font-size:30px}.moss-kawaii-content>p{font-size:13px}.moss-kawaii-cards{gap:7px}.moss-kawaii-card{padding:11px 9px}.moss-kawaii-card strong{font-size:11px}.moss-kawaii-card small{font-size:10px}}
+@media(max-width:390px){.moss-kawaii-cards{grid-template-columns:1fr}.moss-kawaii-card{display:grid;grid-template-columns:32px 1fr;align-items:center}.moss-kawaii-card-icon{grid-row:span 2;margin:0}.moss-kawaii-card small{grid-column:2}}
