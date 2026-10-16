@@ -1,89 +1,88 @@
 (() => {
   "use strict";
   const API = "https://animemoss-api-production.up.railway.app";
+  const KEY = "animemoss-continue-watching";
   const section = document.getElementById("continue-watching-section");
   const list = document.getElementById("continue-watching-list");
 
-
-  function storageKey() { return "animemoss-continue-watching"; }
-  function normalizeAnime(payload) {
-    let anime = payload?.anime || payload?.data || payload;
-    if (Array.isArray(anime)) anime = anime[0];
-    if (!anime || typeof anime !== "object") return null;
-    if (typeof anime.coverImage === "string") anime.coverImage = { large: anime.coverImage, extraLarge: anime.coverImage };
-    if (anime.title && typeof anime.title === "string") anime.title = { english: anime.title, romaji: anime.title };
-    if (!anime.title) anime.title = { english: anime.titleEnglish || anime.title_english || anime.name || `Anime #${anime.id || ""}`, romaji: anime.titleRomaji || anime.title_romaji };
-    if (!anime.coverImage) {
-      const cover = anime.cover_image || anime.coverImageUrl || anime.image || "";
-      anime.coverImage = typeof cover === "string" ? { large: cover, extraLarge: cover } : cover;
-    }
-    return anime;
-  }
-  function readHistory() {
+  const read = () => {
     try {
-      const data = JSON.parse(localStorage.getItem(storageKey()) || "[]");
-      return Array.isArray(data) ? data : [];
+      const value = JSON.parse(localStorage.getItem(KEY) || "[]");
+      return Array.isArray(value) ? value : [];
     } catch { return []; }
-  }
-  function escapeHtml(value) {
-    return String(value ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
-  }
-  async function load() {
-    if (!section || !list) return;
-    const history = readHistory().sort((a,b) => Number(b.updatedAt || 0) - Number(a.updatedAt || 0)).slice(0, 8);
-    if (!history.length) {
-      section.hidden = true;
-      return;
-    }
-    section.hidden = false;
-    list.innerHTML = '<div class="moss-continue-loading">Loading your anime…</div>';
-    const items = await Promise.all(history.map(async item => {
-      try {
-        const response = await fetch(API + "/anime/" + encodeURIComponent(item.animeId));
-        if (!response.ok) throw new Error("Anime unavailable");
-        const payload = await response.json();
-        const anime = normalizeAnime(payload);
-        if (!anime) throw new Error("Invalid anime response");
-        return { ...item, anime };
-      } catch { return { ...item, anime: null }; }
-    }));
-    const valid = items;
-    if (!valid.length) {
-      list.innerHTML = '<div class="moss-continue-empty">Your recent watch history could not be loaded. It will appear here when you watch again.</div>';
-      return;
-    }
-    list.innerHTML = valid.map(item => {
-      const anime = item.anime;
-      const title = anime?.title?.english || anime?.title?.romaji || anime?.title?.native || `Anime #${item.animeId}`;
-      const image = anime?.coverImage?.extraLarge || anime?.coverImage?.large || "";
-      const episode = Math.max(1, Number(item.episode) || 1);
-      const total = Math.max(0, Number(anime.episodes) || 0);
-      const progress = total ? Math.min(100, Math.round(episode / total * 100)) : 0;
-      const href = "watch.html?id=" + encodeURIComponent(item.animeId) + "&episode=" + episode + (item.type === "dub" ? "&type=dub" : "");
-      return '<a class="moss-continue-card" href="' + href + '">' +
-        (image ? '<img class="moss-continue-poster" src="' + escapeHtml(image) + '" alt="' + escapeHtml(title) + '" loading="lazy" decoding="async">' : '<div class="moss-continue-poster moss-continue-placeholder" aria-hidden="true"><i class="fa-solid fa-play"></i></div>') +
-        '<span class="moss-continue-copy"><span class="moss-continue-title">' + escapeHtml(title) + '</span>' +
-        '<span class="moss-continue-episode">Episode ' + episode + '</span>' +
-        '<span class="moss-continue-hint">' + (total ? 'of ' + total + ' episodes' : 'Continue your episode') + '</span>' +
-        '<span class="moss-continue-progress"><span style="width:' + progress + '%"></span></span>' +
-        '<span class="moss-continue-play"><i class="fa-solid fa-play"></i> Continue</span></span></a>';
-    }).join("");
-  }
-  window.AnimeMossContinueWatching = {
-    save: async function(animeId, episode, type) {
-      if (!animeId || !episode) return;
-      const key = storageKey();
-      const history = readHistory();
-      const id = String(animeId);
-      const record = { animeId: id, episode: Math.max(1, Number(episode) || 1), type: type === "dub" ? "dub" : "sub", updatedAt: Date.now() };
-      const next = [record, ...history.filter(item => String(item.animeId) !== id)].slice(0, 20);
-      try {
-        localStorage.setItem(key, JSON.stringify(next));
-        // Keep the shelf in sync immediately if it exists on this page.
-        if (section && !section.hidden) load();
-      } catch (error) { console.warn("Could not save watch history", error); }
-    },
-    refresh: load
   };
-  load();
+  const write = (items) => {
+    try { localStorage.setItem(KEY, JSON.stringify(items.slice(0, 20))); return true; }
+    catch (error) { console.warn("[Continue Watching] storage write failed", error); return false; }
+  };
+  const escape = (value) => String(value ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+  function save(animeId, episode, type) {
+    if (animeId == null || String(animeId).trim() === "") return;
+    const id = String(animeId);
+    const ep = Math.max(1, Number(episode) || 1);
+    const items = read().filter(item => String(item.animeId) !== id);
+    items.unshift({ animeId:id, episode:ep, type:type === "dub" ? "dub" : "sub", updatedAt:Date.now() });
+    write(items);
+    if (section && list) render();
+  }
+  function normalize(payload, id) {
+    let a = payload?.anime || payload?.data || payload;
+    if (Array.isArray(a)) a = a[0];
+    if (!a || typeof a !== "object") return null;
+    let cover = a.coverImage ?? a.cover_image ?? a.coverImageUrl ?? a.image ?? "";
+    if (typeof cover === "string") cover = { large:cover, extraLarge:cover };
+    let title = a.title;
+    if (typeof title === "string") title = { english:title, romaji:title };
+    if (!title) title = { english:a.titleEnglish || a.title_english || a.titleRomaji || a.title_romaji || a.name || ("Anime " + id) };
+    return { ...a, id:a.id || id, title, coverImage:cover || {} };
+  }
+  async function getAnime(item) {
+    try {
+      const response = await fetch(API + "/anime/" + encodeURIComponent(item.animeId), { cache:"no-store" });
+      if (!response.ok) throw new Error("Anime endpoint returned " + response.status);
+      return normalize(await response.json(), item.animeId);
+    } catch (error) {
+      console.warn("[Continue Watching] anime details unavailable", item.animeId, error);
+      return null;
+    }
+  }
+  function card(item, anime) {
+    const title = anime?.title?.english || anime?.title?.romaji || anime?.title?.native || ("Anime " + item.animeId);
+    const cover = anime?.coverImage?.extraLarge || anime?.coverImage?.large || "";
+    const episode = Math.max(1, Number(item.episode) || 1);
+    const total = Math.max(0, Number(anime?.episodes) || 0);
+    const progress = total ? Math.min(100, Math.round(episode / total * 100)) : 0;
+    const href = "watch.html?id=" + encodeURIComponent(item.animeId) + "&episode=" + episode + (item.type === "dub" ? "&type=dub" : "");
+    return '<a class="moss-continue-card" href="' + href + '">' +
+      '<div class="moss-continue-art">' +
+      (cover ? '<img class="moss-continue-poster" src="' + escape(cover) + '" alt="' + escape(title) + '" loading="lazy" decoding="async">' : '<div class="moss-continue-poster moss-continue-placeholder"><i class="fa-solid fa-play"></i></div>') +
+      '<span class="moss-continue-badge">EP ' + episode + (total ? ' / ' + total : '') + '</span><span class="moss-continue-overlay"><i class="fa-solid fa-play"></i></span></div>' +
+      '<span class="moss-continue-copy"><span class="moss-continue-title">' + escape(title) + '</span>' +
+      '<span class="moss-continue-episode">Episode ' + episode + '</span>' +
+      '<span class="moss-continue-hint">' + (total ? (progress + '% watched') : 'Continue your episode') + '</span>' +
+      '<span class="moss-continue-progress"><span style="width:' + progress + '%"></span></span></span></a>';
+  }
+  let renderToken = 0;
+  async function render() {
+    if (!section || !list) return;
+    const token = ++renderToken;
+    const history = read().sort((a,b) => Number(b.updatedAt || 0) - Number(a.updatedAt || 0)).slice(0, 10);
+    if (!history.length) { section.hidden = true; return; }
+    section.hidden = false;
+    list.innerHTML = '<div class="moss-continue-loading"><i class="fa-solid fa-circle-notch fa-spin"></i> Loading your recently watched anime…</div>';
+    const resolved = await Promise.all(history.map(async item => ({item, anime:await getAnime(item)})));
+    if (token !== renderToken) return;
+    list.innerHTML = resolved.map(({item,anime}) => card(item,anime)).join("");
+  }
+  window.AnimeMossContinueWatching = { save, refresh:render, read };
+  // On watch pages, persist the requested episode immediately; playback success is not required.
+  if (!section && /watch\.html$/i.test(location.pathname)) {
+    const params = new URLSearchParams(location.search);
+    const id = params.get("id");
+    if (id) save(id, params.get("episode") || 1, params.get("type"));
+  }
+  if (section && list) {
+    render();
+    window.addEventListener("storage", event => { if (event.key === KEY) render(); });
+  }
 })();
