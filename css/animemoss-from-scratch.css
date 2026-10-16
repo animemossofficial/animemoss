@@ -287,3 +287,9 @@ html body .moss-topbar.moss-idol-topbar.is-scrolled{background:rgba(11,11,16,.48
 .moss-continue-grid::-webkit-scrollbar-thumb{background:linear-gradient(90deg,#ff8fcf,#bb91ff);border-radius:20px;border:1px solid #24172d}
 .moss-continue-grid::-webkit-scrollbar-thumb:hover{background:linear-gradient(90deg,#ffb0df,#d1b0ff)}
 @media(max-width:650px){.moss-continue-section .moss-section-heading{align-items:flex-start;margin-bottom:15px}.moss-continue-section .moss-section-heading h2{font-size:25px}.moss-continue-section .moss-section-heading p{font-size:12px}.moss-continue-grid{padding-bottom:12px!important;scrollbar-width:thin!important}}
+
+
+/* Simplify Continue Watching: remove decorative line and replace red episode badge */
+.moss-continue-section .moss-overline:before{content:none!important;display:none!important}
+.moss-continue-section .moss-overline{gap:0!important}
+.moss-continue-badge{background:linear-gradient(110deg,#e98bcf,#a98bfa)!important;color:#211226!important;box-shadow:0 3px 12px #0004!important;border-radius:7px!important}
