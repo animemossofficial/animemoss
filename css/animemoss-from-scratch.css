@@ -252,3 +252,22 @@ html body .moss-topbar.moss-idol-topbar.is-scrolled{background:rgba(11,11,16,.48
 @media(max-width:1000px){.moss-continue-grid{grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-columns:calc((100% - 36px)/3);gap:18px}}
 @media(max-width:650px){.moss-continue-section{width:calc(100% - 24px);margin:20px auto 30px}.moss-continue-grid{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-columns:78%;gap:12px}.moss-continue-art{aspect-ratio:16/10}.moss-continue-copy{padding:10px}.moss-continue-title{font-size:12px;min-height:33px}.moss-continue-badge{right:7px;top:7px;font-size:9px}}
 @media(prefers-reduced-motion:reduce){.moss-continue-card,.moss-continue-poster,.moss-continue-overlay{transition:none}}
+
+/* Continue Watching premium polish: let the artwork lead, not the borders */
+.moss-continue-section{width:min(calc(100% - 56px),1660px);margin:30px auto 44px}
+.moss-continue-section .moss-section-heading{margin-bottom:20px}
+.moss-continue-grid{grid-auto-columns:calc((100% - 54px)/4);grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;padding:0 0 12px;border:0;scrollbar-width:none}
+.moss-continue-grid::-webkit-scrollbar{display:none}
+.moss-continue-card{border:0!important;border-radius:12px!important;background:transparent!important;box-shadow:none!important;overflow:hidden;transform:none}
+.moss-continue-card:hover{transform:translateY(-3px);box-shadow:none!important}
+.moss-continue-art{aspect-ratio:16/9;border-radius:12px;isolation:isolate;background:#21172b;box-shadow:0 10px 28px #0003}
+.moss-continue-poster{border:0!important;border-radius:12px!important}
+.moss-continue-card:hover .moss-continue-art{box-shadow:0 14px 35px #0005,0 0 0 1px #f39bd544}
+.moss-continue-badge{right:10px;top:10px;border-radius:5px;box-shadow:none}
+.moss-continue-copy{padding:12px 2px 8px}
+.moss-continue-title{font-size:15px;min-height:0;margin:0 0 12px}
+.moss-continue-episode{margin-top:0;font-size:12px}
+.moss-continue-hint{margin-top:4px}
+.moss-continue-progress{margin-top:10px}
+@media(max-width:1050px){.moss-continue-grid{grid-auto-columns:calc((100% - 36px)/3);grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}}
+@media(max-width:650px){.moss-continue-section{width:calc(100% - 28px);margin:22px auto 32px}.moss-continue-grid{grid-auto-columns:78%;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.moss-continue-art{aspect-ratio:16/10}.moss-continue-copy{padding:10px 1px 6px}.moss-continue-title{font-size:13px;margin-bottom:8px}.moss-continue-badge{right:8px;top:8px}}
