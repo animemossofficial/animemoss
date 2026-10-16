@@ -476,3 +476,19 @@ html body .moss-topbar.moss-idol-topbar.is-scrolled{background:rgba(11,11,16,.48
 .moss-kawaii-browse:hover{color:#fff}
 @media(max-width:760px){.moss-kawaii-section{grid-template-columns:1fr;gap:8px;padding:22px 16px;margin:26px 0 32px}.moss-kawaii-art{min-height:0;height:190px;margin:-10px 0 0}.moss-kawaii-art img{max-height:230px;width:100%}.moss-kawaii-content h2{font-size:30px}.moss-kawaii-content>p{font-size:13px}.moss-kawaii-cards{gap:7px}.moss-kawaii-card{padding:11px 9px}.moss-kawaii-card strong{font-size:11px}.moss-kawaii-card small{font-size:10px}}
 @media(max-width:390px){.moss-kawaii-cards{grid-template-columns:1fr}.moss-kawaii-card{display:grid;grid-template-columns:32px 1fr;align-items:center}.moss-kawaii-card-icon{grid-row:span 2;margin:0}.moss-kawaii-card small{grid-column:2}}
+
+
+/* Kawaii Corner refinement: remove broken image frame and match the site's restrained style */
+.moss-kawaii-section{grid-template-columns:minmax(0,1fr)!important;gap:0!important;min-height:0!important;margin:28px 0 38px!important;padding:30px clamp(20px,3vw,38px)!important;border:0!important;border-radius:18px!important;background:linear-gradient(110deg,rgba(31,23,43,.96),rgba(19,17,30,.94))!important;box-shadow:none!important}
+.moss-kawaii-art{display:none!important}
+.moss-kawaii-content{max-width:1000px!important}
+.moss-kawaii-kicker{font-size:10px!important;letter-spacing:.13em!important}
+.moss-kawaii-content h2{font-size:clamp(28px,2.7vw,36px)!important;margin:8px 0!important}
+.moss-kawaii-content>p{max-width:650px!important;font-size:13px!important}
+.moss-kawaii-pills{margin:13px 0 17px!important}
+.moss-kawaii-cards{max-width:900px!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:12px!important}
+.moss-kawaii-card{min-height:104px!important;padding:14px 15px!important;background:rgba(255,255,255,.025)!important;border:1px solid rgba(255,255,255,.07)!important;border-radius:12px!important}
+.moss-kawaii-card:hover{transform:translateY(-2px)!important;background:rgba(255,255,255,.045)!important;border-color:rgba(243,155,213,.28)!important}
+.moss-kawaii-card-icon{width:27px!important;height:27px!important;margin-bottom:2px!important}
+.moss-kawaii-browse{margin-top:15px!important}
+@media(max-width:760px){.moss-kawaii-section{padding:22px 16px!important;margin:22px 0 30px!important}.moss-kawaii-cards{grid-template-columns:1fr!important;gap:8px!important}.moss-kawaii-card{min-height:0!important;display:grid!important;grid-template-columns:32px 1fr!important;align-items:center!important;padding:10px 12px!important}.moss-kawaii-card-icon{grid-row:span 2!important;margin:0!important}.moss-kawaii-card small{grid-column:2!important}}
