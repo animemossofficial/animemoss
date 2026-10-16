@@ -34,7 +34,7 @@
     let title = a.title;
     if (typeof title === "string") title = { english:title, romaji:title };
     if (!title) title = { english:a.titleEnglish || a.title_english || a.titleRomaji || a.title_romaji || a.name || ("Anime " + id) };
-    return { ...a, id:a.id || id, title, coverImage:cover || {} };
+    return { ...a, id:a.id || id, title, coverImage:cover || {}, titleEnglish:title?.english || a.titleEnglish || a.title_english || "", titleRomaji:title?.romaji || a.titleRomaji || a.title_romaji || "" };
   }
   async function getAnime(item) {
     try {
@@ -46,9 +46,22 @@
       return null;
     }
   }
-  function card(item, anime) {
-    const title = anime?.title?.english || anime?.title?.romaji || anime?.title?.native || ("Anime " + item.animeId);
-    const cover = anime?.coverImage?.extraLarge || anime?.coverImage?.large || "";
+  async function getEpisodeThumbnail(item) {
+    try {
+      const response = await fetch(API + "/episodes/" + encodeURIComponent(item.animeId), { cache:"no-store" });
+      if (!response.ok) return "";
+      const payload = await response.json();
+      const episodes = Array.isArray(payload?.episodes) ? payload.episodes : [];
+      const exact = episodes.find(ep => Number(ep.number) === Number(item.episode));
+      return exact?.thumbnail || "";
+    } catch (error) {
+      console.warn("[Continue Watching] episode thumbnail unavailable", item.animeId, item.episode, error);
+      return "";
+    }
+  }
+  function card(item, anime, episodeThumbnail) {
+    const title = anime?.title?.english || anime?.title?.romaji || anime?.title?.native || anime?.titleEnglish || anime?.titleRomaji || ("Anime " + item.animeId);
+    const cover = episodeThumbnail || anime?.coverImage?.extraLarge || anime?.coverImage?.large || "";
     const episode = Math.max(1, Number(item.episode) || 1);
     const total = Math.max(0, Number(anime?.episodes) || 0);
     const progress = total ? Math.min(100, Math.round(episode / total * 100)) : 0;
@@ -70,9 +83,9 @@
     if (!history.length) { section.hidden = true; return; }
     section.hidden = false;
     list.innerHTML = '<div class="moss-continue-loading"><i class="fa-solid fa-circle-notch fa-spin"></i> Loading your recently watched anime…</div>';
-    const resolved = await Promise.all(history.map(async item => ({item, anime:await getAnime(item)})));
+    const resolved = await Promise.all(history.map(async item => { const anime = await getAnime(item); const total = Math.max(0, Number(anime?.episodes) || 0); if (total && Number(item.episode) > total) { item.episode = total; } const episodeThumbnail = await getEpisodeThumbnail(item); return {item, anime, episodeThumbnail}; }));
     if (token !== renderToken) return;
-    list.innerHTML = resolved.map(({item,anime}) => card(item,anime)).join("");
+    list.innerHTML = resolved.map(({item,anime,episodeThumbnail}) => card(item,anime,episodeThumbnail)).join("");
   }
   window.AnimeMossContinueWatching = { save, refresh:render, read };
   // On watch pages, persist the requested episode immediately; playback success is not required.
